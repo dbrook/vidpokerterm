@@ -56,6 +56,11 @@ public:
     explicit PlayingCard(CardSuit cardSuit, CardValue cardValue);
 
     /**
+     * @brief operator == overloading for use by the Deck's removeCard() feature
+     */
+    bool operator==(const PlayingCard &card) const;
+
+    /**
      * @brief      Getter for card's suit
      *
      * @return     Suit of the individual card

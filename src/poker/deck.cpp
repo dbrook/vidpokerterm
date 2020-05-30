@@ -19,12 +19,55 @@
 
 #include <exception>
 
-Deck::Deck(DeckType typeOfDeck)
+Deck::Deck(DeckType typeOfDeck) : _typeOfDeck(typeOfDeck)
 {
     /*
      * Populate the deck based on the type requested
      */
-    if (typeOfDeck == FULL_FRENCH) {
+    this->reset();
+
+    /*
+     * Initialize a random number generator (RNG), provided by the Qt Framework. The first initialization should be
+     * cryptographically secure (the global() guarantees this), but any calls to shuffle will use a pseudo-random
+     * number generator based on this seed. True video poker machines have far more secure and robust RNGs, but this
+     * is really just for fun.
+     */
+    _rand = QRandomGenerator(QRandomGenerator::global()->generate());
+}
+
+void Deck::shuffle()
+{
+    // For each card in the deck, pick a random location to swap cards using a classic "swap" code
+    for (qint32 cardPosition = 0; cardPosition < _cardDeck.size(); ++cardPosition) {
+        _cardDeck.swapItemsAt(cardPosition, _rand.bounded(_cardDeck.size()));
+    }
+}
+
+PlayingCard Deck::drawCard()
+{
+    if (_cardDeck.empty()) {
+        throw std::runtime_error("No available cards in deck");
+    }
+
+    // Take a card off the end of the deck
+    PlayingCard cardToGive = _cardDeck.last();
+    _cardDeck.pop_back();
+
+    // Give it back
+    return cardToGive;
+}
+
+void Deck::removeCard(const PlayingCard &cardToRemove)
+{
+    qint32 removeCardPosition = _cardDeck.indexOf(cardToRemove);
+    if (removeCardPosition != -1) {
+        _cardDeck.remove(removeCardPosition);
+    }
+}
+
+void Deck::reset()
+{
+    if (_typeOfDeck == FULL_FRENCH) {
         // Add all 52 cards of the Full French deck
         _cardDeck = {
             PlayingCard(PlayingCard::CLUB,    PlayingCard::TWO),
@@ -84,46 +127,4 @@ Deck::Deck(DeckType typeOfDeck)
             PlayingCard(PlayingCard::DIAMOND, PlayingCard::ACE),
         };
     }
-
-    /*
-     * Initialize a random number generator (RNG), provided by the Qt Framework. The first initialization should be
-     * cryptographically secure (the global() guarantees this), but each card will actually be picked after with a
-     * pseudo-random generator. True video poker machines have far more secure and robust RNGs, but this little program
-     * is really just for fun.
-     */
-    _rand = QRandomGenerator(QRandomGenerator::global()->generate());
-}
-
-void Deck::shuffle()
-{
-    // TODO: is a shuffle really even required if we're using a stateful RNG + deck positions?
-    //       see comment in Deck::drawCard. It might be worth changing the implementation of the deck...
-}
-
-PlayingCard Deck::drawCard()
-{
-    // TODO: This logic is messy. It could be better to properly shuffle the deck and then treat the deck as a stack>
-
-    // There needs to actually be cards left (this condition should never happen)
-    if (_drawnCardPos.size() == _cardDeck.size()) {
-        throw std::runtime_error("No available cards in deck");
-    }
-
-    // Select a card at random from the vector (0 <= index < _cardDeck's size)
-    // The QRandomNumber::bounded function guarantees uniform distribution
-    quint32 deckPosition;
-    do {
-        deckPosition = _rand.bounded(_cardDeck.size());
-    } while (_drawnCardPos.contains(deckPosition));
-
-    // Blacklist the drawn card position (so it won't be picked again)
-    _drawnCardPos.insert(deckPosition);
-
-    // Give it back
-    return _cardDeck[deckPosition];
-}
-
-void Deck::reset()
-{
-    _drawnCardPos.clear();
 }

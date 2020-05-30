@@ -19,6 +19,11 @@
 
 PlayingCard::PlayingCard(CardSuit cardSuit, CardValue cardValue) : _suit(cardSuit), _value(cardValue) {}
 
+bool PlayingCard::operator==(const PlayingCard &card) const
+{
+    return (this->suit() == card.suit()) && (this->value() == card.value());
+}
+
 PlayingCard::CardSuit PlayingCard::suit() const   {return _suit;}
 
 PlayingCard::CardValue PlayingCard::value() const {return _value;}

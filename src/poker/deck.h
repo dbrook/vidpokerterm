@@ -21,13 +21,12 @@
 #include "playingcard.h"
 
 #include <QRandomGenerator>
-#include <QSet>
 #include <QVector>
 
 /**
  * @brief A Deck is a collection of playing cards from which cards may be dealt one-by-one and shuffled with a RNG.
- *        Cards drawn from the deck are not actually removed from the vector, but instead their indexes in the vector
- *        are added to a black-list (so you cannot draw the same card multiple times)
+ *        Cards drawn from the deck are removed from the deck and provided to the caller of drawCard(). Calling the
+ *        reset() function will repopulate the deck with DeckType's card allotment. Be sure to shuffle() the deck!
  *
  * @note  The RNG used will be initialized in a cryptographically-secure way, but subsequent calls use the pseudo
  *        RNG after this first initialization. Real hardware-based RNGs are used in actual video poker terminals, but
@@ -47,27 +46,27 @@ public:
     /**
      * @brief      Construct a deck of a given type
      *
-     * @param[in]  typeOfDeck
+     * @param[in]  typeOfDeck      What kind of deck to construct
      */
     explicit Deck(DeckType typeOfDeck);
 
     /**
-     * @brief      Shuffles the cards using a cryptographically-secure (per Qt) random number generator
+     * @brief      Shuffles the cards using the random number generator initialized at construction time
      */
     void shuffle();
 
     /**
-     * @brief      DrawCard finds a random card from the deck
+     * @brief      DrawCard pulls the last card off the deck and provides it to the caller
+     *
+     * @return     A single PlayingCard from the deck
      *
      * @throws     runtime_error if there are no cards available ("No available cards in deck")
-     * @return     A single PlayingCard from the deck
      */
     PlayingCard drawCard();
 
     /**
-     * @brief      Blacklists a card from being drawable when using drawCard. This can be handy in multi-hand games
-     *             where a player would select hold cards from one hand and the hold card(s) must be propagated to all
-     *             other hands in the game
+     * @brief      Takes a card out of the deck. This can be handy in multi-hand games where a player would select hold
+     *             cards from one hand and the hold card(s) must be propagated to all other hands in the game
      *
      * @param[in]  cardToRemove    Card to mark as being unable to get drawn by drawCard
      */
@@ -80,9 +79,9 @@ public:
 
 private:
     /* Data members */
-    QVector<PlayingCard>          _cardDeck;      // Vector of all cards in the deck
-    QSet<quint32>                 _drawnCardPos;  // Set of indexes that were drawn
-    QRandomGenerator              _rand;          // Random number generator for shuffling and drawing cards
+    DeckType             _typeOfDeck;  // What kind of deck is represented?
+    QVector<PlayingCard> _cardDeck;    // Vector of all cards in the deck
+    QRandomGenerator     _rand;        // Random number generator for shuffling and drawing cards
 };
 
 #endif // DECK_H
