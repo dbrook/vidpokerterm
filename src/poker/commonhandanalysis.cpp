@@ -34,7 +34,7 @@ void sortHandVector(QVector<PlayingCard> &hand)
     });
 }
 
-quint8 NOfAKind(quint8 nValue, const QVector<PlayingCard> &hand)
+quint8 NOfAKind(quint8 nValue, const QVector<PlayingCard> &hand, QVector<PlayingCard::CardValue> &matches)
 {
     // Map to associate count of all cards in a hand
     QMap<PlayingCard::CardValue, quint8> cardValueCounts;
@@ -49,6 +49,7 @@ quint8 NOfAKind(quint8 nValue, const QVector<PlayingCard> &hand)
     for (const PlayingCard::CardValue &cardVal : cardValueCounts.keys()) {
         if (cardValueCounts[cardVal] == nValue) {
             ++nbNValuesFound;
+            matches.push_back(cardVal);
         }
     }
     return nbNValuesFound;
@@ -60,31 +61,46 @@ quint8 NOfAKind(quint8 nValue, const QVector<PlayingCard> &hand)
  */
 bool JacksOrBetter(const QVector<PlayingCard> &hand)
 {
-    bool JOB = false;
+    QVector<PlayingCard::CardValue> matches;
+    NOfAKind(2, hand, matches);
 
-    // TODO: Insert Jacks-Or-Better code
-
-    return JOB;
+    // See if the matched pair was J+J, Q+Q, K+K, A+A
+    for (const PlayingCard::CardValue &value : matches) {
+        if (value == PlayingCard::ACE   || value == PlayingCard::KING ||
+            value == PlayingCard::QUEEN || value == PlayingCard::JACK)
+        {
+            return true;
+        }
+    }
+    return false;
 }
 
 bool TwoPair(const QVector<PlayingCard> &hand)
 {
-    // No card value occurred 4 times in the hand
-    return (NOfAKind(2, hand) == 2);
+    QVector<PlayingCard::CardValue> matches;       // Unused for Three of a Kind
+    return (NOfAKind(2, hand, matches) == 2);
 }
 
 bool ThreeOfAKind(const QVector<PlayingCard> &hand)
 {
-    return (NOfAKind(3, hand) == 1);
+    QVector<PlayingCard::CardValue> matches;       // Unused for Three of a Kind
+    return (NOfAKind(3, hand, matches) == 1);
 }
 
 bool Straight(const QVector<PlayingCard> &hand)
 {
-    bool STR = false;
+    PlayingCard::CardValue lowestCard = hand[0].value();
 
-    // TODO: Insert code to find a straight here
+    for (qint32 handIdx = 1; handIdx < hand.size(); ++handIdx) {
+        if (hand[handIdx].value() == lowestCard + 1) {
+            lowestCard = hand[handIdx].value();
+        } else {
+            return false;
+        }
+    }
 
-    return STR;
+    // If control got out of the loop, then each card must have been higher than the last
+    return true;
 }
 
 bool Flush(const QVector<PlayingCard> &hand)
@@ -100,12 +116,14 @@ bool Flush(const QVector<PlayingCard> &hand)
 
 bool FullHouse(const QVector<PlayingCard> &hand)
 {
-    return (NOfAKind(3, hand) == 1 && NOfAKind(2, hand) == 1);
+    QVector<PlayingCard::CardValue> matches;    // Unused for Full House
+    return (NOfAKind(3, hand, matches) == 1 && NOfAKind(2, hand, matches) == 1);
 }
 
 bool FourOfAKind(const QVector<PlayingCard> &hand)
 {
-    return (NOfAKind(4, hand) == 1);
+    QVector<PlayingCard::CardValue> matches;    // Unused for Full House
+    return (NOfAKind(4, hand, matches) == 1);
 }
 
 bool StraightFlush(const QVector<PlayingCard> &hand)

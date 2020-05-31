@@ -402,5 +402,14 @@ void TestHands::testJOB_NoWin()
                         PlayingCard(PlayingCard::SPADE,   PlayingCard::SIX  ),
                         PlayingCard(PlayingCard::DIAMOND, PlayingCard::FIVE )),
                    1, 0, "");
+
+    // Almost a straight flush, but not quite!
+    validateResult(JOB,
+                   Hand(PlayingCard(PlayingCard::DIAMOND, PlayingCard::NINE ),
+                        PlayingCard(PlayingCard::DIAMOND, PlayingCard::EIGHT),
+                        PlayingCard(PlayingCard::DIAMOND, PlayingCard::SIX  ),
+                        PlayingCard(PlayingCard::SPADE,   PlayingCard::SIX  ),
+                        PlayingCard(PlayingCard::DIAMOND, PlayingCard::FIVE )),
+                   1, 0, "");
     // TODO: how many tests does it make sense to do for "no win" hands?
 }
