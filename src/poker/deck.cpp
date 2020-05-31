@@ -39,7 +39,13 @@ void Deck::shuffle()
 {
     // For each card in the deck, pick a random location to swap cards using a classic "swap" code
     for (qint32 cardPosition = 0; cardPosition < _cardDeck.size(); ++cardPosition) {
-        _cardDeck.swapItemsAt(cardPosition, _rand.bounded(_cardDeck.size()));
+        qint32      cardToSwapPosition  = _rand.bounded(_cardDeck.size());
+        PlayingCard cardFromDestination = _cardDeck[cardToSwapPosition];
+        _cardDeck[cardToSwapPosition]   = _cardDeck[cardPosition];
+        _cardDeck[cardPosition]         = cardFromDestination;
+
+        // This was only supported in Qt <= 5.14 ... commented out to avoid issues on Raspbian
+//        _cardDeck.swapItemsAt(cardPosition, _rand.bounded(_cardDeck.size()));
     }
 }
 
