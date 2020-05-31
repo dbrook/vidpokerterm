@@ -350,14 +350,14 @@ void TestHands::testJOB_JacksOrBetter()
                     PlayingCard(PlayingCard::HEART,   PlayingCard::TEN  ));
     validateResult(JOB, pairQueens, 1, 1, "Jacks or Better");
 
-    Hand pairKings(PlayingCard(PlayingCard::SPADE,   PlayingCard::JACK ),
+    Hand pairKings(PlayingCard(PlayingCard::SPADE,   PlayingCard::FIVE ),
                    PlayingCard(PlayingCard::DIAMOND, PlayingCard::KING ),
                    PlayingCard(PlayingCard::HEART,   PlayingCard::QUEEN),
                    PlayingCard(PlayingCard::DIAMOND, PlayingCard::JACK ),
                    PlayingCard(PlayingCard::HEART,   PlayingCard::KING ));
     validateResult(JOB, pairKings, 1, 1, "Jacks or Better");
 
-    Hand pairAces(PlayingCard(PlayingCard::SPADE,   PlayingCard::JACK),
+    Hand pairAces(PlayingCard(PlayingCard::SPADE,   PlayingCard::TWO ),
                   PlayingCard(PlayingCard::CLUB,    PlayingCard::KING),
                   PlayingCard(PlayingCard::SPADE,   PlayingCard::ACE ),
                   PlayingCard(PlayingCard::DIAMOND, PlayingCard::JACK),
@@ -383,6 +383,14 @@ void TestHands::testJOB_NoWin()
                         PlayingCard(PlayingCard::SPADE,   PlayingCard::ACE  )),
                    5, 0, "");
 
+    // Almost a straight flush, but not quite!
+    validateResult(JOB,
+                   Hand(PlayingCard(PlayingCard::DIAMOND, PlayingCard::NINE ),
+                        PlayingCard(PlayingCard::DIAMOND, PlayingCard::EIGHT),
+                        PlayingCard(PlayingCard::DIAMOND, PlayingCard::SIX  ),
+                        PlayingCard(PlayingCard::SPADE,   PlayingCard::SIX  ),
+                        PlayingCard(PlayingCard::DIAMOND, PlayingCard::FIVE )),
+                   1, 0, "");
     // TODO: how many tests does it make sense to do for "no win" hands?
 }
 
