@@ -17,6 +17,8 @@
 
 #include "playingcard.h"
 
+PlayingCard::PlayingCard() {}
+
 PlayingCard::PlayingCard(CardSuit cardSuit, CardValue cardValue) : _suit(cardSuit), _value(cardValue) {}
 
 bool PlayingCard::operator==(const PlayingCard &card) const

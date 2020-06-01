@@ -47,6 +47,8 @@ public:
         ACE
     };
 
+    PlayingCard();
+
     /**
      * @brief      A single card consisting of a suit and value
      *
