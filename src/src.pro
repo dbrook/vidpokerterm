@@ -29,3 +29,7 @@ DEFINES += QT_DEPRECATED_WARNINGS
 # Link all sub-modules
 include("poker/poker.pri")
 include("ui/ui.pri")
+
+HEADERS +=
+
+SOURCES +=

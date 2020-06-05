@@ -44,6 +44,14 @@ public:
     };
 
     /**
+     * @brief      For some reason, old version of Qt containers do not like the explicit constructor and need to have
+     *             a default one defined. You should NOT instantiate Deck items with this constructor! :)
+     *
+     * @warning    DO NOT USE THIS DIRECTLY, only included for Qt container compatibility
+     */
+    explicit Deck();
+
+    /**
      * @brief      Construct a deck of a given type
      *
      * @param[in]  typeOfDeck      What kind of deck to construct

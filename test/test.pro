@@ -29,7 +29,10 @@ DEFINES += QT_DEPRECATED_WARNINGS
 include("../src/poker/poker.pri")
 
 SOURCES += \
-    pokerhand_test.cpp
+    jacksorbetter_orctest.cpp \
+    pokerhand_test.cpp \
+    test_main.cpp
 
 HEADERS += \
+    jacksorbetter_orctest.h \
     pokerhand_test.h

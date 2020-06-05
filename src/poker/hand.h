@@ -32,7 +32,10 @@ public:
     const static quint8 kCardsPerHand;
 
     /**
-     * @brief Creates an empty hand
+     * @brief      For some reason, old version of Qt containers do not like the explicit constructor and need to have
+     *             a default one defined. You should NOT instantiate Deck items with this constructor! :)
+     *
+     * @warning    DO NOT USE THIS DIRECTLY, only included for Qt container compatibility
      */
     explicit Hand();
 
@@ -40,11 +43,11 @@ public:
      * @brief      Creates a hand with cards all at once (pretty much only useful for unit testing as the actual game
      *             should add cards one at a time from a deck)
      *
-     * @param[in]  card1     Hand playing card #1
-     * @param[in]  card2     Hand playing card #2
-     * @param[in]  card3     Hand playing card #3
-     * @param[in]  card4     Hand playing card #4
-     * @param[in]  card5     Hand playing card #5
+     * @param[in]  card1      Hand playing card #1
+     * @param[in]  card2      Hand playing card #2
+     * @param[in]  card3      Hand playing card #3
+     * @param[in]  card4      Hand playing card #4
+     * @param[in]  card5      Hand playing card #5
      */
     explicit Hand(PlayingCard card1, PlayingCard card2, PlayingCard card3, PlayingCard card4, PlayingCard card5);
 
@@ -70,7 +73,7 @@ public:
     /**
      * @brief      Determines if a card at cardNum is held and should not be replaced with a draw card
      *
-     * @param      cardNum    Index of the card to query
+     * @param[in]  cardNum    Index of the card to query
      *
      * @return     true if card should not be replaced, false if it can be replaced with a draw card
      *
@@ -88,6 +91,11 @@ public:
      * @note       The card's replacement eligibility should be checked with cardHeld before using this function.
      */
     void replaceCard(quint8 cardNum, PlayingCard card);
+
+    /**
+     * @brief      Empties the hand so it can be repopulated
+     */
+    void reset();
 
     /**
      * @brief      Converts the set of cards in the hand into a QVector (so it can be optimized for hand analysis)
