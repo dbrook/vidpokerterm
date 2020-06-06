@@ -38,7 +38,8 @@ private slots:
     void testJOB_4OfAKind();
     void testJOB_FullHouse();
     void testJOB_Flush();
-    void testJOB_Straight();
+    void testJOB_StraightAceHigh();
+    void testJOB_StraightAceLow();
     void testJOB_3OfAKind();
     void testJOB_2Pair();
     void testJOB_JacksOrBetter();
