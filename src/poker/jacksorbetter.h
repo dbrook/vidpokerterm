@@ -47,9 +47,6 @@ public:
      * @param[in]  gameHand       Single hand of a poker game
      */
     void analyzeHand(const Hand &gameHand);
-
-private:
-    QVector<PokerGame::Parameters> _jacksOrBetter;
 };
 
 #endif // JACKSORBETTER_H

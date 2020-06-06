@@ -19,9 +19,9 @@
 
 #include "commonhandanalysis.h"
 
-JacksOrBetter::JacksOrBetter() : PokerGame()
+JacksOrBetter::JacksOrBetter() : PokerGame("Jacks or Better")
 {
-    _jacksOrBetter = {
+    _handPayouts = {
         {"Royal Flush",     {  250,  500,  750, 1000, 4000}},   // 0
         {"Straight Flush",  {   50,  100,  150,  200,  250}},   // 1
         {"4 of a Kind",     {   25,   50,   75,  100,  125}},   // 2
@@ -48,34 +48,34 @@ void JacksOrBetter::analyzeHand(const Hand &gameHand)
 
     // Go in order of best hand to nothing, so we ensure the best winnings possible are met
     if (HandAnalysis::RoyalFlush(singleHand)) {
-        setHandResult(_jacksOrBetter[0].handString);
-        setWinnings(_jacksOrBetter[0].payoutCredits[payoutArrayIdx]);
+        setHandResult(_handPayouts[0].handString);
+        setWinnings(_handPayouts[0].payoutCredits[payoutArrayIdx]);
     } else if (HandAnalysis::StraightFlush(singleHand)) {
-        setHandResult(_jacksOrBetter[1].handString);
-        setWinnings(_jacksOrBetter[1].payoutCredits[payoutArrayIdx]);
+        setHandResult(_handPayouts[1].handString);
+        setWinnings(_handPayouts[1].payoutCredits[payoutArrayIdx]);
     } else if (HandAnalysis::FourOfAKind(singleHand)) {
-        setHandResult(_jacksOrBetter[2].handString);
-        setWinnings(_jacksOrBetter[2].payoutCredits[payoutArrayIdx]);
+        setHandResult(_handPayouts[2].handString);
+        setWinnings(_handPayouts[2].payoutCredits[payoutArrayIdx]);
     } else if (HandAnalysis::FullHouse(singleHand)) {
-        setHandResult(_jacksOrBetter[3].handString);
-        setWinnings(_jacksOrBetter[3].payoutCredits[payoutArrayIdx]);
+        setHandResult(_handPayouts[3].handString);
+        setWinnings(_handPayouts[3].payoutCredits[payoutArrayIdx]);
     } else if (HandAnalysis::Flush(singleHand)) {
-        setHandResult(_jacksOrBetter[4].handString);
-        setWinnings(_jacksOrBetter[4].payoutCredits[payoutArrayIdx]);
+        setHandResult(_handPayouts[4].handString);
+        setWinnings(_handPayouts[4].payoutCredits[payoutArrayIdx]);
     } else if (HandAnalysis::Straight(singleHand)) {
-        setHandResult(_jacksOrBetter[5].handString);
-        setWinnings(_jacksOrBetter[5].payoutCredits[payoutArrayIdx]);
+        setHandResult(_handPayouts[5].handString);
+        setWinnings(_handPayouts[5].payoutCredits[payoutArrayIdx]);
     } else if (HandAnalysis::ThreeOfAKind(singleHand)) {
-        setHandResult(_jacksOrBetter[6].handString);
-        setWinnings(_jacksOrBetter[6].payoutCredits[payoutArrayIdx]);
+        setHandResult(_handPayouts[6].handString);
+        setWinnings(_handPayouts[6].payoutCredits[payoutArrayIdx]);
     } else if (HandAnalysis::TwoPair(singleHand)) {
-        setHandResult(_jacksOrBetter[7].handString);
-        setWinnings(_jacksOrBetter[7].payoutCredits[payoutArrayIdx]);
+        setHandResult(_handPayouts[7].handString);
+        setWinnings(_handPayouts[7].payoutCredits[payoutArrayIdx]);
     } else if (HandAnalysis::JacksOrBetter(singleHand)) {
-        setHandResult(_jacksOrBetter[8].handString);
-        setWinnings(_jacksOrBetter[8].payoutCredits[payoutArrayIdx]);
+        setHandResult(_handPayouts[8].handString);
+        setWinnings(_handPayouts[8].payoutCredits[payoutArrayIdx]);
     } else {
-        setHandResult(_jacksOrBetter[9].handString);
-        setWinnings(_jacksOrBetter[9].payoutCredits[payoutArrayIdx]);
+        setHandResult(_handPayouts[9].handString);
+        setWinnings(_handPayouts[9].payoutCredits[payoutArrayIdx]);
     }
 }

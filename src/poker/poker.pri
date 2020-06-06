@@ -19,16 +19,20 @@ INCLUDEPATH += $$PWD
 DEPENDPATH += $$PWD
 
 HEADERS += \
+    $$PWD/account.h \
     $$PWD/commonhandanalysis.h \
     $$PWD/deck.h \
+    $$PWD/gameorchestrator.h \
     $$PWD/hand.h \
     $$PWD/jacksorbetter.h \
     $$PWD/playingcard.h \
     $$PWD/pokergame.h
 
 SOURCES += \
+    $$PWD/account.cpp \
     $$PWD/commonhandanalysis.cpp \
     $$PWD/deck.cpp \
+    $$PWD/gameorchestrator.cpp \
     $$PWD/hand.cpp \
     $$PWD/jacksorbetter.cpp \
     $$PWD/playingcard.cpp \

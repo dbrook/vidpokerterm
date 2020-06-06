@@ -393,5 +393,3 @@ void TestHands::testJOB_NoWin()
                    1, 0, "");
     // TODO: how many tests does it make sense to do for "no win" hands?
 }
-
-QTEST_MAIN(TestHands)

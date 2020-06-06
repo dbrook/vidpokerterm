@@ -38,12 +38,19 @@ public:
     /**
      * @brief      ~
      */
-    explicit PokerGame();
+    explicit PokerGame(const QString &gameName);
 
     /**
      * @brief      Virtual destructor
      */
     virtual ~PokerGame();
+
+    /**
+     * @brief gameName returns the name of the game that was instantiated
+     *
+     * @return string representation of the actual poker game hand analysis used
+     */
+    const QString gameName() const;
 
     /**
      * @brief      Choose the pay table
@@ -91,6 +98,13 @@ public:
      */
     void reset();
 
+    /**
+     * @brief currentPayTable extracts the relevant paytable based on the current creditsPerBet value
+     *
+     * @param[out] payoutForBet   vector of strings (name of hand) and int (payout value for that hand)
+     */
+    void currentPayTable(QVector<QPair<const QString, int> > &payoutForBet) const;
+
 protected:
     /**
      * @brief      handResult
@@ -108,8 +122,13 @@ protected:
      */
     void setWinnings(quint32 winningCredits);
 
-private:
+    /**
+     * @brief _handPayouts is where sub classes inheriting from a PokerGame should save their payout tables
+     */
     QVector<Parameters> _handPayouts;
+
+private:
+    QString             _gameName;
     quint8              _credPerBet;
     quint32             _winnings;
     QString             _handResult;

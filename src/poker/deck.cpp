@@ -19,6 +19,10 @@
 
 #include <exception>
 
+Deck::Deck()
+{
+}
+
 Deck::Deck(DeckType typeOfDeck) : _typeOfDeck(typeOfDeck)
 {
     /*
@@ -43,9 +47,6 @@ void Deck::shuffle()
         PlayingCard cardFromDestination = _cardDeck[cardToSwapPosition];
         _cardDeck[cardToSwapPosition]   = _cardDeck[cardPosition];
         _cardDeck[cardPosition]         = cardFromDestination;
-
-        // This was only supported in Qt <= 5.14 ... commented out to avoid issues on Raspbian
-//        _cardDeck.swapItemsAt(cardPosition, _rand.bounded(_cardDeck.size()));
     }
 }
 

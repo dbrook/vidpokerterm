@@ -70,6 +70,11 @@ void Hand::replaceCard(quint8 cardNum, PlayingCard card)
     _handCardStatus[cardNum].first = card;
 }
 
+void Hand::reset()
+{
+    _handCardStatus.clear();
+}
+
 QVector<PlayingCard> Hand::handToVector() const
 {
     QVector<PlayingCard> cards;

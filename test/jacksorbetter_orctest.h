@@ -15,34 +15,29 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef POKERHAND_TEST_H
-#define POKERHAND_TEST_H
+#ifndef JACKSORBETTER_ORCTEST_H
+#define JACKSORBETTER_ORCTEST_H
 
 #include <QObject>
 #include <QtTest/QtTest>
 
 /**
- * @brief TestHands tests the Jacks-or-Better game logic, which by extension includes the following files:
- *          - commonhandanalysis.h/cpp
- *          - deck.h/cpp
- *          - hand.h/cpp
- *          - pokergame.h/cpp
- *          - jacksorbetter.h/cpp
+ * @brief JacksOrBetter_OrcTest tests the orchestration of the Jacks-or-Better game with an account and card decks
+ *        hands, holding, etc.
  */
-class TestHands : public QObject
+class JacksOrBetter_OrcTest : public QObject
 {
     Q_OBJECT
 private slots:
-    void testJOB_RoyalFlush();
-    void testJOB_StraightFlush();
-    void testJOB_4OfAKind();
-    void testJOB_FullHouse();
-    void testJOB_Flush();
-    void testJOB_Straight();
-    void testJOB_3OfAKind();
-    void testJOB_2Pair();
-    void testJOB_JacksOrBetter();
-    void testJOB_NoWin();
+    void testSingleHandGameNoHoldCards();
+    void testSingleHandGame1HoldCard();
+    void testSingleHandGameHoldAllCards();
+    void testSingleHandMultipleGames();
+    void testSingleHandInsufficientFunds();
+    void testBetCycling();
+    void testBetMaximum();
+    void testBetPlayLose();
+    void testBetPlayWinTwoPair();
 };
 
-#endif // POKERHAND_TEST_H
+#endif // JACKSORBETTER_ORCTEST_H

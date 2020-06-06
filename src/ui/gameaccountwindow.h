@@ -20,6 +20,9 @@
 
 #include <QMainWindow>
 
+// The player's account is maintained in this window
+#include "account.h"
+
 QT_BEGIN_NAMESPACE
 namespace Ui { class GameAccountWindow; }
 QT_END_NAMESPACE
@@ -32,7 +35,24 @@ public:
     GameAccountWindow(QWidget *parent = nullptr);
     ~GameAccountWindow();
 
+public slots:
+    /**
+     * @brief setAccountBalance is used to store the balance of the account from the balance spinbox
+     */
+    void setAccountBalance();
+
+    //TODO: another slot to track changes in balance?
+
+    /**
+     * @brief startGame begins a game of Jacks Or Better to test window spawning and game logic
+     */
+    void startGame();
+
 private:
+    // Game-Specific Items
+    Account _playerAccount;
+
+    // User Interface Items
     Ui::GameAccountWindow *ui;
 };
 #endif // GAMEACCOUNTWINDOW_H

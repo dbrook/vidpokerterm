@@ -19,15 +19,16 @@
 
 #include "commonhandanalysis.h"
 
-#include <exception>
-
-PokerGame::PokerGame()
+PokerGame::PokerGame(const QString &gameName)
+    : _gameName(gameName)
 {
     setCreditsPerBet(1);
     reset();
 }
 
 PokerGame::~PokerGame() {}
+
+const QString PokerGame::gameName() const           {return _gameName;}
 
 void PokerGame::setCreditsPerBet(quint8 credits)
 {
@@ -53,4 +54,12 @@ void PokerGame::reset()
     _handResult = "";
     _winnings   = 0;
     setCreditsPerBet(1);
+}
+
+void PokerGame::currentPayTable(QVector<QPair<const QString, int>> &payoutForBet) const
+{
+    for (const Parameters &singleHand : _handPayouts) {
+        QPair<QString, int> handPayout(singleHand.handString, singleHand.payoutCredits[_credPerBet - 1]);
+        payoutForBet.push_back(handPayout);
+    }
 }
