@@ -244,7 +244,7 @@ void TestHands::testJOB_Flush()
     validateResult(JOB, allDiamonds, 1,  6, "Flush");
 }
 
-void TestHands::testJOB_Straight()
+void TestHands::testJOB_StraightAceHigh()
 {
     JacksOrBetter JOB;
 
@@ -288,6 +288,17 @@ void TestHands::testJOB_Straight()
                   PlayingCard(PlayingCard::HEART,   PlayingCard::JACK ),
                   PlayingCard(PlayingCard::CLUB,    PlayingCard::KING ));
     validateResult(JOB, stTenAce, 1,  4, "Straight");
+}
+
+void TestHands::testJOB_StraightAceLow()
+{
+    JacksOrBetter JOB;
+    Hand stAceFive(PlayingCard(PlayingCard::SPADE,   PlayingCard::FIVE ),
+                   PlayingCard(PlayingCard::DIAMOND, PlayingCard::THREE),
+                   PlayingCard(PlayingCard::HEART,   PlayingCard::TWO  ),
+                   PlayingCard(PlayingCard::CLUB,    PlayingCard::FIVE ),
+                   PlayingCard(PlayingCard::CLUB,    PlayingCard::ACE  ));
+    validateResult(JOB, stAceFive, 1,  4, "Straight");
 }
 
 void TestHands::testJOB_3OfAKind()
