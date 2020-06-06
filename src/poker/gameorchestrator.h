@@ -33,12 +33,12 @@ public:
     /**
      * @brief GameOrchestrator constructor using a generic PokerGame x number of simultaneous hands, and credit account
      *
-     * @param[in]  gameAnalyzer    reference to an instance of an actual PokerGame subclass
+     * @param[in]  gameAnalyzer    pointer to an instance of an actual PokerGame subclass
      * @param[in]  nbHandsToPlay   number of hands to play simultaneously (usually will be 1)
      * @param[in]  playerAcct      reference to an account for managing the credits available for betting/winning
      * @param[in]  parent          QObject parent pointer
      */
-    explicit GameOrchestrator(PokerGame &gameAnalyzer,
+    explicit GameOrchestrator(PokerGame *gameAnalyzer,
                               quint32    nbHandsToPlay,
                               Account   &playerAcct,
                               QObject   *parent = nullptr);
@@ -52,12 +52,12 @@ public:
      * @note  drawing any cards in this flow is not expected, you should keep all cards set as holds (which this
      *        constructor does for you)
      *
-     * @param[in]  gameAnalyzer    reference to an instance of an actual PokerGame subclass
+     * @param[in]  gameAnalyzer    pointer to an instance of an actual PokerGame subclass
      * @param[in]  fixedHandTest   reference to a hand to play rather than drawing from a random deck
      * @param[in]  playerAcct      reference to an account for managing the credits available for betting/winning
      * @param[in]  parent          QObject parent pointer
      */
-    explicit GameOrchestrator(PokerGame &gameAnalyzer,
+    explicit GameOrchestrator(PokerGame *gameAnalyzer,
                               Hand      &fixedHandTest,
                               Account   &playerAcct,
                               QObject   *parent = nullptr);
@@ -89,6 +89,13 @@ public:
      */
     qint8 creditsToBet() const;
 
+    /**
+     * @brief currentPayTable retrieves the currently active pay table and hand names for display purposes
+     *
+     * @param[out] payTable        reference to an array to be filled with the pay table
+     */
+    void currentPayTable(QVector<QPair<const QString, int>> &payTable);
+
 public slots:
     /**
      * @brief dealDraw will deal 5 cards per _gameCard pair when called the first time. When called the second time, it
@@ -118,10 +125,43 @@ public slots:
     void betMaximum();
 
 signals:
-    // TODO
+    /**
+     * @brief betUpdated is emitted when the user requested a bet amount change and a new paytable should be shown
+     */
+    void betUpdated();
+
+    /**
+     * @brief newGameStarted is emitted when a new game has begun to be dealt (allowing the UI to react and reset)
+     */
+    void newGameStarted();
+
+    /**
+     * @brief gameInProgress indicates a game is in progress and the next dealDraw call will be a draw, not a full deal
+     */
+    void gameInProgress(bool sayDrawNotDeal);
+
+    /**
+     * @brief primaryHandUpdated indicates the result of the hand analysis and any winnings associated with that hand
+     */
+    void primaryHandUpdated(const QString &handString, quint32 winning);
+
+    /**
+     * @brief gameWinnings indicates how much has been won on the game so far (running total of all hands played)
+     */
+    void gameWinnings(qint32 winningsSoFar);
+
+    /**
+     * @brief updatedBalance indicates the current balance in the account
+     */
+    void updatedBalance(qint32 newCreditBalance);
+
+    /**
+     * @brief primaryCardRevealed indicates a card on the primary hand was revealed (at index and what the card was)
+     */
+    void primaryCardRevealed(int cardIdx, PlayingCard card);
 
 private:
-    PokerGame                  &_gameAnalyzer;
+    PokerGame                  *_gameAnalyzer;
     quint32                     _nbHandsPerBet;
     Account                    &_playerAccount;
     bool                        _fakeGame;

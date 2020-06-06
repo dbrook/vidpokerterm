@@ -36,7 +36,14 @@ public:
      *
      * @return number of credits in the account
      */
-    quint32 balance();
+    quint32 balance() const;
+
+    /**
+     * @brief setBalance forces a new value to be held by the account
+     *
+     * @param[in]  newBal     Exact number of credits to save into the account
+     */
+    void setBalance(quint32 newBal);
 
     /**
      * @brief withdraw will try and pull credits out of the account to use for a bet

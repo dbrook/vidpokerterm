@@ -18,8 +18,9 @@
 #include "gameorchestrator.h"
 
 #include <QDebug>
+#include <QThread>
 
-GameOrchestrator::GameOrchestrator(PokerGame &gameAnalyzer,
+GameOrchestrator::GameOrchestrator(PokerGame *gameAnalyzer,
                                    quint32    nbHandsToPlay,
                                    Account   &playerAcct,
                                    QObject   *parent)
@@ -40,7 +41,7 @@ GameOrchestrator::GameOrchestrator(PokerGame &gameAnalyzer,
     }
 }
 
-GameOrchestrator::GameOrchestrator(PokerGame &gameAnalyzer,
+GameOrchestrator::GameOrchestrator(PokerGame *gameAnalyzer,
                                    Hand      &fixedHandTest,
                                    Account   &playerAcct,
                                    QObject   *parent)
@@ -71,27 +72,36 @@ Hand GameOrchestrator::retrieveHand(qint32 handNumber) const
 
 void GameOrchestrator::setCreditsToBet(qint8 credits)
 {
-    _gameAnalyzer.setCreditsPerBet(credits);
+    _gameAnalyzer->setCreditsPerBet(credits);
+    emit betUpdated();
 }
 
 qint8 GameOrchestrator::creditsToBet() const
 {
-    return _gameAnalyzer.getCreditsPerBet();
+    return _gameAnalyzer->getCreditsPerBet();
+}
+
+void GameOrchestrator::currentPayTable(QVector<QPair<const QString, int> > &payTable)
+{
+    _gameAnalyzer->currentPayTable(payTable);
 }
 
 void GameOrchestrator::dealDraw()
 {
     if (!_handInProg) {
         /*
-         * First stage of the game, no cards dealt yet so deal all of them, make sure deck is full and hand is empty
+         * First stage of the game, no cards dealt so ensure deck is full + shuffled and the target hand(s) empty
          */
+        emit newGameStarted();
+
         if (!_fakeGame) {
             _gameCards[0].first.reset();
             _gameCards[0].second.reset();
+            _gameCards[0].first.shuffle();
         }
 
         // Must have enough credits to continue
-        if (_playerAccount.balance() < _gameAnalyzer.getCreditsPerBet()) {
+        if (_playerAccount.balance() < _gameAnalyzer->getCreditsPerBet()) {
             qDebug() << "Insufficient funds to play a game";
 
             /***********************************************************************************************************
@@ -101,35 +111,47 @@ void GameOrchestrator::dealDraw()
         }
 
         // Take the bet amount from the account * the number of hands played
-        _playerAccount.withdraw(_nbHandsPerBet * _gameAnalyzer.getCreditsPerBet());
+        _playerAccount.withdraw(_nbHandsPerBet * _gameAnalyzer->getCreditsPerBet());
 
         // Do not actually draw any cards if in a unit test simulation mode
         if (!_fakeGame) {
             // The initial deal only operates on the main hand
             try {
                 for (quint32 cardIdx = 0; cardIdx < Hand::kCardsPerHand; ++cardIdx) {
-                    _gameCards[0].second.addCard(_gameCards[0].first.drawCard());
-                    // TODO: signal for each card added
-                    // TODO: real games don't instantly display the cards but have a delay for each ... use a QTimer?
+                    // TODO: Casino games like to have it feel like cards are being dealt slowly, so it is also done
+                    //QThread::msleep(50);
+
+                    PlayingCard nextCard = _gameCards[0].first.drawCard();
+                    _gameCards[0].second.addCard(nextCard);
+                    emit primaryCardRevealed(cardIdx, nextCard);
                 }
             } catch (std::runtime_error &exception) {
                 qDebug() << "WARNING: " << exception.what();
                 return;
             }
+
+            // The nice poker terminals tell you what you have at the first deal (even though you haven't "won" yet)
+            // So it is ok to analyze the hand at the deal, so long as we don't "count" the winnings
+            _gameAnalyzer->analyzeHand(_gameCards[0].second);
+            emit primaryHandUpdated(_gameAnalyzer->handResult(), 0);
         }
         _handInProg = true;
     } else {
         /*
          * Second stage of a game, hold cards selected, so draw only non-held-cards, then analyze the win
          */
+        quint32 totalWinnings = 0;
         for (quint32 handIdx = 0; handIdx < _nbHandsPerBet; ++handIdx) {
             try {
                 for (quint32 cardIdx = 0; cardIdx < Hand::kCardsPerHand; ++cardIdx) {
                     if (!_gameCards[0].second.cardHeld(cardIdx)) {
-                        _gameCards[0].second.replaceCard(cardIdx, _gameCards[0].first.drawCard());
+                        // TODO: Casino games like to have it feel like cards are being dealt slowly
+                        //QThread::msleep(50);
+
+                        PlayingCard nextCard = _gameCards[0].first.drawCard();
+                        _gameCards[0].second.replaceCard(cardIdx, nextCard);
+                        emit primaryCardRevealed(cardIdx, nextCard);
                     }
-                    // TODO: signal for each card added
-                    // TODO: real games don't instantly display the cards but delay for each ... use a QTimer?
                 }
             } catch (std::runtime_error &exception) {
                 qDebug() << "WARNING: " << exception.what();
@@ -137,13 +159,20 @@ void GameOrchestrator::dealDraw()
             }
 
             // Analyze the final hand to see what the player has won (if anything), and adjust the balance
-            _gameAnalyzer.analyzeHand(_gameCards[handIdx].second);
-            _playerAccount.add(_gameAnalyzer.getWinnings());
+            _gameAnalyzer->analyzeHand(_gameCards[handIdx].second);
+            _playerAccount.add(_gameAnalyzer->getWinnings());
 
             // TODO: analyze the win, emit the win string, amount, from the gameAnalyzer + the new account balance
+            // TODO: so far just the primary hand...
+            emit primaryHandUpdated(_gameAnalyzer->handResult(), _gameAnalyzer->getWinnings());
+            totalWinnings += _gameAnalyzer->getWinnings();
+            emit gameWinnings(totalWinnings);
         }
         _handInProg = false;
     }
+
+    emit updatedBalance(_playerAccount.balance());
+    emit gameInProgress(_handInProg);
 }
 
 void GameOrchestrator::hold(quint8 cardPosition, bool canHold)
@@ -165,7 +194,7 @@ void GameOrchestrator::hold(quint8 cardPosition, bool canHold)
 
 void GameOrchestrator::cycleBetAmount()
 {
-    qint8 currentBet = _gameAnalyzer.getCreditsPerBet();
+    qint8 currentBet = _gameAnalyzer->getCreditsPerBet();
     qint8 newBetAmount;
     switch (currentBet) {
     case 1:
@@ -184,14 +213,12 @@ void GameOrchestrator::cycleBetAmount()
     default:
         newBetAmount = 1;
     }
-    _gameAnalyzer.setCreditsPerBet(newBetAmount);
-
-    // TODO: Signal to UI the new bet amount
+    _gameAnalyzer->setCreditsPerBet(newBetAmount);
+    emit betUpdated();
 }
 
 void GameOrchestrator::betMaximum()
 {
-    _gameAnalyzer.setCreditsPerBet(5);
-
-    // TODO: Signal to UI the new bet amount
+    _gameAnalyzer->setCreditsPerBet(5);
+    emit betUpdated();
 }

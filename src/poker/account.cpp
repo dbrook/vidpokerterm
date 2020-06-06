@@ -22,9 +22,14 @@ Account::Account() : _balance(0)
 
 }
 
-quint32 Account::balance()
+quint32 Account::balance() const
 {
     return _balance;
+}
+
+void Account::setBalance(quint32 newBal)
+{
+    _balance = newBal;
 }
 
 bool Account::withdraw(quint32 amount)

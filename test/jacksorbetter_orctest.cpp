@@ -36,7 +36,7 @@ void initAndPlayOneRound(const QVector<bool> &cardsToHold, Hand &firstHand, Hand
     playerAcct.add(1000);
 
     JacksOrBetter    gameJOB;
-    GameOrchestrator orcJOB(gameJOB, 1, playerAcct);
+    GameOrchestrator orcJOB(&gameJOB, 1, playerAcct);
 
     // Deal the cards from the internal random deck
     orcJOB.dealDraw();
@@ -114,7 +114,7 @@ void JacksOrBetter_OrcTest::testSingleHandMultipleGames()
     playerAcct.add(1000);
 
     JacksOrBetter    gameJOB;
-    GameOrchestrator orcJOB(gameJOB, 1, playerAcct);
+    GameOrchestrator orcJOB(&gameJOB, 1, playerAcct);
 
     // Deal the cards from the internal random deck
     orcJOB.dealDraw();
@@ -174,7 +174,7 @@ void JacksOrBetter_OrcTest::testSingleHandInsufficientFunds()
     Account playerAcct;
     playerAcct.add(2);
     JacksOrBetter gameJOB;
-    GameOrchestrator orcJOB(gameJOB, 1, playerAcct);
+    GameOrchestrator orcJOB(&gameJOB, 1, playerAcct);
     orcJOB.setCreditsToBet(5);
     orcJOB.dealDraw();
     Hand emptyHand;
@@ -196,7 +196,7 @@ void JacksOrBetter_OrcTest::testBetCycling()
     Account playerAcct;
     playerAcct.add(100);
     JacksOrBetter gameJOB;
-    GameOrchestrator orcJOB(gameJOB, 1, playerAcct);
+    GameOrchestrator orcJOB(&gameJOB, 1, playerAcct);
 
     // Any PokerGame sub-class initialization (JacksOrBetter in this case) will be for credits-per-bet of 1
     QCOMPARE(orcJOB.creditsToBet(), 1);
@@ -219,7 +219,7 @@ void JacksOrBetter_OrcTest::testBetMaximum()
     Account playerAcct;
     playerAcct.add(100);
     JacksOrBetter gameJOB;
-    GameOrchestrator orcJOB(gameJOB, 1, playerAcct);
+    GameOrchestrator orcJOB(&gameJOB, 1, playerAcct);
 
     // Any PokerGame sub-class initialization (JacksOrBetter in this case) will be for credits-per-bet of 1
     QCOMPARE(orcJOB.creditsToBet(), 1);
@@ -243,7 +243,7 @@ void JacksOrBetter_OrcTest::testBetPlayLose()
                     PlayingCard(PlayingCard::SPADE,   PlayingCard::FOUR),
                     PlayingCard(PlayingCard::DIAMOND, PlayingCard::NINE),
                     PlayingCard(PlayingCard::HEART,   PlayingCard::SEVEN));
-    GameOrchestrator orcJOB(gameJOB, losingHand, playerAcct);
+    GameOrchestrator orcJOB(&gameJOB, losingHand, playerAcct);
 
     // Stated with 100, bet 5, lost the hand (no wins), new balance should be 95
     // NOTE: Using the GameOrchestrator constructor above, hold status need not be set (it was done for us)
@@ -268,7 +268,7 @@ void JacksOrBetter_OrcTest::testBetPlayWinTwoPair()
                     PlayingCard(PlayingCard::CLUB, PlayingCard::JACK),
                     PlayingCard(PlayingCard::CLUB, PlayingCard::QUEEN),
                     PlayingCard(PlayingCard::CLUB, PlayingCard::TEN));
-    GameOrchestrator orcJOB(gameJOB, losingHand, playerAcct);
+    GameOrchestrator orcJOB(&gameJOB, losingHand, playerAcct);
 
     // Stated with 100, bet 5, and get the royal flush, new balance should be 4095
     // NOTE: Using the GameOrchestrator constructor above, hold status need not be set (it was done for us)

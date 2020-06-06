@@ -18,15 +18,51 @@
 #include "gameaccountwindow.h"
 #include "ui_gameaccountwindow.h"
 
+// Game Orchestrator Window can be started with all different supported PokerGame subclasses
+#include "gameorchestratorwindow.h"
+
 GameAccountWindow::GameAccountWindow(QWidget *parent)
     : QMainWindow(parent)
+    , _playerAccount()
     , ui(new Ui::GameAccountWindow)
 {
     ui->setupUi(this);
+
+    // Connect the widgets initialized to their appropriate slots
+    connect(ui->exitButton, &QPushButton::clicked,
+            QApplication::instance(), &QApplication::quit);
+
+    // TODO: Make an "About..." window ...
+
+    // TODO: Make it so account can be updated using the widgets created ...
+    connect(ui->accountBalance, QOverload<int>::of(&QSpinBox::valueChanged),
+            this, &GameAccountWindow::setAccountBalance);
+
+    // Start Jacks Or Better
+    // TODO: This should be filled in for each game supported, but for now it's hardcoded on the UI side
+    connect(ui->jobTestBtn, &QPushButton::clicked,
+            this, &GameAccountWindow::startGame);
 }
 
 GameAccountWindow::~GameAccountWindow()
 {
     delete ui;
+}
+
+void GameAccountWindow::setAccountBalance()
+{
+    _playerAccount.setBalance(ui->accountBalance->value());
+}
+
+void GameAccountWindow::startGame()
+{
+    // Create a game and link it to this parent, open the window
+    GameOrchestratorWindow *gow = new GameOrchestratorWindow(_playerAccount, this);
+
+    // Needed so that memory is automatically cleaned out when closing the window!
+    gow->setAttribute(Qt::WA_DeleteOnClose);
+
+    // Start the game
+    gow->show();
 }
 

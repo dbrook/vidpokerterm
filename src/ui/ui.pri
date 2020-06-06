@@ -19,11 +19,17 @@ INCLUDEPATH += $$PWD
 DEPENDPATH += $$PWD
 
 SOURCES += \
+    $$PWD/gameorchestratorwindow.cpp \
+    $$PWD/handwidget.cpp \
     $$PWD/main.cpp \
     $$PWD/gameaccountwindow.cpp
 
 HEADERS += \
-    $$PWD/gameaccountwindow.h
+    $$PWD/gameaccountwindow.h \
+    $$PWD/gameorchestratorwindow.h \
+    $$PWD/handwidget.h
 
 FORMS += \
-    $$PWD/gameaccountwindow.ui
+    $$PWD/gameaccountwindow.ui \
+    $$PWD/gameorchestratorwindow.ui \
+    $$PWD/handwidget.ui
