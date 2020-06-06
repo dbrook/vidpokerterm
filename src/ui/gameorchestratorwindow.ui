@@ -100,6 +100,9 @@ color: rgb(255, 255, 255);</string>
              </item>
              <item>
               <widget class="QTableWidget" name="payoutDisplay">
+               <property name="focusPolicy">
+                <enum>Qt::NoFocus</enum>
+               </property>
                <property name="sizeAdjustPolicy">
                 <enum>QAbstractScrollArea::AdjustToContents</enum>
                </property>
