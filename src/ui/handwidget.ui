@@ -38,7 +38,7 @@ color: rgb(227, 227, 227);
 font-size: 20pt;</string>
         </property>
         <property name="frameShape">
-         <enum>QFrame::Box</enum>
+         <enum>QFrame::NoFrame</enum>
         </property>
         <property name="frameShadow">
          <enum>QFrame::Plain</enum>
@@ -70,7 +70,7 @@ color: rgb(227, 227, 227);
 font-size: 20pt;</string>
         </property>
         <property name="frameShape">
-         <enum>QFrame::Box</enum>
+         <enum>QFrame::NoFrame</enum>
         </property>
         <property name="frameShadow">
          <enum>QFrame::Plain</enum>
@@ -102,7 +102,7 @@ color: rgb(227, 227, 227);
 font-size: 20pt;</string>
         </property>
         <property name="frameShape">
-         <enum>QFrame::Box</enum>
+         <enum>QFrame::NoFrame</enum>
         </property>
         <property name="frameShadow">
          <enum>QFrame::Plain</enum>
@@ -134,7 +134,7 @@ color: rgb(227, 227, 227);
 font-size: 20pt;</string>
         </property>
         <property name="frameShape">
-         <enum>QFrame::Box</enum>
+         <enum>QFrame::NoFrame</enum>
         </property>
         <property name="frameShadow">
          <enum>QFrame::Plain</enum>
@@ -166,7 +166,7 @@ color: rgb(227, 227, 227);
 font-size: 20pt;</string>
         </property>
         <property name="frameShape">
-         <enum>QFrame::Box</enum>
+         <enum>QFrame::NoFrame</enum>
         </property>
         <property name="frameShadow">
          <enum>QFrame::Plain</enum>
@@ -203,8 +203,14 @@ Casino</string>
           <verstretch>0</verstretch>
          </sizepolicy>
         </property>
+        <property name="styleSheet">
+         <string notr="true">font-size: 14pt;</string>
+        </property>
         <property name="text">
          <string>Hold (1)</string>
+        </property>
+        <property name="shortcut">
+         <string>1</string>
         </property>
         <property name="checkable">
          <bool>true</bool>
@@ -219,8 +225,14 @@ Casino</string>
           <verstretch>0</verstretch>
          </sizepolicy>
         </property>
+        <property name="styleSheet">
+         <string notr="true">font-size: 14pt;</string>
+        </property>
         <property name="text">
          <string>Hold (2)</string>
+        </property>
+        <property name="shortcut">
+         <string>2</string>
         </property>
         <property name="checkable">
          <bool>true</bool>
@@ -235,8 +247,14 @@ Casino</string>
           <verstretch>0</verstretch>
          </sizepolicy>
         </property>
+        <property name="styleSheet">
+         <string notr="true">font-size: 14pt;</string>
+        </property>
         <property name="text">
          <string>Hold (3)</string>
+        </property>
+        <property name="shortcut">
+         <string>3</string>
         </property>
         <property name="checkable">
          <bool>true</bool>
@@ -251,8 +269,14 @@ Casino</string>
           <verstretch>0</verstretch>
          </sizepolicy>
         </property>
+        <property name="styleSheet">
+         <string notr="true">font-size: 14pt;</string>
+        </property>
         <property name="text">
          <string>Hold (4)</string>
+        </property>
+        <property name="shortcut">
+         <string>4</string>
         </property>
         <property name="checkable">
          <bool>true</bool>
@@ -267,8 +291,14 @@ Casino</string>
           <verstretch>0</verstretch>
          </sizepolicy>
         </property>
+        <property name="styleSheet">
+         <string notr="true">font-size: 14pt;</string>
+        </property>
         <property name="text">
          <string>Hold (5)</string>
+        </property>
+        <property name="shortcut">
+         <string>5</string>
         </property>
         <property name="checkable">
          <bool>true</bool>
@@ -280,6 +310,9 @@ Casino</string>
    </item>
    <item>
     <widget class="QLabel" name="resultLabel">
+     <property name="styleSheet">
+      <string notr="true">font-size: 18pt;</string>
+     </property>
      <property name="text">
       <string>Select betting level, then press 'Deal' to begin a game</string>
      </property>

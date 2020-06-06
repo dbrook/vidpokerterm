@@ -144,13 +144,15 @@ void GameOrchestratorWindow::dealToDraw(bool showDraw)
 {
     // When the game is in progress, ONLY let the draw button be pressed
     if (showDraw) {
-        ui->drawDealButton->setText("Draw");
+        ui->drawDealButton->setText("Draw (/)");
+        ui->drawDealButton->setShortcut(QKeySequence("/"));
         ui->winAmount->display(0);
         ui->returnButton->setDisabled(true);
         ui->betIncrementButton->setDisabled(true);
         ui->maxBetButton->setDisabled(true);
     } else {
-        ui->drawDealButton->setText("Deal");
+        ui->drawDealButton->setText("Deal (/)");
+        ui->drawDealButton->setShortcut(QKeySequence("/"));
         ui->returnButton->setDisabled(false);
         ui->betIncrementButton->setDisabled(false);
         ui->maxBetButton->setDisabled(false);

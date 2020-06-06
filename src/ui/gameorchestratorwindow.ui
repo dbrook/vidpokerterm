@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1442</width>
-    <height>688</height>
+    <width>1467</width>
+    <height>695</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -150,7 +150,7 @@ color: rgb(255, 255, 255);</string>
               <widget class="QLabel" name="winLabel">
                <property name="styleSheet">
                 <string notr="true">color: rgb(255, 0, 0);
-font-size: 22pt;</string>
+font-size: 20pt;</string>
                </property>
                <property name="text">
                 <string>Win</string>
@@ -183,7 +183,7 @@ font-size: 22pt;</string>
               <widget class="QLabel" name="betLabel">
                <property name="styleSheet">
                 <string notr="true">color: rgb(0, 255, 255);
-font-size: 22pt;</string>
+font-size: 20pt;</string>
                </property>
                <property name="text">
                 <string>Bet</string>
@@ -216,7 +216,7 @@ font-size: 22pt;</string>
               <widget class="QLabel" name="creditsLabel">
                <property name="styleSheet">
                 <string notr="true">color: rgb(0, 255, 0);
-font-size: 22pt;</string>
+font-size: 20pt;</string>
                </property>
                <property name="text">
                 <string>Credits</string>
@@ -266,35 +266,50 @@ font-size: 22pt;</string>
        <item>
         <widget class="QPushButton" name="returnButton">
          <property name="text">
-          <string>Return</string>
+          <string>Return (Esc)</string>
+         </property>
+         <property name="shortcut">
+          <string>Esc</string>
          </property>
         </widget>
        </item>
        <item>
         <widget class="QPushButton" name="speedButton">
          <property name="text">
-          <string>Speed</string>
+          <string>Speed (M)</string>
+         </property>
+         <property name="shortcut">
+          <string>M</string>
          </property>
         </widget>
        </item>
        <item>
         <widget class="QPushButton" name="betIncrementButton">
          <property name="text">
-          <string>Increase Bet</string>
+          <string>Increase Bet (,)</string>
+         </property>
+         <property name="shortcut">
+          <string>,</string>
          </property>
         </widget>
        </item>
        <item>
         <widget class="QPushButton" name="maxBetButton">
          <property name="text">
-          <string>Bet Maximum</string>
+          <string>Bet Maximum (.)</string>
+         </property>
+         <property name="shortcut">
+          <string>.</string>
          </property>
         </widget>
        </item>
        <item>
         <widget class="QPushButton" name="drawDealButton">
          <property name="text">
-          <string>Deal</string>
+          <string>Deal (/)</string>
+         </property>
+         <property name="shortcut">
+          <string>/</string>
          </property>
         </widget>
        </item>
