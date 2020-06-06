@@ -89,6 +89,17 @@ bool ThreeOfAKind(const QVector<PlayingCard> &hand)
 
 bool Straight(const QVector<PlayingCard> &hand)
 {
+    // Must handle Ace-Considered-Low-Card variety of straight (can only be A-2-3-4-5), but the sorter will have left
+    // the cards as 2-3-4-5-A
+    if (hand[0].value() == PlayingCard::TWO &&
+        hand[1].value() == PlayingCard::THREE &&
+        hand[2].value() == PlayingCard::FOUR &&
+        hand[3].value() == PlayingCard::FIVE &&
+        hand[4].value() == PlayingCard::ACE) {
+        return true;
+    }
+
+    // Ace-Considered-High-Card variety of straight -- relies on intrinsic PlayingCard::Value ordering
     PlayingCard::CardValue lowestCard = hand[0].value();
 
     for (qint32 handIdx = 1; handIdx < hand.size(); ++handIdx) {

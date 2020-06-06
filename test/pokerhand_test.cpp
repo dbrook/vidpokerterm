@@ -296,7 +296,7 @@ void TestHands::testJOB_StraightAceLow()
     Hand stAceFive(PlayingCard(PlayingCard::SPADE,   PlayingCard::FIVE ),
                    PlayingCard(PlayingCard::DIAMOND, PlayingCard::THREE),
                    PlayingCard(PlayingCard::HEART,   PlayingCard::TWO  ),
-                   PlayingCard(PlayingCard::CLUB,    PlayingCard::FIVE ),
+                   PlayingCard(PlayingCard::CLUB,    PlayingCard::FOUR ),
                    PlayingCard(PlayingCard::CLUB,    PlayingCard::ACE  ));
     validateResult(JOB, stAceFive, 1,  4, "Straight");
 }
