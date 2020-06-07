@@ -44,6 +44,9 @@ public slots:
     // Update a drawn card in its relevant position
     void revealCard(int cardIdx, PlayingCard card);
 
+    // Hide cards (flip them back over) that are about to be redrawn
+    void showCardBacks(bool card1, bool card2, bool card3, bool card4, bool card5);
+
     // Flip all cards back around and reset the hold checkboxes
     void resetAll();
 
@@ -58,6 +61,7 @@ signals:
     void card5Hold(bool cardIsHeld);
 
 private:
+    // Actual Qt widgets
     Ui::HandWidget *ui;
 };
 

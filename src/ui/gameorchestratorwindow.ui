@@ -49,7 +49,7 @@ color: rgb(255, 255, 255);</string>
              <item>
               <widget class="QLabel" name="label">
                <property name="text">
-                <string>Work-in-progress -- Multiple Hand display area still to do</string>
+                <string>(placeholder label)</string>
                </property>
                <property name="alignment">
                 <set>Qt::AlignCenter</set>
@@ -279,7 +279,7 @@ font-size: 20pt;</string>
        <item>
         <widget class="QPushButton" name="speedButton">
          <property name="text">
-          <string>Speed (M)</string>
+          <string>Speed &gt;&gt;&gt;&gt; (M)</string>
          </property>
          <property name="shortcut">
           <string>M</string>
