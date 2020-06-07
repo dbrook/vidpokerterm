@@ -36,7 +36,7 @@ void initAndPlayOneRound(const QVector<bool> &cardsToHold, Hand &firstHand, Hand
     playerAcct.add(1000);
 
     JacksOrBetter    gameJOB;
-    GameOrchestrator orcJOB(&gameJOB, 1, playerAcct);
+    GameOrchestrator orcJOB(&gameJOB, 1, playerAcct, 0);
 
     // Deal the cards from the internal random deck
     orcJOB.dealDraw();
@@ -114,7 +114,7 @@ void JacksOrBetter_OrcTest::testSingleHandMultipleGames()
     playerAcct.add(1000);
 
     JacksOrBetter    gameJOB;
-    GameOrchestrator orcJOB(&gameJOB, 1, playerAcct);
+    GameOrchestrator orcJOB(&gameJOB, 1, playerAcct, 0);
 
     // Deal the cards from the internal random deck
     orcJOB.dealDraw();
@@ -174,7 +174,7 @@ void JacksOrBetter_OrcTest::testSingleHandInsufficientFunds()
     Account playerAcct;
     playerAcct.add(2);
     JacksOrBetter gameJOB;
-    GameOrchestrator orcJOB(&gameJOB, 1, playerAcct);
+    GameOrchestrator orcJOB(&gameJOB, 1, playerAcct, 0);
     orcJOB.setCreditsToBet(5);
     orcJOB.dealDraw();
     Hand emptyHand;
@@ -196,7 +196,7 @@ void JacksOrBetter_OrcTest::testBetCycling()
     Account playerAcct;
     playerAcct.add(100);
     JacksOrBetter gameJOB;
-    GameOrchestrator orcJOB(&gameJOB, 1, playerAcct);
+    GameOrchestrator orcJOB(&gameJOB, 1, playerAcct, 0);
 
     // Any PokerGame sub-class initialization (JacksOrBetter in this case) will be for credits-per-bet of 1
     QCOMPARE(orcJOB.creditsToBet(), 1);
@@ -219,7 +219,7 @@ void JacksOrBetter_OrcTest::testBetMaximum()
     Account playerAcct;
     playerAcct.add(100);
     JacksOrBetter gameJOB;
-    GameOrchestrator orcJOB(&gameJOB, 1, playerAcct);
+    GameOrchestrator orcJOB(&gameJOB, 1, playerAcct, 0);
 
     // Any PokerGame sub-class initialization (JacksOrBetter in this case) will be for credits-per-bet of 1
     QCOMPARE(orcJOB.creditsToBet(), 1);

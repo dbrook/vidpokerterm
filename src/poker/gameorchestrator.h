@@ -36,11 +36,13 @@ public:
      * @param[in]  gameAnalyzer    pointer to an instance of an actual PokerGame subclass
      * @param[in]  nbHandsToPlay   number of hands to play simultaneously (usually will be 1)
      * @param[in]  playerAcct      reference to an account for managing the credits available for betting/winning
+     * @param[in]  renderDelay     delay between card draws in milliseconds
      * @param[in]  parent          QObject parent pointer
      */
     explicit GameOrchestrator(PokerGame *gameAnalyzer,
                               quint32    nbHandsToPlay,
                               Account   &playerAcct,
+                              quint8     renderDelay,
                               QObject   *parent = nullptr);
 
     /**
@@ -124,6 +126,15 @@ public slots:
      */
     void betMaximum();
 
+    /**
+     * @brief speedControl will adjust the delay between card draws:
+     *
+     *            +--> Instant --> Slow 150ms --> Medium 100ms --> Fast 50ms ---+
+     *            |                                                             |
+     *            +-------------------------------------------------------------+
+     */
+    void speedControlCycle();
+
 signals:
     /**
      * @brief betUpdated is emitted when the user requested a bet amount change and a new paytable should be shown
@@ -134,6 +145,11 @@ signals:
      * @brief newGameStarted is emitted when a new game has begun to be dealt (allowing the UI to react and reset)
      */
     void newGameStarted();
+
+    /**
+     * @brief cardsToRedraw is emitted with the status (true) of cards that will be redrawn (for the sake of the UI)
+     */
+    void cardsToRedraw(bool card1, bool card2, bool card3, bool card4, bool card5);
 
     /**
      * @brief gameInProgress indicates a game is in progress and the next dealDraw call will be a draw, not a full deal
@@ -160,10 +176,16 @@ signals:
      */
     void primaryCardRevealed(int cardIdx, PlayingCard card);
 
+    /**
+     * @brief renderSpeed indicates the card draw speed was changed
+     */
+    void renderSpeed(const QString &currentSpeed);
+
 private:
     PokerGame                  *_gameAnalyzer;
     quint32                     _nbHandsPerBet;
     Account                    &_playerAccount;
+    quint8                      _renderDelayMS;
     bool                        _fakeGame;
     bool                        _handInProg;
     QVector<QPair<Deck, Hand>>  _gameCards;

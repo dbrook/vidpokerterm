@@ -23,10 +23,12 @@
 GameOrchestrator::GameOrchestrator(PokerGame *gameAnalyzer,
                                    quint32    nbHandsToPlay,
                                    Account   &playerAcct,
+                                   quint8     renderDelay,
                                    QObject   *parent)
     : _gameAnalyzer (gameAnalyzer),
       _nbHandsPerBet(nbHandsToPlay),
       _playerAccount(playerAcct),
+      _renderDelayMS(renderDelay),
       _fakeGame     (false),
       _handInProg   (false),
       QObject       (parent)
@@ -48,6 +50,7 @@ GameOrchestrator::GameOrchestrator(PokerGame *gameAnalyzer,
     : _gameAnalyzer (gameAnalyzer),
       _nbHandsPerBet(1),
       _playerAccount(playerAcct),
+      _renderDelayMS(0),
       _fakeGame     (true),
       _handInProg   (false),
       QObject       (parent)
@@ -110,16 +113,22 @@ void GameOrchestrator::dealDraw()
             return;
         }
 
+        // Set the in progress state right away so the UI will be updated before dealing out cards
+        _handInProg = true;
+        emit gameInProgress(_handInProg);
+
         // Take the bet amount from the account * the number of hands played
         _playerAccount.withdraw(_nbHandsPerBet * _gameAnalyzer->getCreditsPerBet());
+        emit updatedBalance(_playerAccount.balance());
 
         // Do not actually draw any cards if in a unit test simulation mode
         if (!_fakeGame) {
             // The initial deal only operates on the main hand
             try {
                 for (quint32 cardIdx = 0; cardIdx < Hand::kCardsPerHand; ++cardIdx) {
-                    // TODO: Casino games like to have it feel like cards are being dealt slowly, so it is also done
-                    //QThread::msleep(50);
+                    // Actual terminals like to give the appearance of a game, so introduce a delay between showing
+                    if (_renderDelayMS != 0)
+                        QThread::msleep(_renderDelayMS);
 
                     PlayingCard nextCard = _gameCards[0].first.drawCard();
                     _gameCards[0].second.addCard(nextCard);
@@ -135,18 +144,42 @@ void GameOrchestrator::dealDraw()
             _gameAnalyzer->analyzeHand(_gameCards[0].second);
             emit primaryHandUpdated(_gameAnalyzer->handResult(), 0);
         }
-        _handInProg = true;
     } else {
         /*
          * Second stage of a game, hold cards selected, so draw only non-held-cards, then analyze the win
          */
+        // First, flip the cards back over
+        bool flipCard1 = false;
+        bool flipCard2 = false;
+        bool flipCard3 = false;
+        bool flipCard4 = false;
+        bool flipCard5 = false;
+        if (!_gameCards[0].second.cardHeld(0)) {
+            flipCard1 = true;
+        }
+        if (!_gameCards[0].second.cardHeld(1)) {
+            flipCard2 = true;
+        }
+        if (!_gameCards[0].second.cardHeld(2)) {
+            flipCard3 = true;
+        }
+        if (!_gameCards[0].second.cardHeld(3)) {
+            flipCard4 = true;
+        }
+        if (!_gameCards[0].second.cardHeld(4)) {
+            flipCard5 = true;
+        }
+        emit cardsToRedraw(flipCard1, flipCard2, flipCard3, flipCard4, flipCard5);
+
+        // ... then reveal them
         quint32 totalWinnings = 0;
         for (quint32 handIdx = 0; handIdx < _nbHandsPerBet; ++handIdx) {
             try {
                 for (quint32 cardIdx = 0; cardIdx < Hand::kCardsPerHand; ++cardIdx) {
                     if (!_gameCards[0].second.cardHeld(cardIdx)) {
-                        // TODO: Casino games like to have it feel like cards are being dealt slowly
-                        //QThread::msleep(50);
+                        // Actual terminals like to give the appearance of a game, so introduce a delay between showing
+                        if (_renderDelayMS != 0)
+                            QThread::msleep(_renderDelayMS);
 
                         PlayingCard nextCard = _gameCards[0].first.drawCard();
                         _gameCards[0].second.replaceCard(cardIdx, nextCard);
@@ -169,10 +202,9 @@ void GameOrchestrator::dealDraw()
             emit gameWinnings(totalWinnings);
         }
         _handInProg = false;
+        emit gameInProgress(_handInProg);
+        emit updatedBalance(_playerAccount.balance());
     }
-
-    emit updatedBalance(_playerAccount.balance());
-    emit gameInProgress(_handInProg);
 }
 
 void GameOrchestrator::hold(quint8 cardPosition, bool canHold)
@@ -221,4 +253,21 @@ void GameOrchestrator::betMaximum()
 {
     _gameAnalyzer->setCreditsPerBet(5);
     emit betUpdated();
+}
+
+void GameOrchestrator::speedControlCycle()
+{
+    if (_renderDelayMS == 150) {
+        _renderDelayMS = 100;
+        emit renderSpeed(">>");
+    } else if (_renderDelayMS == 100) {
+        _renderDelayMS = 50;
+        emit renderSpeed(">>>");
+    } else if (_renderDelayMS == 50) {
+        _renderDelayMS = 0;
+        emit renderSpeed(">>>>");
+    } else {
+        _renderDelayMS = 150;
+        emit renderSpeed(">");
+    }
 }

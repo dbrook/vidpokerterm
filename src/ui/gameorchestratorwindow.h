@@ -53,6 +53,9 @@ public slots:
     // Update the account balance widget as the totals are created
     void currentBalance(quint32 totalCredits);
 
+    // Sets the render speed indicator on the speed button
+    void updateSpeedChar(const QString &speedStr);
+
     // TODO: This is terrible ... I should be able to make a single function to do this?
     void holdCard1(bool cardHeld);
     void holdCard2(bool cardHeld);
@@ -64,7 +67,7 @@ private:
     Account          &_playerCredits;
     GameOrchestrator *_gameOrc;
     JacksOrBetter    *_gameLogic;
-    QThread          *_gameEventProcessor;     // TODO: Figure out threading for worker process
+    QThread          *_gameEventProcessor;
     Ui::GameOrchestratorWindow *ui;
 };
 

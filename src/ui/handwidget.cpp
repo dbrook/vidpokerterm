@@ -54,7 +54,7 @@ void HandWidget::winningTextAndAmount(const QString &handString, quint32 winning
     } else if (winning == 0) {
         ui->resultLabel->setText(handString);
     } else {
-        ui->resultLabel->setText(handString + " + " + QString::number(winning));
+        ui->resultLabel->setText(handString + " - Win +" + QString::number(winning));
     }
 }
 
@@ -162,6 +162,30 @@ void HandWidget::revealCard(int cardIdx, PlayingCard card)
     default:
         // Should not happen!
         break;
+    }
+}
+
+void HandWidget::showCardBacks(bool card1, bool card2, bool card3, bool card4, bool card5)
+{
+    if (card1) {
+        ui->card1->setText("Chad's\nCasino");
+        ui->card1->setStyleSheet(cardBackStyle);
+    }
+    if (card2) {
+        ui->card2->setText("Chad's\nCasino");
+        ui->card2->setStyleSheet(cardBackStyle);
+    }
+    if (card3) {
+        ui->card3->setText("Chad's\nCasino");
+        ui->card3->setStyleSheet(cardBackStyle);
+    }
+    if (card4) {
+        ui->card4->setText("Chad's\nCasino");
+        ui->card4->setStyleSheet(cardBackStyle);
+    }
+    if (card5) {
+        ui->card5->setText("Chad's\nCasino");
+        ui->card5->setStyleSheet(cardBackStyle);
     }
 }
 
