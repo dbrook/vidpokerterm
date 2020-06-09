@@ -57,7 +57,9 @@ GameOrchestratorWindow::GameOrchestratorWindow(Account &playerAccount, QWidget *
     connect(ui->returnButton, &QPushButton::clicked, this, &GameOrchestratorWindow::close);
 
     // The all-important deal/draw button
-    connect(ui->drawDealButton, &QPushButton::clicked, _gameOrc, &GameOrchestrator::dealDraw);
+    // -- calls our own slot which will call the Orchestrator, thread sync issues observed on slow processors otherwise
+    connect(ui->drawDealButton, &QPushButton::clicked, this, &GameOrchestratorWindow::syncDealDraw);
+    connect(this, &GameOrchestratorWindow::readyForDealDraw, _gameOrc, &GameOrchestrator::dealDraw);
 
     // The text of the button should say 'deal' when a game is not in progress, but 'draw' when it is
     connect(_gameOrc, &GameOrchestrator::gameInProgress, this, &GameOrchestratorWindow::dealToDraw);
@@ -98,7 +100,7 @@ GameOrchestratorWindow::GameOrchestratorWindow(Account &playerAccount, QWidget *
     connect(_gameOrc, &GameOrchestrator::renderSpeed, this, &GameOrchestratorWindow::updateSpeedChar);
 
     // The primary hand should recognize when a new game has started
-    connect(_gameOrc, &GameOrchestrator::newGameStarted, PrimaryHand, &HandWidget::resetAll);
+    connect(this, &GameOrchestratorWindow::resetCardDisplay, PrimaryHand, &HandWidget::resetAll);
 
     // Offload the game processor to its own thread (per https://wiki.qt.io/QThreads_general_usage)
     // Using a separate thread seems to necessitate registering the type?
@@ -119,6 +121,19 @@ GameOrchestratorWindow::~GameOrchestratorWindow()
     delete ui;
 }
 
+void GameOrchestratorWindow::resizeEvent(QResizeEvent *event)
+{
+    QMainWindow::resizeEvent(event);
+    fixPayoutTableSize();
+}
+
+void GameOrchestratorWindow::fixPayoutTableSize()
+{
+    int totalTableWidth = ui->payoutDisplay->width();
+    ui->payoutDisplay->setColumnWidth(0, totalTableWidth * 0.7);
+    ui->payoutDisplay->setColumnWidth(1, totalTableWidth * 0.3);
+}
+
 void GameOrchestratorWindow::showPayTableAndBet()
 {
     // Cleanup existing entries
@@ -136,7 +151,10 @@ void GameOrchestratorWindow::showPayTableAndBet()
         ui->payoutDisplay->insertRow(ui->payoutDisplay->rowCount());
         ui->payoutDisplay->setItem(rowCount, 0, new QTableWidgetItem(payouts[rowCount].first));
         ui->payoutDisplay->setItem(rowCount, 1, new QTableWidgetItem(QString::number(payouts[rowCount].second)));
+        ui->payoutDisplay->item(rowCount, 1)->setTextAlignment(Qt::AlignRight);
     }
+
+    fixPayoutTableSize();
 
     // Show the bet amount requested
     ui->betAmount->display(static_cast<int>(_gameOrc->creditsToBet()));
@@ -146,19 +164,28 @@ void GameOrchestratorWindow::dealToDraw(bool showDraw)
 {
     // When the game is in progress, ONLY let the draw button be pressed
     if (showDraw) {
-        ui->drawDealButton->setText("Draw (/)");
+        ui->drawDealButton->setText("Draw");
         ui->drawDealButton->setShortcut(QKeySequence("/"));
         ui->winAmount->display(0);
         ui->returnButton->setDisabled(true);
         ui->betIncrementButton->setDisabled(true);
         ui->maxBetButton->setDisabled(true);
     } else {
-        ui->drawDealButton->setText("Deal (/)");
+        ui->drawDealButton->setText("Deal");
         ui->drawDealButton->setShortcut(QKeySequence("/"));
         ui->returnButton->setDisabled(false);
         ui->betIncrementButton->setDisabled(false);
         ui->maxBetButton->setDisabled(false);
     }
+}
+
+void GameOrchestratorWindow::syncDealDraw()
+{
+    if (!_gameOrc->isGameInProgress()) {
+        emit resetCardDisplay();
+    }
+
+    emit readyForDealDraw();
 }
 
 void GameOrchestratorWindow::currentWinnings(quint32 winningsOfHands)
@@ -173,7 +200,7 @@ void GameOrchestratorWindow::currentBalance(quint32 totalCredits)
 
 void GameOrchestratorWindow::updateSpeedChar(const QString &speedStr)
 {
-    ui->speedButton->setText("Speed " + speedStr + " (M)");
+    ui->speedButton->setText("Speed " + speedStr);
     ui->speedButton->setShortcut(QKeySequence("M"));
 }
 

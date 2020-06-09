@@ -98,6 +98,13 @@ public:
      */
     void currentPayTable(QVector<QPair<const QString, int>> &payTable);
 
+    /**
+     * @brief isGameInProgress determines if the orchestrator is waiting for the use to hold cards and redraw
+     *
+     * @return true if there is a hand / game in progress
+     */
+    bool isGameInProgress() const;
+
 public slots:
     /**
      * @brief dealDraw will deal 5 cards per _gameCard pair when called the first time. When called the second time, it

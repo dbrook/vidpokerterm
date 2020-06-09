@@ -6,9 +6,15 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>795</width>
-    <height>299</height>
+    <width>960</width>
+    <height>376</height>
    </rect>
+  </property>
+  <property name="sizePolicy">
+   <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+    <horstretch>0</horstretch>
+    <verstretch>0</verstretch>
+   </sizepolicy>
   </property>
   <property name="windowTitle">
    <string>Form</string>
@@ -16,102 +22,30 @@
   <property name="styleSheet">
    <string notr="true">QCheckBox:checked {color: rgb(125,30,0); background-color: rgb(250,250,0);}</string>
   </property>
-  <layout class="QVBoxLayout" name="verticalLayout" stretch="1,0,0">
+  <layout class="QVBoxLayout" name="verticalLayout" stretch="0,0">
    <item>
     <widget class="QFrame" name="cardArea">
-     <property name="sizePolicy">
-      <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-       <horstretch>0</horstretch>
-       <verstretch>0</verstretch>
-      </sizepolicy>
-     </property>
      <property name="frameShape">
       <enum>QFrame::NoFrame</enum>
      </property>
      <property name="frameShadow">
       <enum>QFrame::Raised</enum>
      </property>
-     <layout class="QHBoxLayout" name="cardLayoutItem">
-      <item>
-       <widget class="QLabel" name="card1">
-        <property name="styleSheet">
-         <string notr="true">background-color: rgb(0, 66, 188);
-border-color: rgb(0, 0, 0);
-color: rgb(227, 227, 227);
-font-size: 20pt;</string>
-        </property>
-        <property name="frameShape">
-         <enum>QFrame::NoFrame</enum>
-        </property>
-        <property name="frameShadow">
-         <enum>QFrame::Plain</enum>
-        </property>
-        <property name="lineWidth">
-         <number>4</number>
-        </property>
-        <property name="text">
-         <string>Chad's
-Casino</string>
-        </property>
-        <property name="alignment">
-         <set>Qt::AlignCenter</set>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QLabel" name="card2">
-        <property name="styleSheet">
-         <string notr="true">background-color: rgb(0, 66, 188);
-border-color: rgb(0, 0, 0);
-color: rgb(227, 227, 227);
-font-size: 20pt;</string>
-        </property>
-        <property name="frameShape">
-         <enum>QFrame::NoFrame</enum>
-        </property>
-        <property name="frameShadow">
-         <enum>QFrame::Plain</enum>
-        </property>
-        <property name="lineWidth">
-         <number>4</number>
-        </property>
-        <property name="text">
-         <string>Chad's
-Casino</string>
-        </property>
-        <property name="alignment">
-         <set>Qt::AlignCenter</set>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QLabel" name="card3">
-        <property name="styleSheet">
-         <string notr="true">background-color: rgb(0, 66, 188);
-border-color: rgb(0, 0, 0);
-color: rgb(227, 227, 227);
-font-size: 20pt;</string>
-        </property>
-        <property name="frameShape">
-         <enum>QFrame::NoFrame</enum>
-        </property>
-        <property name="frameShadow">
-         <enum>QFrame::Plain</enum>
-        </property>
-        <property name="lineWidth">
-         <number>4</number>
-        </property>
-        <property name="text">
-         <string>Chad's
-Casino</string>
-        </property>
-        <property name="alignment">
-         <set>Qt::AlignCenter</set>
-        </property>
-       </widget>
-      </item>
-      <item>
+     <layout class="QGridLayout" name="gridLayout" columnstretch="1,0,0,0,0,0,1">
+      <item row="0" column="4">
        <widget class="QLabel" name="card4">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="minimumSize">
+         <size>
+          <width>180</width>
+          <height>250</height>
+         </size>
+        </property>
         <property name="styleSheet">
          <string notr="true">background-color: rgb(0, 66, 188);
 border-color: rgb(0, 0, 0);
@@ -136,8 +70,58 @@ Casino</string>
         </property>
        </widget>
       </item>
-      <item>
+      <item row="0" column="3">
+       <widget class="QLabel" name="card3">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="minimumSize">
+         <size>
+          <width>180</width>
+          <height>250</height>
+         </size>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">background-color: rgb(0, 66, 188);
+border-color: rgb(0, 0, 0);
+color: rgb(227, 227, 227);
+font-size: 20pt;</string>
+        </property>
+        <property name="frameShape">
+         <enum>QFrame::NoFrame</enum>
+        </property>
+        <property name="frameShadow">
+         <enum>QFrame::Plain</enum>
+        </property>
+        <property name="lineWidth">
+         <number>4</number>
+        </property>
+        <property name="text">
+         <string>Chad's
+Casino</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignCenter</set>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="5">
        <widget class="QLabel" name="card5">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="minimumSize">
+         <size>
+          <width>180</width>
+          <height>250</height>
+         </size>
+        </property>
         <property name="styleSheet">
          <string notr="true">background-color: rgb(0, 66, 188);
 border-color: rgb(0, 0, 0);
@@ -162,86 +146,110 @@ Casino</string>
         </property>
        </widget>
       </item>
-     </layout>
-    </widget>
-   </item>
-   <item>
-    <widget class="QFrame" name="holdArea">
-     <property name="frameShape">
-      <enum>QFrame::NoFrame</enum>
-     </property>
-     <property name="frameShadow">
-      <enum>QFrame::Raised</enum>
-     </property>
-     <layout class="QHBoxLayout" name="horizontalLayout">
-      <item>
-       <widget class="QCheckBox" name="holdBtnCard1">
+      <item row="1" column="0">
+       <spacer name="horizontalSpacer">
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>40</width>
+          <height>20</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
+      <item row="0" column="1">
+       <widget class="QLabel" name="card1">
         <property name="sizePolicy">
-         <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+         <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
           <horstretch>0</horstretch>
           <verstretch>0</verstretch>
          </sizepolicy>
         </property>
+        <property name="minimumSize">
+         <size>
+          <width>180</width>
+          <height>250</height>
+         </size>
+        </property>
         <property name="styleSheet">
-         <string notr="true">font-size: 14pt;</string>
+         <string notr="true">background-color: rgb(0, 66, 188);
+border-color: rgb(0, 0, 0);
+color: rgb(227, 227, 227);
+font-size: 20pt;</string>
+        </property>
+        <property name="frameShape">
+         <enum>QFrame::NoFrame</enum>
+        </property>
+        <property name="frameShadow">
+         <enum>QFrame::Plain</enum>
+        </property>
+        <property name="lineWidth">
+         <number>4</number>
         </property>
         <property name="text">
-         <string>Hold (1)</string>
+         <string>Chad's
+Casino</string>
         </property>
-        <property name="shortcut">
-         <string>1</string>
-        </property>
-        <property name="checkable">
-         <bool>true</bool>
+        <property name="alignment">
+         <set>Qt::AlignCenter</set>
         </property>
        </widget>
       </item>
-      <item>
-       <widget class="QCheckBox" name="holdBtnCard2">
+      <item row="0" column="2">
+       <widget class="QLabel" name="card2">
         <property name="sizePolicy">
-         <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+         <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
           <horstretch>0</horstretch>
           <verstretch>0</verstretch>
          </sizepolicy>
         </property>
+        <property name="minimumSize">
+         <size>
+          <width>180</width>
+          <height>250</height>
+         </size>
+        </property>
         <property name="styleSheet">
-         <string notr="true">font-size: 14pt;</string>
+         <string notr="true">background-color: rgb(0, 66, 188);
+border-color: rgb(0, 0, 0);
+color: rgb(227, 227, 227);
+font-size: 20pt;</string>
+        </property>
+        <property name="frameShape">
+         <enum>QFrame::NoFrame</enum>
+        </property>
+        <property name="frameShadow">
+         <enum>QFrame::Plain</enum>
+        </property>
+        <property name="lineWidth">
+         <number>4</number>
         </property>
         <property name="text">
-         <string>Hold (2)</string>
+         <string>Chad's
+Casino</string>
         </property>
-        <property name="shortcut">
-         <string>2</string>
-        </property>
-        <property name="checkable">
-         <bool>true</bool>
+        <property name="alignment">
+         <set>Qt::AlignCenter</set>
         </property>
        </widget>
       </item>
-      <item>
-       <widget class="QCheckBox" name="holdBtnCard3">
-        <property name="sizePolicy">
-         <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
-          <horstretch>0</horstretch>
-          <verstretch>0</verstretch>
-         </sizepolicy>
+      <item row="1" column="6">
+       <spacer name="horizontalSpacer_2">
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
         </property>
-        <property name="styleSheet">
-         <string notr="true">font-size: 14pt;</string>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>40</width>
+          <height>20</height>
+         </size>
         </property>
-        <property name="text">
-         <string>Hold (3)</string>
-        </property>
-        <property name="shortcut">
-         <string>3</string>
-        </property>
-        <property name="checkable">
-         <bool>true</bool>
-        </property>
-       </widget>
+       </spacer>
       </item>
-      <item>
-       <widget class="QCheckBox" name="holdBtnCard4">
+      <item row="1" column="5">
+       <widget class="QPushButton" name="holdBtnCard5">
         <property name="sizePolicy">
          <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
           <horstretch>0</horstretch>
@@ -249,29 +257,28 @@ Casino</string>
          </sizepolicy>
         </property>
         <property name="styleSheet">
-         <string notr="true">font-size: 14pt;</string>
-        </property>
-        <property name="text">
-         <string>Hold (4)</string>
-        </property>
-        <property name="shortcut">
-         <string>4</string>
-        </property>
-        <property name="checkable">
-         <bool>true</bool>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QCheckBox" name="holdBtnCard5">
-        <property name="sizePolicy">
-         <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
-          <horstretch>0</horstretch>
-          <verstretch>0</verstretch>
-         </sizepolicy>
-        </property>
-        <property name="styleSheet">
-         <string notr="true">font-size: 14pt;</string>
+         <string notr="true">QPushButton:disabled {
+    color: gray;
+    border-style: flat;
+    border-width: 2px;
+    border-color: gray;
+    font-size: 15pt;
+}
+QPushButton {
+    border-style: outset;
+    border-width: 2px;
+    border-color: gold;
+    font-size: 15pt;
+}
+QPushButton:checked {
+    color: yellow;
+    background-color: black;
+    border-style: outset;
+    border-width: 2px;
+    border-color: yellow;
+    font-size: 15pt;
+}
+</string>
         </property>
         <property name="text">
          <string>Hold (5)</string>
@@ -284,16 +291,194 @@ Casino</string>
         </property>
        </widget>
       </item>
+      <item row="1" column="4">
+       <widget class="QPushButton" name="holdBtnCard4">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">QPushButton:disabled {
+    color: gray;
+    border-style: flat;
+    border-width: 2px;
+    border-color: gray;
+    font-size: 15pt;
+}
+QPushButton {
+    border-style: outset;
+    border-width: 2px;
+    border-color: gold;
+    font-size: 15pt;
+}
+QPushButton:checked {
+    color: yellow;
+    background-color: black;
+    border-style: outset;
+    border-width: 2px;
+    border-color: yellow;
+    font-size: 15pt;
+}
+</string>
+        </property>
+        <property name="text">
+         <string>Hold (4)</string>
+        </property>
+        <property name="shortcut">
+         <string>4</string>
+        </property>
+        <property name="checkable">
+         <bool>true</bool>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="3">
+       <widget class="QPushButton" name="holdBtnCard3">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">QPushButton:disabled {
+    color: gray;
+    border-style: flat;
+    border-width: 2px;
+    border-color: gray;
+    font-size: 15pt;
+}
+QPushButton {
+    border-style: outset;
+    border-width: 2px;
+    border-color: gold;
+    font-size: 15pt;
+}
+QPushButton:checked {
+    color: yellow;
+    background-color: black;
+    border-style: outset;
+    border-width: 2px;
+    border-color: yellow;
+    font-size: 15pt;
+}
+</string>
+        </property>
+        <property name="text">
+         <string>Hold (3)</string>
+        </property>
+        <property name="shortcut">
+         <string>3</string>
+        </property>
+        <property name="checkable">
+         <bool>true</bool>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="2">
+       <widget class="QPushButton" name="holdBtnCard2">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">QPushButton:disabled {
+    color: gray;
+    border-style: flat;
+    border-width: 2px;
+    border-color: gray;
+    font-size: 15pt;
+}
+QPushButton {
+    border-style: outset;
+    border-width: 2px;
+    border-color: gold;
+    font-size: 15pt;
+}
+QPushButton:checked {
+    color: yellow;
+    background-color: black;
+    border-style: outset;
+    border-width: 2px;
+    border-color: yellow;
+    font-size: 15pt;
+}
+</string>
+        </property>
+        <property name="text">
+         <string>Hold (2)</string>
+        </property>
+        <property name="shortcut">
+         <string>2</string>
+        </property>
+        <property name="checkable">
+         <bool>true</bool>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="1">
+       <widget class="QPushButton" name="holdBtnCard1">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">QPushButton:disabled {
+    color: gray;
+    border-style: flat;
+    border-width: 2px;
+    border-color: gray;
+    font-size: 15pt;
+}
+QPushButton {
+    border-style: outset;
+    border-width: 2px;
+    border-color: gold;
+    font-size: 15pt;
+}
+QPushButton:checked {
+    color: yellow;
+    background-color: black;
+    border-style: outset;
+    border-width: 2px;
+    border-color: yellow;
+    font-size: 15pt;
+}
+</string>
+        </property>
+        <property name="text">
+         <string>Hold (1)</string>
+        </property>
+        <property name="shortcut">
+         <string>1</string>
+        </property>
+        <property name="checkable">
+         <bool>true</bool>
+        </property>
+       </widget>
+      </item>
      </layout>
     </widget>
    </item>
    <item>
     <widget class="QLabel" name="resultLabel">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
      <property name="styleSheet">
       <string notr="true">font-size: 18pt;</string>
      </property>
      <property name="text">
-      <string>Select betting level, then press 'Deal' to begin a game</string>
+      <string>Select bet level, then press 'Deal' to begin a game</string>
      </property>
      <property name="alignment">
       <set>Qt::AlignCenter</set>

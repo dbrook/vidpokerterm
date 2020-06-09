@@ -6,32 +6,38 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1467</width>
-    <height>695</height>
+    <width>1388</width>
+    <height>660</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>VidPokerTerminal</string>
   </property>
+  <property name="styleSheet">
+   <string notr="true">background-color: rgb(6, 139, 3);
+color: rgb(255, 255, 255);</string>
+  </property>
   <widget class="QWidget" name="centralwidget">
    <layout class="QVBoxLayout" name="verticalLayout" stretch="1,0">
     <item>
      <widget class="QFrame" name="handTableCreditsArea">
+      <property name="styleSheet">
+       <string notr="true"/>
+      </property>
       <property name="frameShape">
-       <enum>QFrame::StyledPanel</enum>
+       <enum>QFrame::NoFrame</enum>
       </property>
       <property name="frameShadow">
        <enum>QFrame::Raised</enum>
       </property>
-      <layout class="QHBoxLayout" name="horizontalLayout" stretch="1,0">
+      <layout class="QHBoxLayout" name="horizontalLayout" stretch="7,3">
        <item>
         <widget class="QFrame" name="handArea">
          <property name="styleSheet">
-          <string notr="true">background-color: rgb(6, 139, 3);
-color: rgb(255, 255, 255);</string>
+          <string notr="true"/>
          </property>
          <property name="frameShape">
-          <enum>QFrame::StyledPanel</enum>
+          <enum>QFrame::NoFrame</enum>
          </property>
          <property name="frameShadow">
           <enum>QFrame::Raised</enum>
@@ -40,29 +46,18 @@ color: rgb(255, 255, 255);</string>
           <item>
            <widget class="QFrame" name="multipleHand">
             <property name="frameShape">
-             <enum>QFrame::StyledPanel</enum>
+             <enum>QFrame::NoFrame</enum>
             </property>
             <property name="frameShadow">
              <enum>QFrame::Raised</enum>
             </property>
-            <layout class="QVBoxLayout" name="verticalLayout_3">
-             <item>
-              <widget class="QLabel" name="label">
-               <property name="text">
-                <string>(placeholder label)</string>
-               </property>
-               <property name="alignment">
-                <set>Qt::AlignCenter</set>
-               </property>
-              </widget>
-             </item>
-            </layout>
+            <layout class="QVBoxLayout" name="verticalLayout_3"/>
            </widget>
           </item>
           <item>
            <widget class="QFrame" name="primaryHand">
             <property name="frameShape">
-             <enum>QFrame::StyledPanel</enum>
+             <enum>QFrame::NoFrame</enum>
             </property>
             <property name="frameShadow">
              <enum>QFrame::Raised</enum>
@@ -76,7 +71,7 @@ color: rgb(255, 255, 255);</string>
        <item>
         <widget class="QFrame" name="payTableArea">
          <property name="frameShape">
-          <enum>QFrame::StyledPanel</enum>
+          <enum>QFrame::NoFrame</enum>
          </property>
          <property name="frameShadow">
           <enum>QFrame::Raised</enum>
@@ -84,8 +79,11 @@ color: rgb(255, 255, 255);</string>
          <layout class="QVBoxLayout" name="verticalLayout_5">
           <item>
            <widget class="QFrame" name="payoutTable">
+            <property name="styleSheet">
+             <string notr="true">font-size: 18pt;</string>
+            </property>
             <property name="frameShape">
-             <enum>QFrame::StyledPanel</enum>
+             <enum>QFrame::NoFrame</enum>
             </property>
             <property name="frameShadow">
              <enum>QFrame::Raised</enum>
@@ -102,6 +100,15 @@ color: rgb(255, 255, 255);</string>
               <widget class="QTableWidget" name="payoutDisplay">
                <property name="focusPolicy">
                 <enum>Qt::NoFocus</enum>
+               </property>
+               <property name="styleSheet">
+                <string notr="true">font-size: 16pt;</string>
+               </property>
+               <property name="frameShape">
+                <enum>QFrame::NoFrame</enum>
+               </property>
+               <property name="horizontalScrollBarPolicy">
+                <enum>Qt::ScrollBarAlwaysOff</enum>
                </property>
                <property name="sizeAdjustPolicy">
                 <enum>QAbstractScrollArea::AdjustToContents</enum>
@@ -138,22 +145,17 @@ color: rgb(255, 255, 255);</string>
           </item>
           <item>
            <widget class="QFrame" name="accountBets">
-            <property name="styleSheet">
-             <string notr="true">background-color: rgb(0, 0, 0);
-color: rgb(255, 255, 255);</string>
-            </property>
             <property name="frameShape">
-             <enum>QFrame::StyledPanel</enum>
+             <enum>QFrame::NoFrame</enum>
             </property>
             <property name="frameShadow">
              <enum>QFrame::Raised</enum>
             </property>
-            <layout class="QGridLayout" name="gridLayout">
+            <layout class="QGridLayout" name="gridLayout" columnstretch="0,1">
              <item row="0" column="0">
               <widget class="QLabel" name="winLabel">
                <property name="styleSheet">
-                <string notr="true">color: rgb(255, 0, 0);
-font-size: 20pt;</string>
+                <string notr="true">font-size: 20pt;</string>
                </property>
                <property name="text">
                 <string>Win</string>
@@ -166,7 +168,7 @@ font-size: 20pt;</string>
              <item row="0" column="1">
               <widget class="QLCDNumber" name="winAmount">
                <property name="styleSheet">
-                <string notr="true">color: rgb(255, 0, 0);</string>
+                <string notr="true">font-size: 20pt;</string>
                </property>
                <property name="frameShape">
                 <enum>QFrame::NoFrame</enum>
@@ -175,7 +177,7 @@ font-size: 20pt;</string>
                 <enum>QFrame::Plain</enum>
                </property>
                <property name="digitCount">
-                <number>10</number>
+                <number>11</number>
                </property>
                <property name="segmentStyle">
                 <enum>QLCDNumber::Flat</enum>
@@ -185,8 +187,7 @@ font-size: 20pt;</string>
              <item row="1" column="0">
               <widget class="QLabel" name="betLabel">
                <property name="styleSheet">
-                <string notr="true">color: rgb(0, 255, 255);
-font-size: 20pt;</string>
+                <string notr="true">font-size: 20pt;</string>
                </property>
                <property name="text">
                 <string>Bet</string>
@@ -198,9 +199,6 @@ font-size: 20pt;</string>
              </item>
              <item row="1" column="1">
               <widget class="QLCDNumber" name="betAmount">
-               <property name="styleSheet">
-                <string notr="true">color: rgb(0, 255, 255);</string>
-               </property>
                <property name="frameShape">
                 <enum>QFrame::NoFrame</enum>
                </property>
@@ -208,7 +206,7 @@ font-size: 20pt;</string>
                 <enum>QFrame::Plain</enum>
                </property>
                <property name="digitCount">
-                <number>10</number>
+                <number>11</number>
                </property>
                <property name="segmentStyle">
                 <enum>QLCDNumber::Flat</enum>
@@ -218,8 +216,7 @@ font-size: 20pt;</string>
              <item row="2" column="0">
               <widget class="QLabel" name="creditsLabel">
                <property name="styleSheet">
-                <string notr="true">color: rgb(0, 255, 0);
-font-size: 20pt;</string>
+                <string notr="true">font-size: 20pt;</string>
                </property>
                <property name="text">
                 <string>Credits</string>
@@ -231,9 +228,6 @@ font-size: 20pt;</string>
              </item>
              <item row="2" column="1">
               <widget class="QLCDNumber" name="creditsAmount">
-               <property name="styleSheet">
-                <string notr="true">color: rgb(0, 255, 0);</string>
-               </property>
                <property name="frameShape">
                 <enum>QFrame::NoFrame</enum>
                </property>
@@ -241,7 +235,7 @@ font-size: 20pt;</string>
                 <enum>QFrame::Plain</enum>
                </property>
                <property name="digitCount">
-                <number>10</number>
+                <number>11</number>
                </property>
                <property name="segmentStyle">
                 <enum>QLCDNumber::Flat</enum>
@@ -259,8 +253,11 @@ font-size: 20pt;</string>
     </item>
     <item>
      <widget class="QFrame" name="softKeyArea">
+      <property name="styleSheet">
+       <string notr="true">background-color: rgb(0, 0, 0);</string>
+      </property>
       <property name="frameShape">
-       <enum>QFrame::StyledPanel</enum>
+       <enum>QFrame::NoFrame</enum>
       </property>
       <property name="frameShadow">
        <enum>QFrame::Raised</enum>
@@ -268,8 +265,35 @@ font-size: 20pt;</string>
       <layout class="QHBoxLayout" name="horizontalLayout_2">
        <item>
         <widget class="QPushButton" name="returnButton">
+         <property name="styleSheet">
+          <string notr="true">QPushButton:disabled {
+    color: black;
+    background-color: gray;
+    border-style: outset;
+    border-width: 2px;
+    border-color: gray;
+    font-size: 15pt;
+}
+QPushButton {
+    color: black;
+    background-color: yellow;
+    border-style: outset;
+    border-width: 2px;
+    border-color: gold;
+    font-size: 15pt;
+}
+QPushButton:pressed {
+    color: yellow;
+    background-color: black;
+    border-style: outset;
+    border-width: 2px;
+    border-color: yellow;
+    font-size: 15pt;
+}
+</string>
+         </property>
          <property name="text">
-          <string>Return (Esc)</string>
+          <string>Return</string>
          </property>
          <property name="shortcut">
           <string>Esc</string>
@@ -278,8 +302,35 @@ font-size: 20pt;</string>
        </item>
        <item>
         <widget class="QPushButton" name="speedButton">
+         <property name="styleSheet">
+          <string notr="true">QPushButton:disabled {
+    color: black;
+    background-color: gray;
+    border-style: outset;
+    border-width: 2px;
+    border-color: gray;
+    font-size: 15pt;
+}
+QPushButton {
+    color: black;
+    background-color: yellow;
+    border-style: outset;
+    border-width: 2px;
+    border-color: gold;
+    font-size: 15pt;
+}
+QPushButton:pressed {
+    color: yellow;
+    background-color: black;
+    border-style: outset;
+    border-width: 2px;
+    border-color: yellow;
+    font-size: 15pt;
+}
+</string>
+         </property>
          <property name="text">
-          <string>Speed &gt;&gt;&gt;&gt; (M)</string>
+          <string>Speed &gt;&gt;&gt;&gt;</string>
          </property>
          <property name="shortcut">
           <string>M</string>
@@ -288,8 +339,35 @@ font-size: 20pt;</string>
        </item>
        <item>
         <widget class="QPushButton" name="betIncrementButton">
+         <property name="styleSheet">
+          <string notr="true">QPushButton:disabled {
+    color: black;
+    background-color: gray;
+    border-style: outset;
+    border-width: 2px;
+    border-color: gray;
+    font-size: 15pt;
+}
+QPushButton {
+    color: black;
+    background-color: yellow;
+    border-style: outset;
+    border-width: 2px;
+    border-color: gold;
+    font-size: 15pt;
+}
+QPushButton:pressed {
+    color: yellow;
+    background-color: black;
+    border-style: outset;
+    border-width: 2px;
+    border-color: yellow;
+    font-size: 15pt;
+}
+</string>
+         </property>
          <property name="text">
-          <string>Increase Bet (,)</string>
+          <string>Increase Bet</string>
          </property>
          <property name="shortcut">
           <string>,</string>
@@ -298,8 +376,35 @@ font-size: 20pt;</string>
        </item>
        <item>
         <widget class="QPushButton" name="maxBetButton">
+         <property name="styleSheet">
+          <string notr="true">QPushButton:disabled {
+    color: black;
+    background-color: gray;
+    border-style: outset;
+    border-width: 2px;
+    border-color: gray;
+    font-size: 15pt;
+}
+QPushButton {
+    color: black;
+    background-color: yellow;
+    border-style: outset;
+    border-width: 2px;
+    border-color: gold;
+    font-size: 15pt;
+}
+QPushButton:pressed {
+    color: yellow;
+    background-color: black;
+    border-style: outset;
+    border-width: 2px;
+    border-color: yellow;
+    font-size: 15pt;
+}
+</string>
+         </property>
          <property name="text">
-          <string>Bet Maximum (.)</string>
+          <string>Bet Maximum</string>
          </property>
          <property name="shortcut">
           <string>.</string>
@@ -308,8 +413,35 @@ font-size: 20pt;</string>
        </item>
        <item>
         <widget class="QPushButton" name="drawDealButton">
+         <property name="styleSheet">
+          <string notr="true">QPushButton:disabled {
+    color: black;
+    background-color: gray;
+    border-style: outset;
+    border-width: 2px;
+    border-color: gray;
+    font-size: 15pt;
+}
+QPushButton {
+    color: black;
+    background-color: yellow;
+    border-style: outset;
+    border-width: 2px;
+    border-color: gold;
+    font-size: 15pt;
+}
+QPushButton:pressed {
+    color: yellow;
+    background-color: black;
+    border-style: outset;
+    border-width: 2px;
+    border-color: yellow;
+    font-size: 15pt;
+}
+</string>
+         </property>
          <property name="text">
-          <string>Deal (/)</string>
+          <string>Deal</string>
          </property>
          <property name="shortcut">
           <string>/</string>
