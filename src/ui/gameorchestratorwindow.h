@@ -40,12 +40,19 @@ public:
     explicit GameOrchestratorWindow(Account &playerAccount, QWidget *parent = nullptr);
     ~GameOrchestratorWindow();
 
+    // For custom resize handling of widgets
+    void resizeEvent(QResizeEvent* event);
+    void fixPayoutTableSize();
+
 public slots:
     // Paytable updates when the betting is changed
     void showPayTableAndBet();
 
     // set showDraw to true so the button for deal/draw only says "Draw", otherwise it is "Deal"
     void dealToDraw(bool showDraw);
+
+    // Resets the cards BEFORE calling the dealDraw of the orchestrator (prevents exceptions/collisions between threads)
+    void syncDealDraw();
 
     // Update winnings as hand(s) processed by the orchestrator
     void currentWinnings(quint32 winningsOfHands);
@@ -62,6 +69,14 @@ public slots:
     void holdCard3(bool cardHeld);
     void holdCard4(bool cardHeld);
     void holdCard5(bool cardHeld);
+
+signals:
+    // Should be emitted before calling the dealDraw to give the UI time to catch up before the orchestrator delivers
+    // any new cards
+    void resetCardDisplay();
+
+    // Emitted when the window is ready for the orchestrator to deliver cards
+    void readyForDealDraw();
 
 private:
     Account          &_playerCredits;

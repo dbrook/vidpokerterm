@@ -89,6 +89,11 @@ void GameOrchestrator::currentPayTable(QVector<QPair<const QString, int> > &payT
     _gameAnalyzer->currentPayTable(payTable);
 }
 
+bool GameOrchestrator::isGameInProgress() const
+{
+    return _handInProg;
+}
+
 void GameOrchestrator::dealDraw()
 {
     if (!_handInProg) {

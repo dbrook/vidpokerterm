@@ -30,16 +30,11 @@ HandWidget::HandWidget(QWidget *parent) :
 
     // There are 5 cards, selecting their respective hold buttons should indicate to the game orchestrator they are
     // to be preserved and not re-drawn
-    connect(ui->holdBtnCard1, &QCheckBox::toggled,
-            this, &HandWidget::card1Hold);
-    connect(ui->holdBtnCard2, &QCheckBox::toggled,
-            this, &HandWidget::card2Hold);
-    connect(ui->holdBtnCard3, &QCheckBox::toggled,
-            this, &HandWidget::card3Hold);
-    connect(ui->holdBtnCard4, &QCheckBox::toggled,
-            this, &HandWidget::card4Hold);
-    connect(ui->holdBtnCard5, &QCheckBox::toggled,
-            this, &HandWidget::card5Hold);
+    connect(ui->holdBtnCard1, &QPushButton::toggled, this, &HandWidget::card1Hold);
+    connect(ui->holdBtnCard2, &QPushButton::toggled, this, &HandWidget::card2Hold);
+    connect(ui->holdBtnCard3, &QPushButton::toggled, this, &HandWidget::card3Hold);
+    connect(ui->holdBtnCard4, &QPushButton::toggled, this, &HandWidget::card4Hold);
+    connect(ui->holdBtnCard5, &QPushButton::toggled, this, &HandWidget::card5Hold);
 }
 
 HandWidget::~HandWidget()
@@ -50,7 +45,7 @@ HandWidget::~HandWidget()
 void HandWidget::winningTextAndAmount(const QString &handString, quint32 winning)
 {
     if (handString.isEmpty()) {
-        ui->resultLabel->setText("");    // Nothing, no winning combination
+        ui->resultLabel->setText("");
     } else if (winning == 0) {
         ui->resultLabel->setText(handString);
     } else {
@@ -192,11 +187,11 @@ void HandWidget::showCardBacks(bool card1, bool card2, bool card3, bool card4, b
 void HandWidget::resetAll()
 {
     // Unset holds
-    ui->holdBtnCard1->setCheckState(Qt::Unchecked);
-    ui->holdBtnCard2->setCheckState(Qt::Unchecked);
-    ui->holdBtnCard3->setCheckState(Qt::Unchecked);
-    ui->holdBtnCard4->setCheckState(Qt::Unchecked);
-    ui->holdBtnCard5->setCheckState(Qt::Unchecked);
+    ui->holdBtnCard1->setChecked(false);
+    ui->holdBtnCard2->setChecked(false);
+    ui->holdBtnCard3->setChecked(false);
+    ui->holdBtnCard4->setChecked(false);
+    ui->holdBtnCard5->setChecked(false);
 
     // Flip cards back
     ui->card1->setText("Chad's\nCasino");
@@ -209,6 +204,9 @@ void HandWidget::resetAll()
     ui->card4->setStyleSheet(cardBackStyle);
     ui->card5->setText("Chad's\nCasino");
     ui->card5->setStyleSheet(cardBackStyle);
+
+    // Hide any winning string
+    ui->resultLabel->setText("");
 }
 
 void HandWidget::enableHolds(bool enableCheckBoxes)
