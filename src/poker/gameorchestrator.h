@@ -149,11 +149,6 @@ signals:
     void betUpdated();
 
     /**
-     * @brief newGameStarted is emitted when a new game has begun to be dealt (allowing the UI to react and reset)
-     */
-    void newGameStarted();
-
-    /**
      * @brief cardsToRedraw is emitted with the status (true) of cards that will be redrawn (for the sake of the UI)
      */
     void cardsToRedraw(bool card1, bool card2, bool card3, bool card4, bool card5);

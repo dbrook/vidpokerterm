@@ -32,15 +32,20 @@ namespace Ui {
 class GameOrchestratorWindow;
 }
 
+/**
+ * @brief The GameOrchestratorWindow provides a graphical interface to a generic PokerGame logic via an orchestrator
+ *        which handles dealing, holding, drawing, betting, winning operations with an Account which tracks all funds.
+ */
 class GameOrchestratorWindow : public QMainWindow
 {
     Q_OBJECT
-
 public:
     explicit GameOrchestratorWindow(Account &playerAccount, QWidget *parent = nullptr);
     ~GameOrchestratorWindow();
 
     // For custom resize handling of widgets
+    // TODO: these could change depending on how the rendering of the paytable could be better handled
+    //       (they also do not appear to work when the game window is initially spawned, only on resizes)
     void resizeEvent(QResizeEvent* event);
     void fixPayoutTableSize();
 

@@ -100,8 +100,6 @@ void GameOrchestrator::dealDraw()
         /*
          * First stage of the game, no cards dealt so ensure deck is full + shuffled and the target hand(s) empty
          */
-        emit newGameStarted();
-
         if (!_fakeGame) {
             _gameCards[0].first.reset();
             _gameCards[0].second.reset();
