@@ -24,17 +24,21 @@
 // Individual games supported
 #include "jacksorbetter.h"
 
-GameOrchestratorWindow::GameOrchestratorWindow(Account &playerAccount, QWidget *parent) :
-    QMainWindow(parent),
-    _playerCredits(playerAccount),
-    ui(new Ui::GameOrchestratorWindow)
+GameOrchestratorWindow::GameOrchestratorWindow(Account   &playerAccount,
+                                               PokerGame *gameLogic,
+                                               int        handsToPlay,
+                                               QWidget   *parent)
+    : QMainWindow(parent),
+      _playerCredits(playerAccount),
+      _gameLogic(gameLogic),
+      _handsToPlay(handsToPlay),
+      ui(new Ui::GameOrchestratorWindow)
 {
     // Setup the UI
     ui->setupUi(this);
 
     // Now bring in the game logic
-    _gameLogic = new JacksOrBetter;
-    _gameOrc   = new GameOrchestrator(_gameLogic, 1, _playerCredits, 0);
+    _gameOrc = new GameOrchestrator(_gameLogic, _handsToPlay, _playerCredits, 0);
 
     // Fill in the number of credits the first time
     ui->creditsAmount->display(static_cast<int>(_playerCredits.balance()));
@@ -117,7 +121,6 @@ GameOrchestratorWindow::GameOrchestratorWindow(Account &playerAccount, QWidget *
 GameOrchestratorWindow::~GameOrchestratorWindow()
 {
     delete _gameOrc;
-    delete _gameLogic;
     delete ui;
 }
 

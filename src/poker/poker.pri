@@ -20,6 +20,7 @@ DEPENDPATH += $$PWD
 
 HEADERS += \
     $$PWD/account.h \
+    $$PWD/bonuspoker.h \
     $$PWD/commonhandanalysis.h \
     $$PWD/deck.h \
     $$PWD/gameorchestrator.h \
@@ -30,6 +31,7 @@ HEADERS += \
 
 SOURCES += \
     $$PWD/account.cpp \
+    $$PWD/bonuspoker.cpp \
     $$PWD/commonhandanalysis.cpp \
     $$PWD/deck.cpp \
     $$PWD/gameorchestrator.cpp \

@@ -25,7 +25,6 @@
 
 // A game orchestrator supports an abstract PokerGame instance and account
 #include "gameorchestrator.h"
-#include "jacksorbetter.h"
 #include "account.h"
 
 namespace Ui {
@@ -40,7 +39,11 @@ class GameOrchestratorWindow : public QMainWindow
 {
     Q_OBJECT
 public:
-    explicit GameOrchestratorWindow(Account &playerAccount, QWidget *parent = nullptr);
+    explicit GameOrchestratorWindow(Account   &playerAccount,
+                                    PokerGame *gameLogic,
+                                    int        handsToPlay,
+                                    QWidget   *parent = nullptr);
+
     ~GameOrchestratorWindow();
 
     // For custom resize handling of widgets
@@ -86,7 +89,8 @@ signals:
 private:
     Account          &_playerCredits;
     GameOrchestrator *_gameOrc;
-    JacksOrBetter    *_gameLogic;
+    PokerGame        *_gameLogic;
+    int               _handsToPlay;
     QThread          *_gameEventProcessor;
     Ui::GameOrchestratorWindow *ui;
 };
