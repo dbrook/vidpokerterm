@@ -23,6 +23,9 @@
 // The player's account is maintained in this window
 #include "account.h"
 
+// Generic PokerGame logic
+#include "pokergame.h"
+
 QT_BEGIN_NAMESPACE
 namespace Ui { class GameAccountWindow; }
 QT_END_NAMESPACE
@@ -46,11 +49,14 @@ public slots:
     /**
      * @brief startGame begins a game of Jacks Or Better to test window spawning and game logic
      */
-    void startGame();
+    void startGame(PokerGame *gameLogicPointer, int numberOfHands);
 
 private:
     // Game-Specific Items
     Account _playerAccount;
+
+    // List of playable games -- vector of generic "PokerGame" classes, to be filled with pointers to actual logic
+    QVector<PokerGame *> _supportedGames;
 
     // User Interface Items
     Ui::GameAccountWindow *ui;

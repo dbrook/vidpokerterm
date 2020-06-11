@@ -21,6 +21,10 @@
 // Game Orchestrator Window can be started with all different supported PokerGame subclasses
 #include "gameorchestratorwindow.h"
 
+// Individual games supported (sub-classed from PokerGame)
+#include "jacksorbetter.h"
+#include "bonuspoker.h"
+
 GameAccountWindow::GameAccountWindow(QWidget *parent)
     : QMainWindow(parent)
     , _playerAccount()
@@ -29,19 +33,52 @@ GameAccountWindow::GameAccountWindow(QWidget *parent)
     ui->setupUi(this);
 
     // Connect the widgets initialized to their appropriate slots
-    connect(ui->exitButton, &QPushButton::clicked,
-            QApplication::instance(), &QApplication::quit);
+    connect(ui->exitButton, &QPushButton::clicked, QApplication::instance(), &QApplication::quit);
 
     // TODO: Make an "About..." window ...
 
-    // TODO: Make it so account can be updated using the widgets created ...
+    // Connect the value of the spinbox to the actual account balance + support buttons for changing values
     connect(ui->accountBalance, QOverload<int>::of(&QSpinBox::valueChanged),
             this, &GameAccountWindow::setAccountBalance);
+    connect(ui->resetAcct0, &QPushButton::clicked, this, [=]() {
+        ui->accountBalance->setValue(0);
+    });
+    connect(ui->addAcct10, &QPushButton::clicked,  this, [=]() {
+        ui->accountBalance->setValue(ui->accountBalance->value() + 10);
+    });
+    connect(ui->addAcct100, &QPushButton::clicked, this, [=]() {
+        ui->accountBalance->setValue(ui->accountBalance->value() + 100);
+    });
 
-    // Start Jacks Or Better
-    // TODO: This should be filled in for each game supported, but for now it's hardcoded on the UI side
-    connect(ui->jobTestBtn, &QPushButton::clicked,
-            this, &GameAccountWindow::startGame);
+    ;
+
+    /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+     * ALL SUPPORTED GAMES SHOULD BE PUSHED HERE SO THEY ARE RENDERED TO THE ACCOUNT / GAME SELECTION SCREEN         *
+     * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+    _supportedGames.push_back(new JacksOrBetter);
+    _supportedGames.push_back(new BonusPoker);
+    /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+
+    // Loop over all games added above and create buttons + connections to launch them
+    int gameIdx;
+    for (gameIdx = 0; gameIdx < _supportedGames.size(); ++gameIdx) {
+        QString nameOfGame = _supportedGames[gameIdx]->gameName();
+        QPushButton *gameStartButton = new QPushButton(nameOfGame, this);
+        QSpinBox *nbSimulHandsSelect = new QSpinBox(this);
+
+        // For now, we can only support 1 hand games (UI is hardcoded against this, but the orchestrator supports >= 1)
+        nbSimulHandsSelect->setMinimum(1);
+        nbSimulHandsSelect->setMaximum(1);
+
+        ui->gameSelectFrame->layout()->addWidget(gameStartButton/*, gameIdx, 0*/);
+        ui->gameSelectFrame->layout()->addWidget(nbSimulHandsSelect/*, gameIdx, 1*/);
+
+        // Connect the button to the game starter
+        connect(gameStartButton, &QPushButton::clicked,
+                this, [=]() {
+            startGame(_supportedGames[gameIdx], nbSimulHandsSelect->value());
+        });
+    }
 }
 
 GameAccountWindow::~GameAccountWindow()
@@ -54,10 +91,10 @@ void GameAccountWindow::setAccountBalance()
     _playerAccount.setBalance(ui->accountBalance->value());
 }
 
-void GameAccountWindow::startGame()
+void GameAccountWindow::startGame(PokerGame *gameLogicPointer, int numberOfHands)
 {
     // Create a game and link it to this parent, open the window
-    GameOrchestratorWindow *gow = new GameOrchestratorWindow(_playerAccount, this);
+    GameOrchestratorWindow *gow = new GameOrchestratorWindow(_playerAccount, gameLogicPointer, numberOfHands, this);
 
     // Needed so that memory is automatically cleaned out when closing the window!
     gow->setAttribute(Qt::WA_DeleteOnClose);

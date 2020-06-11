@@ -18,9 +18,10 @@
 #include "handwidget.h"
 #include "ui_handwidget.h"
 
-const QString HandWidget::cardBackStyle  = "background-color: rgb(0,66,188);color: rgb(227,227,227);font-size: 20pt;";
-const QString HandWidget::cardFrontStyle = "background-color: rgb(227,227,227);font-size: 48pt;";
-
+const QString HandWidget::cardBackStyle =
+        "background-color:rgb(0,66,188);border-radius:10px;color:rgb(227,227,227);font-size:20pt;";
+const QString HandWidget::cardFrontStyle =
+        "background-color:rgb(227,227,227);border-radius:10px;font-size:48pt;";
 
 HandWidget::HandWidget(QWidget *parent) :
     QWidget(parent),
