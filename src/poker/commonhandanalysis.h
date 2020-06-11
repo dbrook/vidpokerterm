@@ -38,12 +38,13 @@ void sortHandVector(QVector<PlayingCard> &hand);
  *
  * @param[in]  nValue    The value of "N" in "N"-of-a-kind
  * @param[in]  hand      A single hand of a poker game
+ * @param[out] matches   Vector of card values that were matched nValue times
  *
  * @return     number of times "N" of a kind was found in the hand
  *                 EXAMPLES: To match "Two Pair":         NOfAKind(2, hand) ==> 2
  *                           To match "Three of a Kind":  NOfAKind(3, hand) ==> 1
  */
-quint8 NOfAKind(quint8 nValue, const QVector<PlayingCard> &hand);
+quint8 NOfAKind(quint8 nValue, const QVector<PlayingCard> &hand, QVector<PlayingCard::CardValue> &matches);
 
 /**
  * @brief      Determines if a hand meets Jacks-or-Better criteria

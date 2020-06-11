@@ -296,7 +296,7 @@ void TestHands::testJOB_StraightAceLow()
     Hand stAceFive(PlayingCard(PlayingCard::SPADE,   PlayingCard::FIVE ),
                    PlayingCard(PlayingCard::DIAMOND, PlayingCard::THREE),
                    PlayingCard(PlayingCard::HEART,   PlayingCard::TWO  ),
-                   PlayingCard(PlayingCard::CLUB,    PlayingCard::FIVE ),
+                   PlayingCard(PlayingCard::CLUB,    PlayingCard::FOUR ),
                    PlayingCard(PlayingCard::CLUB,    PlayingCard::ACE  ));
     validateResult(JOB, stAceFive, 1,  4, "Straight");
 }
@@ -393,6 +393,15 @@ void TestHands::testJOB_NoWin()
                         PlayingCard(PlayingCard::DIAMOND, PlayingCard::NINE ),
                         PlayingCard(PlayingCard::SPADE,   PlayingCard::ACE  )),
                    5, 0, "");
+
+    // Almost a straight flush, but not quite!
+    validateResult(JOB,
+                   Hand(PlayingCard(PlayingCard::DIAMOND, PlayingCard::NINE ),
+                        PlayingCard(PlayingCard::DIAMOND, PlayingCard::EIGHT),
+                        PlayingCard(PlayingCard::DIAMOND, PlayingCard::SIX  ),
+                        PlayingCard(PlayingCard::SPADE,   PlayingCard::SIX  ),
+                        PlayingCard(PlayingCard::DIAMOND, PlayingCard::FIVE )),
+                   1, 0, "");
 
     // Almost a straight flush, but not quite!
     validateResult(JOB,
