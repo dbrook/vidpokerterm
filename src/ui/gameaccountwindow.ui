@@ -6,42 +6,107 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>883</width>
-    <height>391</height>
+    <width>813</width>
+    <height>383</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>VidPokerTerminal</string>
   </property>
+  <property name="styleSheet">
+   <string notr="true">font-size: 15pt;
+background-color: rgb(6, 139, 3);
+color: rgb(255, 255, 255);</string>
+  </property>
   <widget class="QWidget" name="centralwidget">
-   <layout class="QVBoxLayout" name="verticalLayout" stretch="0,0,1,0,0,0">
+   <layout class="QVBoxLayout" name="verticalLayout" stretch="0,0,1,0,0">
     <item>
      <widget class="QLabel" name="label">
       <property name="text">
-       <string>Welcome to VidPokerTerm, the Qt-Based Video Poker Terminal!</string>
+       <string>Welcome to VidPokerTerm! Add credits and select a game.</string>
       </property>
      </widget>
     </item>
     <item>
      <widget class="QFrame" name="accountFrame">
+      <property name="styleSheet">
+       <string notr="true">QPushButton {
+    color: lawngreen;
+    background-color: black;
+    border-style: outset;
+    border-width: 2px;
+    border-color: blue;
+}
+QPushButton:focus {
+    color: lawngreen;
+    background-color: blue;
+    border-style: outset;
+    border-width: 2px;
+    border-color: blue;
+}
+QPushButton:pressed {
+    color: blue;
+    background-color: lawngreen;
+    border-style: outset;
+    border-width: 2px;
+    border-color: lawngreen;
+}
+</string>
+      </property>
       <property name="frameShape">
        <enum>QFrame::StyledPanel</enum>
       </property>
       <property name="frameShadow">
        <enum>QFrame::Raised</enum>
       </property>
-      <layout class="QHBoxLayout" name="horizontalLayout">
+      <layout class="QHBoxLayout" name="horizontalLayout" stretch="0,1,0,1,1,1">
        <item>
         <widget class="QLabel" name="label_2">
          <property name="text">
-          <string>Credits Available</string>
+          <string>Credits</string>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
          </property>
         </widget>
        </item>
        <item>
-        <widget class="QSpinBox" name="accountBalance">
-         <property name="maximum">
-          <number>1000000000</number>
+        <widget class="QLCDNumber" name="creditCountLCD">
+         <property name="frameShape">
+          <enum>QFrame::NoFrame</enum>
+         </property>
+         <property name="digitCount">
+          <number>6</number>
+         </property>
+         <property name="segmentStyle">
+          <enum>QLCDNumber::Flat</enum>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <spacer name="horizontalSpacer_2">
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>40</width>
+           <height>20</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+       <item>
+        <widget class="QPushButton" name="addAcct100">
+         <property name="text">
+          <string>+100</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="addAcct10">
+         <property name="text">
+          <string>+10</string>
          </property>
         </widget>
        </item>
@@ -52,61 +117,152 @@
          </property>
         </widget>
        </item>
-       <item>
-        <widget class="QPushButton" name="addAcct10">
-         <property name="text">
-          <string>Add 10</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QPushButton" name="addAcct100">
-         <property name="text">
-          <string>Add 100</string>
-         </property>
-        </widget>
-       </item>
       </layout>
      </widget>
     </item>
     <item>
      <widget class="QFrame" name="gameSelectFrame">
+      <property name="styleSheet">
+       <string notr="true">QPushButton {
+    color: lawngreen;
+    background-color: black;
+    border-style: outset;
+    border-width: 2px;
+    border-color: blue;
+}
+QPushButton:focus {
+    color: lawngreen;
+    background-color: blue;
+    border-style: outset;
+    border-width: 2px;
+    border-color: blue;
+}
+QPushButton:pressed {
+    color: blue;
+    background-color: lawngreen;
+    border-style: outset;
+    border-width: 2px;
+    border-color: lawngreen;
+}
+</string>
+      </property>
+      <property name="frameShape">
+       <enum>QFrame::NoFrame</enum>
+      </property>
+      <property name="frameShadow">
+       <enum>QFrame::Raised</enum>
+      </property>
+      <layout class="QVBoxLayout" name="verticalLayout_2"/>
+     </widget>
+    </item>
+    <item>
+     <widget class="QFrame" name="frame">
+      <property name="styleSheet">
+       <string notr="true">QPushButton {
+    color: lawngreen;
+    background-color: black;
+    border-style: outset;
+    border-width: 2px;
+    border-color: blue;
+}
+QPushButton:focus {
+    color: lawngreen;
+    background-color: blue;
+    border-style: outset;
+    border-width: 2px;
+    border-color: blue;
+}
+QPushButton:pressed {
+    color: blue;
+    background-color: lawngreen;
+    border-style: outset;
+    border-width: 2px;
+    border-color: lawngreen;
+}
+</string>
+      </property>
       <property name="frameShape">
        <enum>QFrame::StyledPanel</enum>
       </property>
       <property name="frameShadow">
        <enum>QFrame::Raised</enum>
       </property>
-      <layout class="QGridLayout" name="gridLayout">
-       <item row="0" column="1">
-        <widget class="QLabel" name="handsToPlayText">
+      <layout class="QHBoxLayout" name="horizontalLayout_3" stretch="4,4,0,0,1">
+       <item>
+        <widget class="QPushButton" name="exitButton">
+         <property name="styleSheet">
+          <string notr="true">QPushButton {
+    color: lawngreen;
+    background-color: black;
+    border-style: outset;
+    border-width: 2px;
+    border-color: blue;
+}
+QPushButton:focus {
+    color: blue;
+    background-color: salmon;
+    border-style: outset;
+    border-width: 2px;
+    border-color: blue;
+}
+QPushButton:pressed {
+    color: salmon;
+    background-color: blue;
+    border-style: outset;
+    border-width: 2px;
+    border-color: salmon;
+}
+</string>
+         </property>
          <property name="text">
-          <string># hands / round</string>
+          <string>Exit</string>
          </property>
         </widget>
        </item>
-       <item row="0" column="0">
-        <widget class="QLabel" name="gameText">
+       <item>
+        <widget class="QPushButton" name="aboutButton">
          <property name="text">
-          <string>Game</string>
+          <string>About...</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <spacer name="horizontalSpacer">
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>40</width>
+           <height>20</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+       <item>
+        <widget class="QLabel" name="handsToPlayLabel">
+         <property name="text">
+          <string>Hands</string>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLCDNumber" name="handsToPlayLCD">
+         <property name="frameShape">
+          <enum>QFrame::NoFrame</enum>
+         </property>
+         <property name="digitCount">
+          <number>3</number>
+         </property>
+         <property name="segmentStyle">
+          <enum>QLCDNumber::Flat</enum>
          </property>
         </widget>
        </item>
       </layout>
-     </widget>
-    </item>
-    <item>
-     <widget class="QPushButton" name="exitButton">
-      <property name="text">
-       <string>Exit</string>
-      </property>
-     </widget>
-    </item>
-    <item>
-     <widget class="QPushButton" name="aboutButton">
-      <property name="text">
-       <string>About...</string>
-      </property>
      </widget>
     </item>
     <item>
@@ -122,7 +278,58 @@
       </property>
       <layout class="QHBoxLayout" name="horizontalLayout_2">
        <item>
+        <widget class="QPushButton" name="moveDnSoftkey">
+         <property name="focusPolicy">
+          <enum>Qt::ClickFocus</enum>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">QPushButton:disabled {
+    color: black;
+    background-color: gray;
+    border-style: outset;
+    border-width: 2px;
+    border-color: gray;
+    font-size: 15pt;
+}
+QPushButton {
+    color: black;
+    background-color: yellow;
+    border-style: outset;
+    border-width: 2px;
+    border-color: gold;
+    font-size: 15pt;
+}
+QPushButton:focused {
+    color: red;
+    background-color: yellow;
+    border-style: outset;
+    border-width: 2px;
+    border-color: gold;
+    font-size: 15pt;
+}
+QPushButton:pressed {
+    color: yellow;
+    background-color: black;
+    border-style: outset;
+    border-width: 2px;
+    border-color: yellow;
+    font-size: 15pt;
+}
+</string>
+         </property>
+         <property name="text">
+          <string>Next</string>
+         </property>
+         <property name="shortcut">
+          <string>N</string>
+         </property>
+        </widget>
+       </item>
+       <item>
         <widget class="QPushButton" name="moveUpSoftkey">
+         <property name="focusPolicy">
+          <enum>Qt::ClickFocus</enum>
+         </property>
          <property name="styleSheet">
           <string notr="true">QPushButton:disabled {
     color: black;
@@ -140,6 +347,14 @@ QPushButton {
     border-color: gold;
     font-size: 15pt;
 }
+QPushButton:focused {
+    color: red;
+    background-color: yellow;
+    border-style: outset;
+    border-width: 2px;
+    border-color: gold;
+    font-size: 15pt;
+}
 QPushButton:pressed {
     color: yellow;
     background-color: black;
@@ -151,12 +366,18 @@ QPushButton:pressed {
 </string>
          </property>
          <property name="text">
-          <string>softkey1</string>
+          <string>Back</string>
+         </property>
+         <property name="shortcut">
+          <string>M</string>
          </property>
         </widget>
        </item>
        <item>
-        <widget class="QPushButton" name="moveDownSoftkey">
+        <widget class="QPushButton" name="nbHandsDec">
+         <property name="focusPolicy">
+          <enum>Qt::ClickFocus</enum>
+         </property>
          <property name="styleSheet">
           <string notr="true">QPushButton:disabled {
     color: black;
@@ -174,6 +395,14 @@ QPushButton {
     border-color: gold;
     font-size: 15pt;
 }
+QPushButton:focused {
+    color: red;
+    background-color: yellow;
+    border-style: outset;
+    border-width: 2px;
+    border-color: gold;
+    font-size: 15pt;
+}
 QPushButton:pressed {
     color: yellow;
     background-color: black;
@@ -185,12 +414,18 @@ QPushButton:pressed {
 </string>
          </property>
          <property name="text">
-          <string>softkey2</string>
+          <string>Hands (-)</string>
+         </property>
+         <property name="shortcut">
+          <string>,</string>
          </property>
         </widget>
        </item>
        <item>
-        <widget class="QPushButton" name="pushButton_3">
+        <widget class="QPushButton" name="nbHandsInc">
+         <property name="focusPolicy">
+          <enum>Qt::ClickFocus</enum>
+         </property>
          <property name="styleSheet">
           <string notr="true">QPushButton:disabled {
     color: black;
@@ -208,34 +443,8 @@ QPushButton {
     border-color: gold;
     font-size: 15pt;
 }
-QPushButton:pressed {
-    color: yellow;
-    background-color: black;
-    border-style: outset;
-    border-width: 2px;
-    border-color: yellow;
-    font-size: 15pt;
-}
-</string>
-         </property>
-         <property name="text">
-          <string>softkey3</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QPushButton" name="pushButton_4">
-         <property name="styleSheet">
-          <string notr="true">QPushButton:disabled {
-    color: black;
-    background-color: gray;
-    border-style: outset;
-    border-width: 2px;
-    border-color: gray;
-    font-size: 15pt;
-}
-QPushButton {
-    color: black;
+QPushButton:focused {
+    color: red;
     background-color: yellow;
     border-style: outset;
     border-width: 2px;
@@ -253,12 +462,18 @@ QPushButton:pressed {
 </string>
          </property>
          <property name="text">
-          <string>softkey4</string>
+          <string>Hands (+)</string>
+         </property>
+         <property name="shortcut">
+          <string>.</string>
          </property>
         </widget>
        </item>
        <item>
         <widget class="QPushButton" name="selectSoftkey">
+         <property name="focusPolicy">
+          <enum>Qt::ClickFocus</enum>
+         </property>
          <property name="styleSheet">
           <string notr="true">QPushButton:disabled {
     color: black;
@@ -276,6 +491,14 @@ QPushButton {
     border-color: gold;
     font-size: 15pt;
 }
+QPushButton:focused {
+    color: red;
+    background-color: yellow;
+    border-style: outset;
+    border-width: 2px;
+    border-color: gold;
+    font-size: 15pt;
+}
 QPushButton:pressed {
     color: yellow;
     background-color: black;
@@ -287,7 +510,10 @@ QPushButton:pressed {
 </string>
          </property>
          <property name="text">
-          <string>softkey5</string>
+          <string>Select</string>
+         </property>
+         <property name="shortcut">
+          <string>/</string>
          </property>
         </widget>
        </item>
@@ -297,6 +523,13 @@ QPushButton:pressed {
    </layout>
   </widget>
  </widget>
+ <tabstops>
+  <tabstop>addAcct100</tabstop>
+  <tabstop>addAcct10</tabstop>
+  <tabstop>resetAcct0</tabstop>
+  <tabstop>exitButton</tabstop>
+  <tabstop>aboutButton</tabstop>
+ </tabstops>
  <resources/>
  <connections/>
 </ui>

@@ -296,7 +296,7 @@ QPushButton:pressed {
           <string>Return</string>
          </property>
          <property name="shortcut">
-          <string>Esc</string>
+          <string>N</string>
          </property>
         </widget>
        </item>

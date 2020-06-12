@@ -38,19 +38,21 @@ GameAccountWindow::GameAccountWindow(QWidget *parent)
     // TODO: Make an "About..." window ...
 
     // Connect the value of the spinbox to the actual account balance + support buttons for changing values
-    connect(ui->accountBalance, QOverload<int>::of(&QSpinBox::valueChanged),
-            this, &GameAccountWindow::setAccountBalance);
+    connect(&_playerAccount, &Account::balanceChanged, this, &GameAccountWindow::updateAccountBalance);
     connect(ui->resetAcct0, &QPushButton::clicked, this, [=]() {
-        ui->accountBalance->setValue(0);
+        _playerAccount.setBalance(0);
     });
     connect(ui->addAcct10, &QPushButton::clicked,  this, [=]() {
-        ui->accountBalance->setValue(ui->accountBalance->value() + 10);
+        _playerAccount.add(10);
     });
     connect(ui->addAcct100, &QPushButton::clicked, this, [=]() {
-        ui->accountBalance->setValue(ui->accountBalance->value() + 100);
+        _playerAccount.add(100);
     });
 
-    ;
+    // TODO:
+    // For now, do not allow more or less than 1 hand at a time. The Orchestrator UI cannot handle it even though the
+    // orchestrator back-end is more than happy to
+    ui->handsToPlayLCD->display(1);
 
     /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
      * ALL SUPPORTED GAMES SHOULD BE PUSHED HERE SO THEY ARE RENDERED TO THE ACCOUNT / GAME SELECTION SCREEN         *
@@ -60,25 +62,52 @@ GameAccountWindow::GameAccountWindow(QWidget *parent)
     /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
     // Loop over all games added above and create buttons + connections to launch them
-    int gameIdx;
-    for (gameIdx = 0; gameIdx < _supportedGames.size(); ++gameIdx) {
+    for (int gameIdx = 0; gameIdx < _supportedGames.size(); ++gameIdx) {
         QString nameOfGame = _supportedGames[gameIdx]->gameName();
         QPushButton *gameStartButton = new QPushButton(nameOfGame, this);
-        QSpinBox *nbSimulHandsSelect = new QSpinBox(this);
-
-        // For now, we can only support 1 hand games (UI is hardcoded against this, but the orchestrator supports >= 1)
-        nbSimulHandsSelect->setMinimum(1);
-        nbSimulHandsSelect->setMaximum(1);
-
-        ui->gameSelectFrame->layout()->addWidget(gameStartButton/*, gameIdx, 0*/);
-        ui->gameSelectFrame->layout()->addWidget(nbSimulHandsSelect/*, gameIdx, 1*/);
+        ui->gameSelectFrame->layout()->addWidget(gameStartButton);
 
         // Connect the button to the game starter
         connect(gameStartButton, &QPushButton::clicked,
                 this, [=]() {
-            startGame(_supportedGames[gameIdx], nbSimulHandsSelect->value());
+            startGame(_supportedGames[gameIdx]);
         });
     }
+
+    // When games are added they will mess up the intrinsic "tab" ordering of the main window, so build a new ordering
+    // First the credits-available:
+    setTabOrder(ui->addAcct100, ui->addAcct10);
+    setTabOrder(ui->addAcct10, ui->resetAcct0);
+
+    int i;
+    for (i = 0; i < ui->gameSelectFrame->layout()->count(); ++i) {
+        if (i == 0) {
+            setTabOrder(ui->resetAcct0, ui->gameSelectFrame->layout()->itemAt(i)->widget());
+        } else {
+            setTabOrder(ui->gameSelectFrame->layout()->itemAt(i - 1)->widget(),
+                        ui->gameSelectFrame->layout()->itemAt(i)->widget());
+        }
+    }
+
+    // Then finally link the Exit and About... Buttons
+    setTabOrder(ui->gameSelectFrame->layout()->itemAt(i - 1)->widget(), ui->exitButton);
+    setTabOrder(ui->exitButton, ui->aboutButton);
+
+    // SOFTKEY ASSIGNMENT
+    // Move Down / Up:
+    connect(ui->moveDnSoftkey, &QPushButton::clicked, this, &GameAccountWindow::focusNextChild);
+    connect(ui->moveUpSoftkey, &QPushButton::clicked, this, &GameAccountWindow::focusPreviousChild);
+
+    // Select
+    connect(ui->selectSoftkey, &QPushButton::clicked, this, [=]() {
+        // Hope this doesn't crash ... anyway the user will only be able to cycle through pushbuttons
+        QPushButton *currentlyFocused = dynamic_cast<QPushButton*>(this->focusWidget());
+        currentlyFocused->click();
+    });
+
+    // Number of Hands Increment / Decrement
+    connect(ui->nbHandsDec, &QPushButton::clicked, this, [=]() {changeNumberOfHands(-1);});
+    connect(ui->nbHandsInc, &QPushButton::clicked, this, [=]() {changeNumberOfHands( 1);});
 }
 
 GameAccountWindow::~GameAccountWindow()
@@ -86,13 +115,17 @@ GameAccountWindow::~GameAccountWindow()
     delete ui;
 }
 
-void GameAccountWindow::setAccountBalance()
+void GameAccountWindow::updateAccountBalance(quint32 updatedBalance)
 {
-    _playerAccount.setBalance(ui->accountBalance->value());
+    // WARNING: Static cast could yeild strangeness for big numbers of credits
+    ui->creditCountLCD->display(static_cast<int>(updatedBalance));
 }
 
-void GameAccountWindow::startGame(PokerGame *gameLogicPointer, int numberOfHands)
+void GameAccountWindow::startGame(PokerGame *gameLogicPointer)
 {
+    // How many simultaneous hands are played per betting round?
+    int numberOfHands = ui->handsToPlayLCD->value();
+
     // Create a game and link it to this parent, open the window
     GameOrchestratorWindow *gow = new GameOrchestratorWindow(_playerAccount, gameLogicPointer, numberOfHands, this);
 
@@ -101,5 +134,23 @@ void GameAccountWindow::startGame(PokerGame *gameLogicPointer, int numberOfHands
 
     // Start the game
     gow->show();
+}
+
+void GameAccountWindow::changeNumberOfHands(int increaseDecrease)
+{
+    int currentHandCount = ui->handsToPlayLCD->value();
+    if (increaseDecrease == -1) {
+        if (currentHandCount > 1) {
+            ui->handsToPlayLCD->display(currentHandCount - 1);
+        } else {
+            ui->handsToPlayLCD->display(10);
+        }
+    } else if (increaseDecrease == 1) {
+        if (currentHandCount < 10) {
+            ui->handsToPlayLCD->display(currentHandCount + 1);
+        } else {
+            ui->handsToPlayLCD->display(1);
+        }
+    }
 }
 

@@ -82,7 +82,7 @@ GameOrchestratorWindow::GameOrchestratorWindow(Account   &playerAccount,
     connect(_gameOrc, &GameOrchestrator::gameWinnings, this, &GameOrchestratorWindow::currentWinnings);
 
     // Connect the account balance to the display
-    connect(_gameOrc, &GameOrchestrator::updatedBalance, this, &GameOrchestratorWindow::currentBalance);
+    connect(&_playerCredits, &Account::balanceChanged, this, &GameOrchestratorWindow::currentBalance);
 
     // Card holding (for the primary hand) - set to disabled to start
     PrimaryHand->enableHolds(false);
@@ -120,8 +120,12 @@ GameOrchestratorWindow::GameOrchestratorWindow(Account   &playerAccount,
 
 GameOrchestratorWindow::~GameOrchestratorWindow()
 {
+    // Cleanup heap-allocated objects
     delete _gameOrc;
     delete ui;
+
+    // TODO: need to implement a stateless _gameLogic! Ensure that the game logic does not have any game state leftover
+    _gameLogic->reset();
 }
 
 void GameOrchestratorWindow::resizeEvent(QResizeEvent *event)
@@ -177,6 +181,7 @@ void GameOrchestratorWindow::dealToDraw(bool showDraw)
         ui->drawDealButton->setText("Deal");
         ui->drawDealButton->setShortcut(QKeySequence("/"));
         ui->returnButton->setDisabled(false);
+        ui->returnButton->setShortcut(QKeySequence("N"));
         ui->betIncrementButton->setDisabled(false);
         ui->maxBetButton->setDisabled(false);
     }

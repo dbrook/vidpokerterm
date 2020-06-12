@@ -25,13 +25,13 @@ GameOrchestrator::GameOrchestrator(PokerGame *gameAnalyzer,
                                    Account   &playerAcct,
                                    quint8     renderDelay,
                                    QObject   *parent)
-    : _gameAnalyzer (gameAnalyzer),
+    : QObject       (parent),
+      _gameAnalyzer (gameAnalyzer),
       _nbHandsPerBet(nbHandsToPlay),
       _playerAccount(playerAcct),
       _renderDelayMS(renderDelay),
       _fakeGame     (false),
-      _handInProg   (false),
-      QObject       (parent)
+      _handInProg   (false)
 {
     // TODO: How many hand should we max out at? This is a fun thought experiment ... probably depends on screen reso.?
     _gameCards.reserve(nbHandsToPlay);
@@ -47,13 +47,13 @@ GameOrchestrator::GameOrchestrator(PokerGame *gameAnalyzer,
                                    Hand      &fixedHandTest,
                                    Account   &playerAcct,
                                    QObject   *parent)
-    : _gameAnalyzer (gameAnalyzer),
+    : QObject       (parent),
+      _gameAnalyzer (gameAnalyzer),
       _nbHandsPerBet(1),
       _playerAccount(playerAcct),
       _renderDelayMS(0),
       _fakeGame     (true),
-      _handInProg   (false),
-      QObject       (parent)
+      _handInProg   (false)
 {
     _gameCards.reserve(1);
     Deck cardDeckToIgnore(Deck::FULL_FRENCH);
@@ -122,7 +122,6 @@ void GameOrchestrator::dealDraw()
 
         // Take the bet amount from the account * the number of hands played
         _playerAccount.withdraw(_nbHandsPerBet * _gameAnalyzer->getCreditsPerBet());
-        emit updatedBalance(_playerAccount.balance());
 
         // Do not actually draw any cards if in a unit test simulation mode
         if (!_fakeGame) {
@@ -206,7 +205,6 @@ void GameOrchestrator::dealDraw()
         }
         _handInProg = false;
         emit gameInProgress(_handInProg);
-        emit updatedBalance(_playerAccount.balance());
     }
 }
 
