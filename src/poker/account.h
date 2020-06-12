@@ -18,18 +18,19 @@
 #ifndef ACCOUNT_H
 #define ACCOUNT_H
 
-#include <qglobal.h>
+#include <QObject>
 
 /**
  * @brief The Account class handles adding/withdrawing/checking the balance of credits available for betting
  */
-class Account
+class Account : public QObject
 {
+    Q_OBJECT
 public:
     /**
      * @brief Sets up an empty account
      */
-    explicit Account();
+    explicit Account(QObject *parent = nullptr);
 
     /**
      * @brief balance retrieves the number of credits available to bet
@@ -39,13 +40,7 @@ public:
     quint32 balance() const;
 
     /**
-     * @brief setBalance forces a new value to be held by the account
-     *
-     * @param[in]  newBal     Exact number of credits to save into the account
-     */
-    void setBalance(quint32 newBal);
 
-    /**
      * @brief withdraw will try and pull credits out of the account to use for a bet
      *
      * @param[in]  amount     Number of credits to take out of the account
@@ -54,12 +49,26 @@ public:
      */
     bool withdraw(quint32 amount);
 
+signals:
+
+    // Emitted whenever the balance changes
+    void balanceChanged(quint32 updatedBalance);
+
+public slots:
+    /**
+     * @brief setBalance forces a new value to be held by the account
+     *
+     * @param[in]  newBal     Exact number of credits to save into the account
+     */
+    void setBalance(quint32 newBal);
+
     /**
      * @brief add
      *
      * @param[in]  amount     Number of credits to add to the account
      */
     void add(quint32 amount);
+
 private:
     quint32 _balance;
 };

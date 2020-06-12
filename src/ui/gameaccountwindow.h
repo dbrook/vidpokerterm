@@ -40,16 +40,23 @@ public:
 
 public slots:
     /**
-     * @brief setAccountBalance is used to store the balance of the account from the balance spinbox
+     * @brief updateAccountBalance will reflect the balance of credits in a player's account in a LCD display widget
      */
-    void setAccountBalance();
-
-    //TODO: another slot to track changes in balance?
+    void updateAccountBalance(quint32 updatedBalance);
 
     /**
-     * @brief startGame begins a game of Jacks Or Better to test window spawning and game logic
+     * @brief startGame begins a game of whatever PokerGame is pointed to
      */
-    void startGame(PokerGame *gameLogicPointer, int numberOfHands);
+    void startGame(PokerGame *gameLogicPointer);
+
+    /**
+     * @brief      changeNumberOfHands sets the number of hands a player will play at a time in the game orchestrator
+     *
+     * @param[in]  increaseDecrease use -1 to decrease the hands played, 1 to increase it
+     *
+     * @note       The minimum value held is 1, the maximum value is ---TODO--- (after UI supports multi-hands)
+     */
+    void changeNumberOfHands(int increaseDecrease);
 
 private:
     // Game-Specific Items

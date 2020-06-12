@@ -17,7 +17,7 @@
 
 #include "account.h"
 
-Account::Account() : _balance(0)
+Account::Account(QObject *parent) : QObject(parent), _balance(0)
 {
 
 }
@@ -30,6 +30,7 @@ quint32 Account::balance() const
 void Account::setBalance(quint32 newBal)
 {
     _balance = newBal;
+    emit balanceChanged(_balance);
 }
 
 bool Account::withdraw(quint32 amount)
@@ -38,10 +39,12 @@ bool Account::withdraw(quint32 amount)
         return false;
     }
     _balance -= amount;
+    emit balanceChanged(_balance);
     return true;
 }
 
 void Account::add(quint32 amount)
 {
     _balance += amount;
+    emit balanceChanged(_balance);
 }

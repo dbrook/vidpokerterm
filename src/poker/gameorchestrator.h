@@ -169,11 +169,6 @@ signals:
     void gameWinnings(qint32 winningsSoFar);
 
     /**
-     * @brief updatedBalance indicates the current balance in the account
-     */
-    void updatedBalance(qint32 newCreditBalance);
-
-    /**
      * @brief primaryCardRevealed indicates a card on the primary hand was revealed (at index and what the card was)
      */
     void primaryCardRevealed(int cardIdx, PlayingCard card);
