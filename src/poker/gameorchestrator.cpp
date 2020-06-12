@@ -27,7 +27,8 @@ GameOrchestrator::GameOrchestrator(PokerGame *gameAnalyzer,
                                    QObject   *parent)
     : QObject       (parent),
       _gameAnalyzer (gameAnalyzer),
-      _nbHandsPerBet(nbHandsToPlay),
+      _nbHandsToPlay(nbHandsToPlay),
+      _betsPerHand  (1),
       _playerAccount(playerAcct),
       _renderDelayMS(renderDelay),
       _fakeGame     (false),
@@ -49,7 +50,8 @@ GameOrchestrator::GameOrchestrator(PokerGame *gameAnalyzer,
                                    QObject   *parent)
     : QObject       (parent),
       _gameAnalyzer (gameAnalyzer),
-      _nbHandsPerBet(1),
+      _nbHandsToPlay(1),
+      _betsPerHand  (1),
       _playerAccount(playerAcct),
       _renderDelayMS(0),
       _fakeGame     (true),
@@ -73,20 +75,20 @@ Hand GameOrchestrator::retrieveHand(qint32 handNumber) const
     return _gameCards[handNumber].second;
 }
 
-void GameOrchestrator::setCreditsToBet(qint8 credits)
+void GameOrchestrator::setCreditsToBet(qint32 credits)
 {
-    _gameAnalyzer->setCreditsPerBet(credits);
+    _betsPerHand = credits;
     emit betUpdated();
 }
 
 qint8 GameOrchestrator::creditsToBet() const
 {
-    return _gameAnalyzer->getCreditsPerBet();
+    return _betsPerHand;
 }
 
 void GameOrchestrator::currentPayTable(QVector<QPair<const QString, int> > &payTable)
 {
-    _gameAnalyzer->currentPayTable(payTable);
+    _gameAnalyzer->currentPayTable(_betsPerHand, payTable);
 }
 
 bool GameOrchestrator::isGameInProgress() const
@@ -107,7 +109,7 @@ void GameOrchestrator::dealDraw()
         }
 
         // Must have enough credits to continue
-        if (_playerAccount.balance() < _gameAnalyzer->getCreditsPerBet()) {
+        if (_playerAccount.balance() < _betsPerHand * _nbHandsToPlay) {
             qDebug() << "Insufficient funds to play a game";
 
             /***********************************************************************************************************
@@ -121,7 +123,7 @@ void GameOrchestrator::dealDraw()
         emit gameInProgress(_handInProg);
 
         // Take the bet amount from the account * the number of hands played
-        _playerAccount.withdraw(_nbHandsPerBet * _gameAnalyzer->getCreditsPerBet());
+        _playerAccount.withdraw(_nbHandsToPlay * _betsPerHand);
 
         // Do not actually draw any cards if in a unit test simulation mode
         if (!_fakeGame) {
@@ -143,8 +145,10 @@ void GameOrchestrator::dealDraw()
 
             // The nice poker terminals tell you what you have at the first deal (even though you haven't "won" yet)
             // So it is ok to analyze the hand at the deal, so long as we don't "count" the winnings
-            _gameAnalyzer->analyzeHand(_gameCards[0].second);
-            emit primaryHandUpdated(_gameAnalyzer->handResult(), 0);
+            QString handAnalyResult;
+            quint32 handWinCredits;
+            _gameAnalyzer->determineHandAndWin(_gameCards[0].second, _betsPerHand, handAnalyResult, handWinCredits);
+            emit primaryHandUpdated(handAnalyResult, 0);
         }
     } else {
         /*
@@ -175,7 +179,7 @@ void GameOrchestrator::dealDraw()
 
         // ... then reveal them
         quint32 totalWinnings = 0;
-        for (quint32 handIdx = 0; handIdx < _nbHandsPerBet; ++handIdx) {
+        for (quint32 handIdx = 0; handIdx < _nbHandsToPlay; ++handIdx) {
             try {
                 for (quint32 cardIdx = 0; cardIdx < Hand::kCardsPerHand; ++cardIdx) {
                     if (!_gameCards[0].second.cardHeld(cardIdx)) {
@@ -194,13 +198,15 @@ void GameOrchestrator::dealDraw()
             }
 
             // Analyze the final hand to see what the player has won (if anything), and adjust the balance
-            _gameAnalyzer->analyzeHand(_gameCards[handIdx].second);
-            _playerAccount.add(_gameAnalyzer->getWinnings());
+            QString handAnalyRslt;
+            quint32 handWinCreds;
+            _gameAnalyzer->determineHandAndWin(_gameCards[handIdx].second, _betsPerHand, handAnalyRslt, handWinCreds);
+            _playerAccount.add(handWinCreds);
 
-            // TODO: analyze the win, emit the win string, amount, from the gameAnalyzer + the new account balance
+            // Update the front-end with the individual hand winnings and total winnings (for multi-handed games)
             // TODO: so far just the primary hand...
-            emit primaryHandUpdated(_gameAnalyzer->handResult(), _gameAnalyzer->getWinnings());
-            totalWinnings += _gameAnalyzer->getWinnings();
+            emit primaryHandUpdated(handAnalyRslt, handWinCreds);
+            totalWinnings += handWinCreds;
             emit gameWinnings(totalWinnings);
         }
         _handInProg = false;
@@ -227,7 +233,7 @@ void GameOrchestrator::hold(quint8 cardPosition, bool canHold)
 
 void GameOrchestrator::cycleBetAmount()
 {
-    qint8 currentBet = _gameAnalyzer->getCreditsPerBet();
+    qint8 currentBet = _betsPerHand;
     qint8 newBetAmount;
     switch (currentBet) {
     case 1:
@@ -246,13 +252,13 @@ void GameOrchestrator::cycleBetAmount()
     default:
         newBetAmount = 1;
     }
-    _gameAnalyzer->setCreditsPerBet(newBetAmount);
+    _betsPerHand = newBetAmount;
     emit betUpdated();
 }
 
 void GameOrchestrator::betMaximum()
 {
-    _gameAnalyzer->setCreditsPerBet(5);
+    _betsPerHand = 5;
     emit betUpdated();
 }
 

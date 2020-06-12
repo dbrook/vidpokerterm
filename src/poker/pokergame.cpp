@@ -19,47 +19,28 @@
 
 #include "commonhandanalysis.h"
 
-PokerGame::PokerGame(const QString &gameName)
-    : _gameName(gameName)
-{
-    setCreditsPerBet(1);
-    reset();
-}
+PokerGame::PokerGame(const QString &gameName) : _gameName(gameName) {}
 
 PokerGame::~PokerGame() {}
 
-const QString PokerGame::gameName() const           {return _gameName;}
+const QString PokerGame::gameName() const {return _gameName;}
 
-void PokerGame::setCreditsPerBet(quint8 credits)
+bool PokerGame::creditBetValid(quint32 nbCredPerBet) const
 {
-    if (credits == 0 || credits > 5) {
+    if (nbCredPerBet == 0 || nbCredPerBet > 5) {
+        return false;
+    }
+    return true;
+}
+
+void PokerGame::currentPayTable(quint32 nbCreditsPerBet, QVector<QPair<const QString, int>> &payoutForBet) const
+{
+    if (!creditBetValid(nbCreditsPerBet)) {
         throw std::runtime_error("Invalid number of credits for game");
     }
 
-    _credPerBet = credits;
-}
-
-quint8 PokerGame::getCreditsPerBet() const          {return _credPerBet;}
-
-void PokerGame::setHandResult(QString handResult)   {_handResult = handResult;}
-
-QString PokerGame::handResult() const               {return _handResult;}
-
-void PokerGame::setWinnings(quint32 winningCredits) {_winnings = winningCredits;}
-
-quint32 PokerGame::getWinnings() const              {return _winnings;}
-
-void PokerGame::reset()
-{
-    _handResult = "";
-    _winnings   = 0;
-    setCreditsPerBet(1);
-}
-
-void PokerGame::currentPayTable(QVector<QPair<const QString, int>> &payoutForBet) const
-{
     for (const Parameters &singleHand : _handPayouts) {
-        QPair<QString, int> handPayout(singleHand.handString, singleHand.payoutCredits[_credPerBet - 1]);
+        QPair<QString, int> handPayout(singleHand.handString, singleHand.payoutCredits[nbCreditsPerBet - 1]);
         payoutForBet.push_back(handPayout);
     }
 }

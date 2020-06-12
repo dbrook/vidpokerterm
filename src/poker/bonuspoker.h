@@ -46,9 +46,12 @@ public:
     /**
      * @brief      Analyzes a hand against the Bonus Poker payout table / game rules
      *
-     * @param[in]  gameHand       Single hand of a poker game
+     * @param[in]  gameHand       A set of PlayingCards comprising the player's hand construction
+     * @param[in]  nbCreditsBet   Number of credits the player has staked for gameHand
+     * @param[out] winningHand    QString buffer to write the winning hand (if any)
+     * @param[out] creditsWon     Number of credits the player is entitled to win based on the gameHand and bet
      */
-    void analyzeHand(const Hand &gameHand);
+    void determineHandAndWin(const Hand &gameHand, quint32 nbCreditsBet, QString &winningHand, quint32 &creditsWon);
 };
 
 #endif // BONUSPOKER_H

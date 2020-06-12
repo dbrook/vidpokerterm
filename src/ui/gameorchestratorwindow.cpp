@@ -123,9 +123,6 @@ GameOrchestratorWindow::~GameOrchestratorWindow()
     // Cleanup heap-allocated objects
     delete _gameOrc;
     delete ui;
-
-    // TODO: need to implement a stateless _gameLogic! Ensure that the game logic does not have any game state leftover
-    _gameLogic->reset();
 }
 
 void GameOrchestratorWindow::resizeEvent(QResizeEvent *event)

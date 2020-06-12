@@ -81,7 +81,7 @@ public:
      *
      * @param[in]  credits
      */
-    void setCreditsToBet(qint8 credits);
+    void setCreditsToBet(qint32 credits);
 
     /**
      * @brief creditsToBet fetches how many credits the player must apply to a deal as stored in the gameAnalyzer.
@@ -180,7 +180,8 @@ signals:
 
 private:
     PokerGame                  *_gameAnalyzer;
-    quint32                     _nbHandsPerBet;
+    quint32                     _nbHandsToPlay;
+    quint32                     _betsPerHand;
     Account                    &_playerAccount;
     quint8                      _renderDelayMS;
     bool                        _fakeGame;
