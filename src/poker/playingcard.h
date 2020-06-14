@@ -58,6 +58,13 @@ public:
     explicit PlayingCard(CardSuit cardSuit, CardValue cardValue);
 
     /**
+     * @brief      Determines if this instance is an actual card and not a 'placeholder'
+     *
+     * @return     true if the card's null flag is set
+     */
+    bool fakeCard() const;
+
+    /**
      * @brief operator == overloading for use by the Deck's removeCard() feature
      */
     bool operator==(const PlayingCard &card) const;
@@ -77,6 +84,7 @@ public:
     CardValue value() const;
 
 private:
+    bool      _null;    // A null card can be used to have a placeholder in a hand (say for holding at a position)
     CardSuit  _suit;
     CardValue _value;
 };

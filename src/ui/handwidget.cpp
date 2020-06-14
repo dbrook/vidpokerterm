@@ -18,24 +18,58 @@
 #include "handwidget.h"
 #include "ui_handwidget.h"
 
-const QString HandWidget::cardBackStyle =
-        "background-color:rgb(0,66,188);border-radius:10px;color:rgb(227,227,227);font-size:20pt;";
-const QString HandWidget::cardFrontStyle =
-        "background-color:rgb(227,227,227);border-radius:10px;font-size:48pt;";
-
-HandWidget::HandWidget(QWidget *parent) :
+HandWidget::HandWidget(bool           extraHand,
+                       const QSize   &cardSize,
+                       const QString &fontSize,
+                       const QString &winFontSize,
+                       QWidget       *parent) :
     QWidget(parent),
+    _displayCardsOnly(extraHand),
+    _cardSize(cardSize),
+    _fontSize(fontSize),
+    _winFontSize(winFontSize),
     ui(new Ui::HandWidget)
 {
     ui->setupUi(this);
 
+    // Apply styling to the cards
+    _cardBackStyleSheet = "border-radius:10px;color:rgb(227,227,227);"
+            "background-color: qlineargradient(spread:repeat, x1:0, y1:0, x2:1, y2:1, stop:0 rgba(0, 0, 74, 255),"
+            " stop:1 rgba(0, 0, 255, 255));";
+
+    _cardFrontStyleSheet = "border-radius:10px;"
+            "background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:1, stop:0 rgba(185, 185, 185, 255),"
+            "stop:1 rgba(255, 255, 255, 255));font-size:" + _fontSize + "pt;";
+
+    if (!_winFontSize.isEmpty()) {
+        ui->resultLabel->setStyleSheet("font-size:" + _winFontSize + "pt;");
+    }
+
+    // And make sure the size obeys what the UI requested
+    ui->card1->setMinimumSize(_cardSize);
+    ui->card2->setMinimumSize(_cardSize);
+    ui->card3->setMinimumSize(_cardSize);
+    ui->card4->setMinimumSize(_cardSize);
+    ui->card5->setMinimumSize(_cardSize);
+
     // There are 5 cards, selecting their respective hold buttons should indicate to the game orchestrator they are
     // to be preserved and not re-drawn
-    connect(ui->holdBtnCard1, &QPushButton::toggled, this, &HandWidget::card1Hold);
-    connect(ui->holdBtnCard2, &QPushButton::toggled, this, &HandWidget::card2Hold);
-    connect(ui->holdBtnCard3, &QPushButton::toggled, this, &HandWidget::card3Hold);
-    connect(ui->holdBtnCard4, &QPushButton::toggled, this, &HandWidget::card4Hold);
-    connect(ui->holdBtnCard5, &QPushButton::toggled, this, &HandWidget::card5Hold);
+    if (!_displayCardsOnly) {
+        // Primary hand: show and allow use of the hold buttons
+        connect(ui->holdBtnCard1, &QPushButton::toggled, this, &HandWidget::card1Hold);
+        connect(ui->holdBtnCard2, &QPushButton::toggled, this, &HandWidget::card2Hold);
+        connect(ui->holdBtnCard3, &QPushButton::toggled, this, &HandWidget::card3Hold);
+        connect(ui->holdBtnCard4, &QPushButton::toggled, this, &HandWidget::card4Hold);
+        connect(ui->holdBtnCard5, &QPushButton::toggled, this, &HandWidget::card5Hold);
+    } else {
+        // Extra hand(s): only for display, no hold button control
+        ui->holdBtnCard1->deleteLater();
+        ui->holdBtnCard2->deleteLater();
+        ui->holdBtnCard3->deleteLater();
+        ui->holdBtnCard4->deleteLater();
+        ui->holdBtnCard5->deleteLater();
+        ui->resultLabel->setText("");
+    }
 }
 
 HandWidget::~HandWidget()
@@ -50,7 +84,7 @@ void HandWidget::winningTextAndAmount(const QString &handString, quint32 winning
     } else if (winning == 0) {
         ui->resultLabel->setText(handString);
     } else {
-        ui->resultLabel->setText(handString + " - Win +" + QString::number(winning));
+        ui->resultLabel->setText(handString + " +" + QString::number(winning));
     }
 }
 
@@ -137,23 +171,23 @@ void HandWidget::revealCard(int cardIdx, PlayingCard card)
     switch (cardIdx) {
     case 0:
         ui->card1->setText(valueSymbol + "\n" + suitSymbol);
-        ui->card1->setStyleSheet(cardFrontStyle + colorStyleSheet);
+        ui->card1->setStyleSheet(_cardFrontStyleSheet + colorStyleSheet);
         break;
     case 1:
         ui->card2->setText(valueSymbol + "\n" + suitSymbol);
-        ui->card2->setStyleSheet(cardFrontStyle + colorStyleSheet);
+        ui->card2->setStyleSheet(_cardFrontStyleSheet + colorStyleSheet);
         break;
     case 2:
         ui->card3->setText(valueSymbol + "\n" + suitSymbol);
-        ui->card3->setStyleSheet(cardFrontStyle + colorStyleSheet);
+        ui->card3->setStyleSheet(_cardFrontStyleSheet + colorStyleSheet);
         break;
     case 3:
         ui->card4->setText(valueSymbol + "\n" + suitSymbol);
-        ui->card4->setStyleSheet(cardFrontStyle + colorStyleSheet);
+        ui->card4->setStyleSheet(_cardFrontStyleSheet + colorStyleSheet);
         break;
     case 4:
         ui->card5->setText(valueSymbol + "\n" + suitSymbol);
-        ui->card5->setStyleSheet(cardFrontStyle + colorStyleSheet);
+        ui->card5->setStyleSheet(_cardFrontStyleSheet + colorStyleSheet);
         break;
     default:
         // Should not happen!
@@ -164,47 +198,49 @@ void HandWidget::revealCard(int cardIdx, PlayingCard card)
 void HandWidget::showCardBacks(bool card1, bool card2, bool card3, bool card4, bool card5)
 {
     if (card1) {
-        ui->card1->setText("Chad's\nCasino");
-        ui->card1->setStyleSheet(cardBackStyle);
+        ui->card1->setText("");
+        ui->card1->setStyleSheet(_cardBackStyleSheet);
     }
     if (card2) {
-        ui->card2->setText("Chad's\nCasino");
-        ui->card2->setStyleSheet(cardBackStyle);
+        ui->card2->setText("");
+        ui->card2->setStyleSheet(_cardBackStyleSheet);
     }
     if (card3) {
-        ui->card3->setText("Chad's\nCasino");
-        ui->card3->setStyleSheet(cardBackStyle);
+        ui->card3->setText("");
+        ui->card3->setStyleSheet(_cardBackStyleSheet);
     }
     if (card4) {
-        ui->card4->setText("Chad's\nCasino");
-        ui->card4->setStyleSheet(cardBackStyle);
+        ui->card4->setText("");
+        ui->card4->setStyleSheet(_cardBackStyleSheet);
     }
     if (card5) {
-        ui->card5->setText("Chad's\nCasino");
-        ui->card5->setStyleSheet(cardBackStyle);
+        ui->card5->setText("");
+        ui->card5->setStyleSheet(_cardBackStyleSheet);
     }
 }
 
 void HandWidget::resetAll()
 {
     // Unset holds
-    ui->holdBtnCard1->setChecked(false);
-    ui->holdBtnCard2->setChecked(false);
-    ui->holdBtnCard3->setChecked(false);
-    ui->holdBtnCard4->setChecked(false);
-    ui->holdBtnCard5->setChecked(false);
+    if (!_displayCardsOnly) {
+        ui->holdBtnCard1->setChecked(false);
+        ui->holdBtnCard2->setChecked(false);
+        ui->holdBtnCard3->setChecked(false);
+        ui->holdBtnCard4->setChecked(false);
+        ui->holdBtnCard5->setChecked(false);
+    }
 
     // Flip cards back
-    ui->card1->setText("Chad's\nCasino");
-    ui->card1->setStyleSheet(cardBackStyle);
-    ui->card2->setText("Chad's\nCasino");
-    ui->card2->setStyleSheet(cardBackStyle);
-    ui->card3->setText("Chad's\nCasino");
-    ui->card3->setStyleSheet(cardBackStyle);
-    ui->card4->setText("Chad's\nCasino");
-    ui->card4->setStyleSheet(cardBackStyle);
-    ui->card5->setText("Chad's\nCasino");
-    ui->card5->setStyleSheet(cardBackStyle);
+    ui->card1->setText("");
+    ui->card1->setStyleSheet(_cardBackStyleSheet);
+    ui->card2->setText("");
+    ui->card2->setStyleSheet(_cardBackStyleSheet);
+    ui->card3->setText("");
+    ui->card3->setStyleSheet(_cardBackStyleSheet);
+    ui->card4->setText("");
+    ui->card4->setStyleSheet(_cardBackStyleSheet);
+    ui->card5->setText("");
+    ui->card5->setStyleSheet(_cardBackStyleSheet);
 
     // Hide any winning string
     ui->resultLabel->setText("");

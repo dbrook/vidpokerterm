@@ -25,12 +25,14 @@ const quint8 Hand::kCardsPerHand = 5;
 
 Hand::Hand()
 {
-    // Claim 5 spaces for cards
+    // Claim 5 spaces for cards, to be used later
     _handCardStatus.reserve(kCardsPerHand);
 }
 
 Hand::Hand(PlayingCard card1, PlayingCard card2, PlayingCard card3, PlayingCard card4, PlayingCard card5)
 {
+    // Claim 5 spaces for cards
+    _handCardStatus.reserve(kCardsPerHand);
     addCard(card1);
     addCard(card2);
     addCard(card3);
@@ -44,6 +46,11 @@ void Hand::addCard(PlayingCard card)
         throw std::runtime_error("Adding card will exceed hand limit");
     }
     _handCardStatus.push_back({card, false});
+}
+
+const PlayingCard Hand::cardAt(quint8 cardIdx) const
+{
+    return _handCardStatus[cardIdx].first;
 }
 
 void Hand::holdCard(quint8 cardNum, bool hold)

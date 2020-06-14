@@ -17,13 +17,19 @@
 
 #include "playingcard.h"
 
-PlayingCard::PlayingCard() {}
+PlayingCard::PlayingCard() : _null(true) {}
 
-PlayingCard::PlayingCard(CardSuit cardSuit, CardValue cardValue) : _suit(cardSuit), _value(cardValue) {}
+PlayingCard::PlayingCard(CardSuit cardSuit, CardValue cardValue) : _null(false), _suit(cardSuit), _value(cardValue) {}
+
+bool PlayingCard::fakeCard() const {return _null;}
 
 bool PlayingCard::operator==(const PlayingCard &card) const
 {
-    return (this->suit() == card.suit()) && (this->value() == card.value());
+    return ((this->fakeCard() && card.fakeCard()) ||
+            (!this->fakeCard() &&
+             !card.fakeCard()  &&
+             (this->suit() == card.suit()) &&
+             (this->value() == card.value())));
 }
 
 PlayingCard::CardSuit PlayingCard::suit() const   {return _suit;}

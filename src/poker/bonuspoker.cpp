@@ -35,8 +35,11 @@ BonusPoker::BonusPoker() : PokerGame("Bonus Poker")
     };
 }
 
-void BonusPoker::analyzeHand(const Hand &gameHand)
+void BonusPoker::determineHandAndWin(const Hand &gameHand,
+                                     quint32     nbCreditsBet,
+                                     QString    &winningHand,
+                                     quint32    &creditsWon)
 {
-    ;
+    winningHand = "";
+    creditsWon  = 0;
 }
-

@@ -27,26 +27,29 @@ public:
      * @brief The classic popular video poker game, "Jacks or Better". This is the desirable 9-6 Jacks or Better game.
      *
      *        Payout Table (as initialized by the Constructor):
-     *        +-----------------+-----+-----+-----+-----+-----+
-     *        | Royal Flush     |  250|  500|  750| 1000| 4000|
-     *        | Straight Flush  |   50|  100|  150|  200|  250|
-     *        | 4 of a Kind     |   25|   50|   75|  100|  125|
-     *        | Full House      |    9|   18|   27|   36|   45|
-     *        | Flush           |    6|   12|   18|   24|   30|
-     *        | Straight        |    4|    8|   12|   16|   20|
-     *        | 3 of a Kind     |    3|    6|    9|   12|   15|
-     *        | 2 Pair          |    2|    4|    6|    8|   10|
-     *        | Jacks or Better |    1|    2|    3|    4|    5|
-     *        +-----------------+-----+-----+-----+-----+-----+
+     *        +-----------------+------+------+------+------+------+
+     *        | Royal Flush     |  250 |  500 |  750 | 1000 | 4000 |
+     *        | Straight Flush  |   50 |  100 |  150 |  200 |  250 |
+     *        | 4 of a Kind     |   25 |   50 |   75 |  100 |  125 |
+     *        | Full House      |    9 |   18 |   27 |   36 |   45 |
+     *        | Flush           |    6 |   12 |   18 |   24 |   30 |
+     *        | Straight        |    4 |    8 |   12 |   16 |   20 |
+     *        | 3 of a Kind     |    3 |    6 |    9 |   12 |   15 |
+     *        | 2 Pair          |    2 |    4 |    6 |    8 |   10 |
+     *        | Jacks or Better |    1 |    2 |    3 |    4 |    5 |
+     *        +-----------------+------+------+------+------+------+
      */
     explicit JacksOrBetter();
 
     /**
-     * @brief      Analyzes a hand against the Jacks-or-Better game rules
+     * @brief determineHandAndWin Analyzes a hand against the Jacks-or-Better game rules and the requested bet amount
      *
-     * @param[in]  gameHand       Single hand of a poker game
+     * @param[in]  gameHand       A set of PlayingCards comprising the player's hand construction
+     * @param[in]  nbCreditsBet   Number of credits the player has staked for gameHand
+     * @param[out] winningHand    QString buffer to write the winning hand (if any)
+     * @param[out] creditsWon     Number of credits the player is entitled to win based on the gameHand and bet
      */
-    void analyzeHand(const Hand &gameHand);
+    void determineHandAndWin(const Hand &gameHand, quint32 nbCreditsBet, QString &winningHand, quint32 &creditsWon);
 };
 
 #endif // JACKSORBETTER_H

@@ -72,6 +72,11 @@ void Deck::removeCard(const PlayingCard &cardToRemove)
     }
 }
 
+void Deck::addCard(const PlayingCard cardToInsert)
+{
+    _cardDeck.push_back(cardToInsert);
+}
+
 void Deck::reset()
 {
     if (_typeOfDeck == FULL_FRENCH) {

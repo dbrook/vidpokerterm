@@ -36,12 +36,12 @@ public:
     };
 
     /**
-     * @brief      ~
+     * @brief Abstract game paytable and analysis class. See jacksorbetter.h/cpp files to see how to create a game
      */
     explicit PokerGame(const QString &gameName);
 
     /**
-     * @brief      Virtual destructor
+     * @brief Virtual destructor
      */
     virtual ~PokerGame();
 
@@ -53,74 +53,36 @@ public:
     const QString gameName() const;
 
     /**
-     * @brief      Choose the pay table
+     * @brief determineHandAndWin is where the actual hand evaluation logic and winnings shall be determined by classes
+     *                            inheriting from this abstract base class
      *
-     * @param[in]  credits     Credit / bet to spend towards each hand - must be between 1 and 5
-     *
-     * @throws     runtime_error if an invalid number of credits was proposed ("Invalid number of credits for game")
+     * @param[in]  gameHand       A set of PlayingCards comprising the player's hand construction
+     * @param[in]  nbCreditsBet   Number of credits the player has staked for gameHand
+     * @param[out] winningHand    QString buffer to write the winning hand (if any)
+     * @param[out] creditsWon     Number of credits the player is entitled to win based on the gameHand and bet
      */
-    void setCreditsPerBet(quint8 credits);
+    virtual void determineHandAndWin(const Hand &gameHand,
+                                     quint32     nbCreditsBet,
+                                     QString    &winningHand,
+                                     quint32    &creditsWon) = 0;
 
     /**
-     * @brief      Gets current pay table selection
+     * @brief currentPayTable extracts the relevant paytable based on how many credits would be bet
      *
-     * @return     number of credits currently bet
-     */
-    quint8 getCreditsPerBet() const;
-
-    /**
-     * @brief      Analyze a hand to see what (if any) winnings will apply
-     *
-     * @param[in]  gameHand    Reference to the hand that the game currently has
-     */
-    virtual void analyzeHand(const Hand &gameHand) = 0;
-
-    /**
-     * @brief      handResult
-     *
-     * @return     Hardcoded string representing the results of the hand analysis
-     *
-     * @note       analyzeHand must be run first
-     */
-    QString handResult() const;
-
-    /**
-     * @brief      Determines how many credits should be awarded to the player given the credits bet and hand result
-     *
-     * @return     Number of credits won per the final hand
-     *
-     * @note       analyzeHand must be run first
-     */
-    quint32 getWinnings() const;
-
-    /**
-     * @brief      Resets the hand processor
-     */
-    void reset();
-
-    /**
-     * @brief currentPayTable extracts the relevant paytable based on the current creditsPerBet value
-     *
+     * @param[in]  nbCredPerBet   number of credits that would be bet
      * @param[out] payoutForBet   vector of strings (name of hand) and int (payout value for that hand)
      */
-    void currentPayTable(QVector<QPair<const QString, int> > &payoutForBet) const;
+    void currentPayTable(quint32 nbCredPerBet, QVector<QPair<const QString, int> > &payoutForBet) const;
 
 protected:
     /**
-     * @brief      handResult
+     * @brief creditBetValid determines if a valid number of credits was requested for betting
      *
-     * @param[in]  Hardcoded string representing the results of the hand analysis
+     * @param[in]  nbCredPerBet   Number of credits the player would like to bet
+     *
+     * @return     true if the number of credits are supported, false otherwise
      */
-    void setHandResult(QString handResult);
-
-    /**
-     * @brief      Determines how many credits should be awarded to the player given the credits bet and hand result
-     *
-     * @return     Number of credits won per the final hand
-     *
-     * @note       analyzeHand must be run first
-     */
-    void setWinnings(quint32 winningCredits);
+    bool creditBetValid(quint32 nbCredPerBet) const;
 
     /**
      * @brief _handPayouts is where sub classes inheriting from a PokerGame should save their payout tables
@@ -129,9 +91,6 @@ protected:
 
 private:
     QString             _gameName;
-    quint8              _credPerBet;
-    quint32             _winnings;
-    QString             _handResult;
 };
 
 #endif // POKERGAME_H

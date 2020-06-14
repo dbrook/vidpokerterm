@@ -24,11 +24,11 @@ namespace {
 // Test orchestrator function to hopefully make for less repetetive code
 void validateResult(PokerGame &myGame, const Hand &myHand, quint8 credits, quint32 expWinnings, const QString &expHand)
 {
-    myGame.setCreditsPerBet(credits);
-    myGame.analyzeHand(myHand);
-    QCOMPARE(myGame.getWinnings(), expWinnings);
-    QCOMPARE(myGame.handResult(), expHand);
-    myGame.reset();
+    QString retHand;
+    quint32 retWinnings;
+    myGame.determineHandAndWin(myHand, credits, retHand, retWinnings);
+    QCOMPARE(retWinnings, expWinnings);
+    QCOMPARE(retHand, expHand);
 }
 }
 

@@ -108,6 +108,12 @@ GameAccountWindow::GameAccountWindow(QWidget *parent)
     // Number of Hands Increment / Decrement
     connect(ui->nbHandsDec, &QPushButton::clicked, this, [=]() {changeNumberOfHands(-1);});
     connect(ui->nbHandsInc, &QPushButton::clicked, this, [=]() {changeNumberOfHands( 1);});
+
+    // Uncomment to make window full-screen
+//    this->setWindowState(this->windowState() | Qt::WindowFullScreen);
+
+    // Uncomment the line below to mask the mouse pointer
+//    QApplication::setOverrideCursor(Qt::BlankCursor);
 }
 
 GameAccountWindow::~GameAccountWindow()
@@ -139,18 +145,53 @@ void GameAccountWindow::startGame(PokerGame *gameLogicPointer)
 void GameAccountWindow::changeNumberOfHands(int increaseDecrease)
 {
     int currentHandCount = ui->handsToPlayLCD->value();
+    int nextHandCount    = 1;
+
+    // Because of rendering constraints, adjust the number of hands not 1-by-1 but with specific values
     if (increaseDecrease == -1) {
-        if (currentHandCount > 1) {
-            ui->handsToPlayLCD->display(currentHandCount - 1);
-        } else {
-            ui->handsToPlayLCD->display(10);
+        switch (currentHandCount) {
+        case 1:
+//            nextHandCount = 100;
+            nextHandCount = 25;
+            break;
+        case 5:
+            nextHandCount = 3;
+            break;
+        case 10:
+            nextHandCount = 5;
+            break;
+        case 25:
+            nextHandCount = 10;
+            break;
+//        case 100:
+//            nextHandCount = 25;
+//            break;
+        default:
+            nextHandCount = 1;
         }
     } else if (increaseDecrease == 1) {
-        if (currentHandCount < 10) {
-            ui->handsToPlayLCD->display(currentHandCount + 1);
-        } else {
-            ui->handsToPlayLCD->display(1);
+        switch (currentHandCount) {
+        case 1:
+            nextHandCount = 3;
+            break;
+        case 3:
+            nextHandCount = 5;
+            break;
+        case 5:
+            nextHandCount = 10;
+            break;
+        case 10:
+            nextHandCount = 25;
+            break;
+//        case 25:
+//            nextHandCount = 100;
+//            break;
+        default:
+            nextHandCount = 1;
         }
     }
+
+    // Update the UI control with the new value
+    ui->handsToPlayLCD->display(nextHandCount);
 }
 

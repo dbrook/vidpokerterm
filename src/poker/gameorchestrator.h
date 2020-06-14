@@ -81,7 +81,7 @@ public:
      *
      * @param[in]  credits
      */
-    void setCreditsToBet(qint8 credits);
+    void setCreditsToBet(qint32 credits);
 
     /**
      * @brief creditsToBet fetches how many credits the player must apply to a deal as stored in the gameAnalyzer.
@@ -159,6 +159,12 @@ signals:
     void gameInProgress(bool sayDrawNotDeal);
 
     /**
+     * @brief operating indicates the orchestrator has tasks in progress (so asking for another deal-draw would cause
+     *        an inconsistent state).
+     */
+    void operating(bool handsDealing);
+
+    /**
      * @brief primaryHandUpdated indicates the result of the hand analysis and any winnings associated with that hand
      */
     void primaryHandUpdated(const QString &handString, quint32 winning);
@@ -174,13 +180,24 @@ signals:
     void primaryCardRevealed(int cardIdx, PlayingCard card);
 
     /**
+     * @brief secondaryCardRevealed indicates card at cardIdx on a secondary hand handIdx is displayable (show == true)
+     */
+    void secondaryCardRevealed(int handIdx, int cardIdx, PlayingCard card, bool show);
+
+    /**
+     * @brief secondaryHandUpdated
+     */
+    void secondaryHandUpdated(int handIdx, const QString &handString, quint32 winning);
+
+    /**
      * @brief renderSpeed indicates the card draw speed was changed
      */
     void renderSpeed(const QString &currentSpeed);
 
 private:
     PokerGame                  *_gameAnalyzer;
-    quint32                     _nbHandsPerBet;
+    quint32                     _nbHandsToPlay;
+    quint32                     _betsPerHand;
     Account                    &_playerAccount;
     quint8                      _renderDelayMS;
     bool                        _fakeGame;
