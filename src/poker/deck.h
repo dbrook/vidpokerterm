@@ -81,6 +81,15 @@ public:
     void removeCard(const PlayingCard &cardToRemove);
 
     /**
+     * @brief      Puts the cardToReplace into the deck. This is also principally intended for multi-hand games.
+     *             Placing a card back into the deck will hurt it's shuffled-ness, so be sure to shuffle after doing
+     *             this operation.
+     *
+     * @param[in]  cardToInsert    Card to put into the deck
+     */
+    void addCard(const PlayingCard cardToInsert);
+
+    /**
      * @brief      Resets the internal black list, restoring the deck back to full eligibility
      */
     void reset();

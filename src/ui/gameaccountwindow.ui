@@ -14,9 +14,9 @@
    <string>VidPokerTerminal</string>
   </property>
   <property name="styleSheet">
-   <string notr="true">font-size: 15pt;
-background-color: rgb(6, 139, 3);
-color: rgb(255, 255, 255);</string>
+   <string notr="true">background-color: rgb(6, 139, 3);
+color: rgb(255, 255, 255);
+/*font-size: 14pt;*/</string>
   </property>
   <widget class="QWidget" name="centralwidget">
    <layout class="QVBoxLayout" name="verticalLayout" stretch="0,0,1,0,0">
@@ -51,7 +51,7 @@ QPushButton:pressed {
     border-width: 2px;
     border-color: lawngreen;
 }
-</string>
+font-size: 14pt;</string>
       </property>
       <property name="frameShape">
        <enum>QFrame::StyledPanel</enum>
@@ -144,7 +144,7 @@ QPushButton:pressed {
     border-width: 2px;
     border-color: lawngreen;
 }
-</string>
+font-size: 14pt;</string>
       </property>
       <property name="frameShape">
        <enum>QFrame::NoFrame</enum>
@@ -179,7 +179,7 @@ QPushButton:pressed {
     border-width: 2px;
     border-color: lawngreen;
 }
-</string>
+font-size: 14pt;</string>
       </property>
       <property name="frameShape">
        <enum>QFrame::StyledPanel</enum>
@@ -267,11 +267,14 @@ QPushButton:pressed {
     </item>
     <item>
      <widget class="QFrame" name="quitAboutArea">
+      <property name="cursor">
+       <cursorShape>ForbiddenCursor</cursorShape>
+      </property>
       <property name="styleSheet">
        <string notr="true">background-color: rgb(0, 0, 0);</string>
       </property>
       <property name="frameShape">
-       <enum>QFrame::StyledPanel</enum>
+       <enum>QFrame::NoFrame</enum>
       </property>
       <property name="frameShadow">
        <enum>QFrame::Raised</enum>
@@ -289,7 +292,6 @@ QPushButton:pressed {
     border-style: outset;
     border-width: 2px;
     border-color: gray;
-    font-size: 15pt;
 }
 QPushButton {
     color: black;
@@ -297,7 +299,6 @@ QPushButton {
     border-style: outset;
     border-width: 2px;
     border-color: gold;
-    font-size: 15pt;
 }
 QPushButton:focused {
     color: red;
@@ -305,7 +306,6 @@ QPushButton:focused {
     border-style: outset;
     border-width: 2px;
     border-color: gold;
-    font-size: 15pt;
 }
 QPushButton:pressed {
     color: yellow;
@@ -313,7 +313,6 @@ QPushButton:pressed {
     border-style: outset;
     border-width: 2px;
     border-color: yellow;
-    font-size: 15pt;
 }
 </string>
          </property>
@@ -337,7 +336,6 @@ QPushButton:pressed {
     border-style: outset;
     border-width: 2px;
     border-color: gray;
-    font-size: 15pt;
 }
 QPushButton {
     color: black;
@@ -345,7 +343,6 @@ QPushButton {
     border-style: outset;
     border-width: 2px;
     border-color: gold;
-    font-size: 15pt;
 }
 QPushButton:focused {
     color: red;
@@ -353,7 +350,6 @@ QPushButton:focused {
     border-style: outset;
     border-width: 2px;
     border-color: gold;
-    font-size: 15pt;
 }
 QPushButton:pressed {
     color: yellow;
@@ -361,7 +357,6 @@ QPushButton:pressed {
     border-style: outset;
     border-width: 2px;
     border-color: yellow;
-    font-size: 15pt;
 }
 </string>
          </property>
@@ -385,7 +380,6 @@ QPushButton:pressed {
     border-style: outset;
     border-width: 2px;
     border-color: gray;
-    font-size: 15pt;
 }
 QPushButton {
     color: black;
@@ -393,7 +387,6 @@ QPushButton {
     border-style: outset;
     border-width: 2px;
     border-color: gold;
-    font-size: 15pt;
 }
 QPushButton:focused {
     color: red;
@@ -401,7 +394,6 @@ QPushButton:focused {
     border-style: outset;
     border-width: 2px;
     border-color: gold;
-    font-size: 15pt;
 }
 QPushButton:pressed {
     color: yellow;
@@ -409,7 +401,6 @@ QPushButton:pressed {
     border-style: outset;
     border-width: 2px;
     border-color: yellow;
-    font-size: 15pt;
 }
 </string>
          </property>
@@ -433,7 +424,6 @@ QPushButton:pressed {
     border-style: outset;
     border-width: 2px;
     border-color: gray;
-    font-size: 15pt;
 }
 QPushButton {
     color: black;
@@ -441,7 +431,6 @@ QPushButton {
     border-style: outset;
     border-width: 2px;
     border-color: gold;
-    font-size: 15pt;
 }
 QPushButton:focused {
     color: red;
@@ -449,7 +438,6 @@ QPushButton:focused {
     border-style: outset;
     border-width: 2px;
     border-color: gold;
-    font-size: 15pt;
 }
 QPushButton:pressed {
     color: yellow;
@@ -457,7 +445,6 @@ QPushButton:pressed {
     border-style: outset;
     border-width: 2px;
     border-color: yellow;
-    font-size: 15pt;
 }
 </string>
          </property>
@@ -481,7 +468,6 @@ QPushButton:pressed {
     border-style: outset;
     border-width: 2px;
     border-color: gray;
-    font-size: 15pt;
 }
 QPushButton {
     color: black;
@@ -489,7 +475,6 @@ QPushButton {
     border-style: outset;
     border-width: 2px;
     border-color: gold;
-    font-size: 15pt;
 }
 QPushButton:focused {
     color: red;
@@ -497,7 +482,6 @@ QPushButton:focused {
     border-style: outset;
     border-width: 2px;
     border-color: gold;
-    font-size: 15pt;
 }
 QPushButton:pressed {
     color: yellow;
@@ -505,7 +489,6 @@ QPushButton:pressed {
     border-style: outset;
     border-width: 2px;
     border-color: yellow;
-    font-size: 15pt;
 }
 </string>
          </property>

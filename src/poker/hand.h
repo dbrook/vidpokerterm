@@ -61,6 +61,15 @@ public:
     void addCard(PlayingCard card);
 
     /**
+     * @brief      Allows a client to copy the card at a specified hand position for comparisons
+     *
+     * @param[in]  cardIdx    Position from the hand to peek at the card
+     *
+     * @return     a const copy of the playing card
+     */
+    const PlayingCard cardAt(quint8 cardIdx) const;
+
+    /**
      * @brief      Sets the hold status of a card in the hand
      *
      * @param[in]  cardNum    Index of the card to hold

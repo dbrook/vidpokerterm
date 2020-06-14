@@ -34,7 +34,14 @@ class HandWidget : public QWidget
     const static QString cardFrontStyle;
 
 public:
-    explicit HandWidget(QWidget *parent = nullptr);
+    /**
+     * @brief HandWidget is a display/select module for a single hand of a poker game UI
+     *
+     * @param[in]  extraHand      true to indicate 'extra' hands (no hold controls), false for the primary hand
+     * @param[in]  parent         standard QObject hierarchy / memory management pointer
+     */
+    explicit HandWidget(bool extraHand, QWidget *parent = nullptr);
+
     ~HandWidget();
 
 public slots:
@@ -61,6 +68,8 @@ signals:
     void card5Hold(bool cardIsHeld);
 
 private:
+    bool _displayCardsOnly;
+
     // Actual Qt widgets
     Ui::HandWidget *ui;
 };

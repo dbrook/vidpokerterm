@@ -41,7 +41,7 @@ GameOrchestratorWindow::GameOrchestratorWindow(Account   &playerAccount,
     _gameOrc = new GameOrchestrator(_gameLogic, _handsToPlay, _playerCredits, 0);
 
     // Fill in the number of credits the first time
-    ui->creditsAmount->display(static_cast<int>(_playerCredits.balance()));
+    ui->creditsAmount->setText(QString::number(_playerCredits.balance()));
 
     // Fill the game name string in the table and the main window title
     setWindowTitle(_gameLogic->gameName());
@@ -60,16 +60,30 @@ GameOrchestratorWindow::GameOrchestratorWindow(Account   &playerAccount,
     // Return button to go back to game selection
     connect(ui->returnButton, &QPushButton::clicked, this, &GameOrchestratorWindow::close);
 
+    /*
+     * Dealing / Drawing cards from the orchestrator
+     */
     // The all-important deal/draw button
     // -- calls our own slot which will call the Orchestrator, thread sync issues observed on slow processors otherwise
     connect(ui->drawDealButton, &QPushButton::clicked, this, &GameOrchestratorWindow::syncDealDraw);
     connect(this, &GameOrchestratorWindow::readyForDealDraw, _gameOrc, &GameOrchestrator::dealDraw);
 
+    // While the orchestrator is working, it should not be burdened with deal-draw requests
+    connect(_gameOrc, &GameOrchestrator::operating, this, &GameOrchestratorWindow::disableDealDraw);
+
     // The text of the button should say 'deal' when a game is not in progress, but 'draw' when it is
     connect(_gameOrc, &GameOrchestrator::gameInProgress, this, &GameOrchestratorWindow::dealToDraw);
 
-    // Display the cards
-    HandWidget *PrimaryHand = new HandWidget;
+    // Connect the winnings display widget to the orchestrator
+    connect(_gameOrc, &GameOrchestrator::gameWinnings, this, &GameOrchestratorWindow::currentWinnings);
+
+    // Connect the account balance to the display
+    connect(&_playerCredits, &Account::balanceChanged, this, &GameOrchestratorWindow::currentBalance);
+
+    /*
+     * Primary hand setup: this hand will control the hold status of *all* additional hands for multi-hand games
+     */
+    HandWidget *PrimaryHand = new HandWidget(false, this);
     ui->primaryHand->layout()->addWidget(PrimaryHand);
 
     // Connect [primary] hand widgets to the game orchestrator to show results, winnings
@@ -77,12 +91,6 @@ GameOrchestratorWindow::GameOrchestratorWindow(Account   &playerAccount,
 
     // Connect [primary] hand card reveals to the widget as they're turned from the orchestrator
     connect(_gameOrc, &GameOrchestrator::primaryCardRevealed, PrimaryHand, &HandWidget::revealCard);
-
-    // Connect the winnings display widget to the orchestrator
-    connect(_gameOrc, &GameOrchestrator::gameWinnings, this, &GameOrchestratorWindow::currentWinnings);
-
-    // Connect the account balance to the display
-    connect(&_playerCredits, &Account::balanceChanged, this, &GameOrchestratorWindow::currentBalance);
 
     // Card holding (for the primary hand) - set to disabled to start
     PrimaryHand->enableHolds(false);
@@ -97,17 +105,37 @@ GameOrchestratorWindow::GameOrchestratorWindow(Account   &playerAccount,
     // Tie the redraw status to the primary hand display
     connect(_gameOrc, &GameOrchestrator::cardsToRedraw, PrimaryHand, &HandWidget::showCardBacks);
 
+    // All of the hands should recognize when a new game has started
+    connect(this, &GameOrchestratorWindow::resetCardDisplay, PrimaryHand, &HandWidget::resetAll);
+    connect(this, &GameOrchestratorWindow::resetCardDisplay, this, &GameOrchestratorWindow::flipAllHands);
+
+    /*
+     * Additional Hands (optional)
+     * Using push_front so that when rendering the hands it will go from bottom to top
+     */
+    _addedHands.reserve(_handsToPlay);
+    for (int extraHands = 1; extraHands < _handsToPlay; ++extraHands) {
+        HandWidget *ExtraHand = new HandWidget(true, this);
+        ui->multipleHand->layout()->addWidget(ExtraHand);
+        _addedHands.push_front(ExtraHand);
+    }
+
+    connect(_gameOrc, &GameOrchestrator::secondaryCardRevealed, this, &GameOrchestratorWindow::updateSecondaryHandCard);
+    connect(_gameOrc, &GameOrchestrator::secondaryHandUpdated, this, &GameOrchestratorWindow::secondaryWinTextAndAmt);
+
+    /*
+     * Render Speed Control
+     */
     // Set the speed button to change the rendering rate of the cards
     connect(ui->speedButton, &QPushButton::clicked, _gameOrc, &GameOrchestrator::speedControlCycle);
 
     // Render the speed setting on the speed button
     connect(_gameOrc, &GameOrchestrator::renderSpeed, this, &GameOrchestratorWindow::updateSpeedChar);
 
-    // The primary hand should recognize when a new game has started
-    connect(this, &GameOrchestratorWindow::resetCardDisplay, PrimaryHand, &HandWidget::resetAll);
-
-    // Offload the game processor to its own thread (per https://wiki.qt.io/QThreads_general_usage)
-    // Using a separate thread seems to necessitate registering the type?
+    /*
+     * Offload the game processor to its own thread (per https://wiki.qt.io/QThreads_general_usage)
+     * Using a separate thread seems to necessitate registering the type?
+     */
     qRegisterMetaType<PlayingCard>("PlayingCard");
     QThread* _gameEventProcessor = new QThread;
     _gameOrc->moveToThread(_gameEventProcessor);
@@ -115,7 +143,11 @@ GameOrchestratorWindow::GameOrchestratorWindow(Account   &playerAccount,
     // Make sure closing the window will stop the orchestrator and thread resources
     connect(this, &GameOrchestratorWindow::destroyed, _gameEventProcessor, &QThread::quit);
     connect(this, &GameOrchestratorWindow::destroyed, _gameEventProcessor, &QThread::deleteLater);
+
     _gameEventProcessor->start();
+
+    // Uncomment to make the game full-screen
+//    this->setWindowState(this->windowState() | Qt::WindowFullScreen);
 }
 
 GameOrchestratorWindow::~GameOrchestratorWindow()
@@ -161,7 +193,7 @@ void GameOrchestratorWindow::showPayTableAndBet()
     fixPayoutTableSize();
 
     // Show the bet amount requested
-    ui->betAmount->display(static_cast<int>(_gameOrc->creditsToBet()));
+    ui->betAmount->setText(QString::number(_gameOrc->creditsToBet() * _handsToPlay));
 }
 
 void GameOrchestratorWindow::dealToDraw(bool showDraw)
@@ -169,19 +201,27 @@ void GameOrchestratorWindow::dealToDraw(bool showDraw)
     // When the game is in progress, ONLY let the draw button be pressed
     if (showDraw) {
         ui->drawDealButton->setText("Draw");
+        ui->drawDealButton->setDisabled(false);
         ui->drawDealButton->setShortcut(QKeySequence("/"));
-        ui->winAmount->display(0);
+        ui->winAmount->setText("0");
         ui->returnButton->setDisabled(true);
         ui->betIncrementButton->setDisabled(true);
         ui->maxBetButton->setDisabled(true);
     } else {
         ui->drawDealButton->setText("Deal");
+        ui->drawDealButton->setDisabled(false);
         ui->drawDealButton->setShortcut(QKeySequence("/"));
         ui->returnButton->setDisabled(false);
         ui->returnButton->setShortcut(QKeySequence("N"));
         ui->betIncrementButton->setDisabled(false);
         ui->maxBetButton->setDisabled(false);
     }
+}
+
+void GameOrchestratorWindow::disableDealDraw(bool dealDrawDisabled)
+{
+    // Do not let the deal/draw button get pressed again while the orchestrator is working
+    ui->drawDealButton->setDisabled(dealDrawDisabled);
 }
 
 void GameOrchestratorWindow::syncDealDraw()
@@ -195,12 +235,12 @@ void GameOrchestratorWindow::syncDealDraw()
 
 void GameOrchestratorWindow::currentWinnings(quint32 winningsOfHands)
 {
-    ui->winAmount->display(static_cast<int>(winningsOfHands));
+    ui->winAmount->setText(QString::number(winningsOfHands));
 }
 
 void GameOrchestratorWindow::currentBalance(quint32 totalCredits)
 {
-    ui->creditsAmount->display(static_cast<int>(totalCredits));
+    ui->creditsAmount->setText(QString::number(totalCredits));
 }
 
 void GameOrchestratorWindow::updateSpeedChar(const QString &speedStr)
@@ -232,4 +272,48 @@ void GameOrchestratorWindow::holdCard4(bool cardHeld)
 void GameOrchestratorWindow::holdCard5(bool cardHeld)
 {
     _gameOrc->hold(4, cardHeld);
+}
+
+void GameOrchestratorWindow::updateSecondaryHandCard(int secoHandPos, int cardPos, PlayingCard cardToShow, bool show)
+{
+    if (show) {
+        _addedHands[secoHandPos]->revealCard(cardPos, cardToShow);
+    } else {
+        bool flipcard1 = false;
+        bool flipcard2 = false;
+        bool flipcard3 = false;
+        bool flipcard4 = false;
+        bool flipcard5 = false;
+        switch (cardPos) {
+        case 0:
+            flipcard1 = true;
+            break;
+        case 1:
+            flipcard2 = true;
+            break;
+        case 2:
+            flipcard3 = true;
+            break;
+        case 3:
+            flipcard4 = true;
+            break;
+        case 4:
+            flipcard5 = true;
+            break;
+        };
+
+        _addedHands[secoHandPos]->showCardBacks(flipcard1, flipcard2, flipcard3, flipcard4, flipcard5);
+    }
+}
+
+void GameOrchestratorWindow::secondaryWinTextAndAmt(int secoHandPos, const QString &handString, quint32 winning)
+{
+    _addedHands[secoHandPos]->winningTextAndAmount(handString, winning);
+}
+
+void GameOrchestratorWindow::flipAllHands()
+{
+    for (HandWidget *secoHand : _addedHands) {
+        secoHand->resetAll();
+    }
 }

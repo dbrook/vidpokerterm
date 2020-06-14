@@ -108,6 +108,12 @@ GameAccountWindow::GameAccountWindow(QWidget *parent)
     // Number of Hands Increment / Decrement
     connect(ui->nbHandsDec, &QPushButton::clicked, this, [=]() {changeNumberOfHands(-1);});
     connect(ui->nbHandsInc, &QPushButton::clicked, this, [=]() {changeNumberOfHands( 1);});
+
+    // Uncomment to make window full-screen
+//    this->setWindowState(this->windowState() | Qt::WindowFullScreen);
+
+    // Uncomment the line below to mask the mouse pointer
+//    QApplication::setOverrideCursor(Qt::BlankCursor);
 }
 
 GameAccountWindow::~GameAccountWindow()

@@ -19,23 +19,35 @@
 #include "ui_handwidget.h"
 
 const QString HandWidget::cardBackStyle =
-        "background-color:rgb(0,66,188);border-radius:10px;color:rgb(227,227,227);font-size:20pt;";
+        "background-color:rgb(0,66,188);border-radius:10px;color:rgb(227,227,227);";
 const QString HandWidget::cardFrontStyle =
-        "background-color:rgb(227,227,227);border-radius:10px;font-size:48pt;";
+        "background-color:rgb(227,227,227);border-radius:10px;font-size:32pt;";
 
-HandWidget::HandWidget(QWidget *parent) :
+HandWidget::HandWidget(bool extraHand, QWidget *parent) :
     QWidget(parent),
+    _displayCardsOnly(extraHand),
     ui(new Ui::HandWidget)
 {
     ui->setupUi(this);
 
     // There are 5 cards, selecting their respective hold buttons should indicate to the game orchestrator they are
     // to be preserved and not re-drawn
-    connect(ui->holdBtnCard1, &QPushButton::toggled, this, &HandWidget::card1Hold);
-    connect(ui->holdBtnCard2, &QPushButton::toggled, this, &HandWidget::card2Hold);
-    connect(ui->holdBtnCard3, &QPushButton::toggled, this, &HandWidget::card3Hold);
-    connect(ui->holdBtnCard4, &QPushButton::toggled, this, &HandWidget::card4Hold);
-    connect(ui->holdBtnCard5, &QPushButton::toggled, this, &HandWidget::card5Hold);
+    if (!_displayCardsOnly) {
+        // Primary hand: show and allow use of the hold buttons
+        connect(ui->holdBtnCard1, &QPushButton::toggled, this, &HandWidget::card1Hold);
+        connect(ui->holdBtnCard2, &QPushButton::toggled, this, &HandWidget::card2Hold);
+        connect(ui->holdBtnCard3, &QPushButton::toggled, this, &HandWidget::card3Hold);
+        connect(ui->holdBtnCard4, &QPushButton::toggled, this, &HandWidget::card4Hold);
+        connect(ui->holdBtnCard5, &QPushButton::toggled, this, &HandWidget::card5Hold);
+    } else {
+        // Extra hand(s): only for display, no hold button control
+        ui->holdBtnCard1->deleteLater();
+        ui->holdBtnCard2->deleteLater();
+        ui->holdBtnCard3->deleteLater();
+        ui->holdBtnCard4->deleteLater();
+        ui->holdBtnCard5->deleteLater();
+        ui->resultLabel->setText("");
+    }
 }
 
 HandWidget::~HandWidget()
@@ -188,11 +200,13 @@ void HandWidget::showCardBacks(bool card1, bool card2, bool card3, bool card4, b
 void HandWidget::resetAll()
 {
     // Unset holds
-    ui->holdBtnCard1->setChecked(false);
-    ui->holdBtnCard2->setChecked(false);
-    ui->holdBtnCard3->setChecked(false);
-    ui->holdBtnCard4->setChecked(false);
-    ui->holdBtnCard5->setChecked(false);
+    if (!_displayCardsOnly) {
+        ui->holdBtnCard1->setChecked(false);
+        ui->holdBtnCard2->setChecked(false);
+        ui->holdBtnCard3->setChecked(false);
+        ui->holdBtnCard4->setChecked(false);
+        ui->holdBtnCard5->setChecked(false);
+    }
 
     // Flip cards back
     ui->card1->setText("Chad's\nCasino");

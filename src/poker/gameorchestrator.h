@@ -159,6 +159,12 @@ signals:
     void gameInProgress(bool sayDrawNotDeal);
 
     /**
+     * @brief operating indicates the orchestrator has tasks in progress (so asking for another deal-draw would cause
+     *        an inconsistent state).
+     */
+    void operating(bool handsDealing);
+
+    /**
      * @brief primaryHandUpdated indicates the result of the hand analysis and any winnings associated with that hand
      */
     void primaryHandUpdated(const QString &handString, quint32 winning);
@@ -172,6 +178,16 @@ signals:
      * @brief primaryCardRevealed indicates a card on the primary hand was revealed (at index and what the card was)
      */
     void primaryCardRevealed(int cardIdx, PlayingCard card);
+
+    /**
+     * @brief secondaryCardRevealed indicates card at cardIdx on a secondary hand handIdx is displayable (show == true)
+     */
+    void secondaryCardRevealed(int handIdx, int cardIdx, PlayingCard card, bool show);
+
+    /**
+     * @brief secondaryHandUpdated
+     */
+    void secondaryHandUpdated(int handIdx, const QString &handString, quint32 winning);
 
     /**
      * @brief renderSpeed indicates the card draw speed was changed

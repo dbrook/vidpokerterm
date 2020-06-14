@@ -6,23 +6,34 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>960</width>
-    <height>376</height>
+    <width>689</width>
+    <height>281</height>
    </rect>
-  </property>
-  <property name="sizePolicy">
-   <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-    <horstretch>0</horstretch>
-    <verstretch>0</verstretch>
-   </sizepolicy>
   </property>
   <property name="windowTitle">
    <string>Form</string>
   </property>
   <property name="styleSheet">
-   <string notr="true">QCheckBox:checked {color: rgb(125,30,0); background-color: rgb(250,250,0);}</string>
+   <string notr="true">QCheckBox:checked {
+  color: rgb(125,30,0);
+  background-color: rgb(250,250,0);
+}
+</string>
   </property>
-  <layout class="QVBoxLayout" name="verticalLayout" stretch="0,0">
+  <layout class="QVBoxLayout" name="verticalLayout" stretch="0,0,0,0">
+   <item>
+    <spacer name="verticalSpacer_2">
+     <property name="orientation">
+      <enum>Qt::Vertical</enum>
+     </property>
+     <property name="sizeHint" stdset="0">
+      <size>
+       <width>20</width>
+       <height>40</height>
+      </size>
+     </property>
+    </spacer>
+   </item>
    <item>
     <widget class="QFrame" name="cardArea">
      <property name="frameShape">
@@ -34,23 +45,16 @@
      <layout class="QGridLayout" name="gridLayout" columnstretch="1,0,0,0,0,0,1">
       <item row="0" column="4">
        <widget class="QLabel" name="card4">
-        <property name="sizePolicy">
-         <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-          <horstretch>0</horstretch>
-          <verstretch>0</verstretch>
-         </sizepolicy>
-        </property>
         <property name="minimumSize">
          <size>
-          <width>180</width>
-          <height>250</height>
+          <width>125</width>
+          <height>175</height>
          </size>
         </property>
         <property name="styleSheet">
          <string notr="true">background-color: rgb(0, 66, 188);
 border-color: rgb(250, 250, 250);
 color: rgb(227, 227, 227);
-font-size: 20pt;
 border-radius: 10px;</string>
         </property>
         <property name="frameShape">
@@ -73,23 +77,16 @@ Casino</string>
       </item>
       <item row="0" column="3">
        <widget class="QLabel" name="card3">
-        <property name="sizePolicy">
-         <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-          <horstretch>0</horstretch>
-          <verstretch>0</verstretch>
-         </sizepolicy>
-        </property>
         <property name="minimumSize">
          <size>
-          <width>180</width>
-          <height>250</height>
+          <width>125</width>
+          <height>175</height>
          </size>
         </property>
         <property name="styleSheet">
          <string notr="true">background-color: rgb(0, 66, 188);
 border-color: rgb(250, 250, 250);
 color: rgb(227, 227, 227);
-font-size: 20pt;
 border-radius: 10px;</string>
         </property>
         <property name="frameShape">
@@ -112,23 +109,16 @@ Casino</string>
       </item>
       <item row="0" column="5">
        <widget class="QLabel" name="card5">
-        <property name="sizePolicy">
-         <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-          <horstretch>0</horstretch>
-          <verstretch>0</verstretch>
-         </sizepolicy>
-        </property>
         <property name="minimumSize">
          <size>
-          <width>180</width>
-          <height>250</height>
+          <width>125</width>
+          <height>175</height>
          </size>
         </property>
         <property name="styleSheet">
          <string notr="true">background-color: rgb(0, 66, 188);
 border-color: rgb(250, 250, 250);
 color: rgb(227, 227, 227);
-font-size: 20pt;
 border-radius: 10px;</string>
         </property>
         <property name="frameShape">
@@ -164,23 +154,16 @@ Casino</string>
       </item>
       <item row="0" column="1">
        <widget class="QLabel" name="card1">
-        <property name="sizePolicy">
-         <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-          <horstretch>0</horstretch>
-          <verstretch>0</verstretch>
-         </sizepolicy>
-        </property>
         <property name="minimumSize">
          <size>
-          <width>180</width>
-          <height>250</height>
+          <width>125</width>
+          <height>175</height>
          </size>
         </property>
         <property name="styleSheet">
          <string notr="true">background-color: rgb(0, 66, 188);
 border-color: rgb(250, 250, 250);
 color: rgb(227, 227, 227);
-font-size: 20pt;
 border-radius: 10px;</string>
         </property>
         <property name="frameShape">
@@ -203,23 +186,16 @@ Casino</string>
       </item>
       <item row="0" column="2">
        <widget class="QLabel" name="card2">
-        <property name="sizePolicy">
-         <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-          <horstretch>0</horstretch>
-          <verstretch>0</verstretch>
-         </sizepolicy>
-        </property>
         <property name="minimumSize">
          <size>
-          <width>180</width>
-          <height>250</height>
+          <width>125</width>
+          <height>175</height>
          </size>
         </property>
         <property name="styleSheet">
          <string notr="true">background-color: rgb(0, 66, 188);
 border-color: rgb(250, 250, 250);
 color: rgb(227, 227, 227);
-font-size: 20pt;
 border-radius: 10px;</string>
         </property>
         <property name="frameShape">
@@ -267,13 +243,11 @@ Casino</string>
     border-style: flat;
     border-width: 2px;
     border-color: gray;
-    font-size: 15pt;
 }
 QPushButton {
     border-style: outset;
     border-width: 2px;
     border-color: gold;
-    font-size: 15pt;
 }
 QPushButton:checked {
     color: yellow;
@@ -281,7 +255,6 @@ QPushButton:checked {
     border-style: outset;
     border-width: 2px;
     border-color: yellow;
-    font-size: 15pt;
 }
 </string>
         </property>
@@ -310,13 +283,11 @@ QPushButton:checked {
     border-style: flat;
     border-width: 2px;
     border-color: gray;
-    font-size: 15pt;
 }
 QPushButton {
     border-style: outset;
     border-width: 2px;
     border-color: gold;
-    font-size: 15pt;
 }
 QPushButton:checked {
     color: yellow;
@@ -324,7 +295,6 @@ QPushButton:checked {
     border-style: outset;
     border-width: 2px;
     border-color: yellow;
-    font-size: 15pt;
 }
 </string>
         </property>
@@ -353,13 +323,11 @@ QPushButton:checked {
     border-style: flat;
     border-width: 2px;
     border-color: gray;
-    font-size: 15pt;
 }
 QPushButton {
     border-style: outset;
     border-width: 2px;
     border-color: gold;
-    font-size: 15pt;
 }
 QPushButton:checked {
     color: yellow;
@@ -367,7 +335,6 @@ QPushButton:checked {
     border-style: outset;
     border-width: 2px;
     border-color: yellow;
-    font-size: 15pt;
 }
 </string>
         </property>
@@ -396,13 +363,11 @@ QPushButton:checked {
     border-style: flat;
     border-width: 2px;
     border-color: gray;
-    font-size: 15pt;
 }
 QPushButton {
     border-style: outset;
     border-width: 2px;
     border-color: gold;
-    font-size: 15pt;
 }
 QPushButton:checked {
     color: yellow;
@@ -410,7 +375,6 @@ QPushButton:checked {
     border-style: outset;
     border-width: 2px;
     border-color: yellow;
-    font-size: 15pt;
 }
 </string>
         </property>
@@ -439,13 +403,11 @@ QPushButton:checked {
     border-style: flat;
     border-width: 2px;
     border-color: gray;
-    font-size: 15pt;
 }
 QPushButton {
     border-style: outset;
     border-width: 2px;
     border-color: gold;
-    font-size: 15pt;
 }
 QPushButton:checked {
     color: yellow;
@@ -453,7 +415,6 @@ QPushButton:checked {
     border-style: outset;
     border-width: 2px;
     border-color: yellow;
-    font-size: 15pt;
 }
 </string>
         </property>
@@ -479,8 +440,8 @@ QPushButton:checked {
        <verstretch>0</verstretch>
       </sizepolicy>
      </property>
-     <property name="styleSheet">
-      <string notr="true">font-size: 18pt;</string>
+     <property name="frameShape">
+      <enum>QFrame::NoFrame</enum>
      </property>
      <property name="text">
       <string>Select bet level, then press 'Deal' to begin a game</string>
@@ -489,6 +450,19 @@ QPushButton:checked {
       <set>Qt::AlignCenter</set>
      </property>
     </widget>
+   </item>
+   <item>
+    <spacer name="verticalSpacer">
+     <property name="orientation">
+      <enum>Qt::Vertical</enum>
+     </property>
+     <property name="sizeHint" stdset="0">
+      <size>
+       <width>20</width>
+       <height>40</height>
+      </size>
+     </property>
+    </spacer>
    </item>
   </layout>
  </widget>

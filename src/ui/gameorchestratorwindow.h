@@ -31,6 +31,8 @@ namespace Ui {
 class GameOrchestratorWindow;
 }
 
+class HandWidget;
+
 /**
  * @brief The GameOrchestratorWindow provides a graphical interface to a generic PokerGame logic via an orchestrator
  *        which handles dealing, holding, drawing, betting, winning operations with an Account which tracks all funds.
@@ -59,6 +61,9 @@ public slots:
     // set showDraw to true so the button for deal/draw only says "Draw", otherwise it is "Deal"
     void dealToDraw(bool showDraw);
 
+    // Disables the deal-draw button so it cannot be operated
+    void disableDealDraw(bool dealDrawDisabled);
+
     // Resets the cards BEFORE calling the dealDraw of the orchestrator (prevents exceptions/collisions between threads)
     void syncDealDraw();
 
@@ -78,6 +83,15 @@ public slots:
     void holdCard4(bool cardHeld);
     void holdCard5(bool cardHeld);
 
+    // Update Secondary Hand at secoHandPos
+    void updateSecondaryHandCard(int secoHandPos, int cardPos, PlayingCard cardToShow, bool show);
+
+    // Show the win of a secondary hand at secoHandPos
+    void secondaryWinTextAndAmt(int secoHandPos, const QString &handString, quint32 winning);
+
+    // Flips over all cards of all hands
+    void flipAllHands();
+
 signals:
     // Should be emitted before calling the dealDraw to give the UI time to catch up before the orchestrator delivers
     // any new cards
@@ -87,11 +101,12 @@ signals:
     void readyForDealDraw();
 
 private:
-    Account          &_playerCredits;
-    GameOrchestrator *_gameOrc;
-    PokerGame        *_gameLogic;
-    int               _handsToPlay;
-    QThread          *_gameEventProcessor;
+    Account              &_playerCredits;
+    GameOrchestrator     *_gameOrc;
+    PokerGame            *_gameLogic;
+    int                   _handsToPlay;
+    QVector<HandWidget*>  _addedHands;
+    QThread              *_gameEventProcessor;
     Ui::GameOrchestratorWindow *ui;
 };
 

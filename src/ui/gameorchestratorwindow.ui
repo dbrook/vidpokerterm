@@ -42,7 +42,7 @@ color: rgb(255, 255, 255);</string>
          <property name="frameShadow">
           <enum>QFrame::Raised</enum>
          </property>
-         <layout class="QVBoxLayout" name="verticalLayout_2" stretch="0,1">
+         <layout class="QVBoxLayout" name="verticalLayout_2" stretch="0,0">
           <item>
            <widget class="QFrame" name="multipleHand">
             <property name="frameShape">
@@ -79,9 +79,6 @@ color: rgb(255, 255, 255);</string>
          <layout class="QVBoxLayout" name="verticalLayout_5">
           <item>
            <widget class="QFrame" name="payoutTable">
-            <property name="styleSheet">
-             <string notr="true">font-size: 18pt;</string>
-            </property>
             <property name="frameShape">
              <enum>QFrame::NoFrame</enum>
             </property>
@@ -94,15 +91,15 @@ color: rgb(255, 255, 255);</string>
                <property name="text">
                 <string>Poker Game Name</string>
                </property>
+               <property name="alignment">
+                <set>Qt::AlignCenter</set>
+               </property>
               </widget>
              </item>
              <item>
               <widget class="QTableWidget" name="payoutDisplay">
                <property name="focusPolicy">
                 <enum>Qt::NoFocus</enum>
-               </property>
-               <property name="styleSheet">
-                <string notr="true">font-size: 16pt;</string>
                </property>
                <property name="frameShape">
                 <enum>QFrame::NoFrame</enum>
@@ -145,6 +142,9 @@ color: rgb(255, 255, 255);</string>
           </item>
           <item>
            <widget class="QFrame" name="accountBets">
+            <property name="styleSheet">
+             <string notr="true">font-size: 16pt;</string>
+            </property>
             <property name="frameShape">
              <enum>QFrame::NoFrame</enum>
             </property>
@@ -152,45 +152,31 @@ color: rgb(255, 255, 255);</string>
              <enum>QFrame::Raised</enum>
             </property>
             <layout class="QGridLayout" name="gridLayout" columnstretch="0,1">
+             <item row="1" column="0">
+              <widget class="QLabel" name="betLabel">
+               <property name="text">
+                <string>Bet</string>
+               </property>
+              </widget>
+             </item>
+             <item row="2" column="0">
+              <widget class="QLabel" name="creditsLabel">
+               <property name="text">
+                <string>Credits</string>
+               </property>
+              </widget>
+             </item>
              <item row="0" column="0">
               <widget class="QLabel" name="winLabel">
-               <property name="styleSheet">
-                <string notr="true">font-size: 20pt;</string>
-               </property>
                <property name="text">
                 <string>Win</string>
-               </property>
-               <property name="alignment">
-                <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
                </property>
               </widget>
              </item>
              <item row="0" column="1">
-              <widget class="QLCDNumber" name="winAmount">
-               <property name="styleSheet">
-                <string notr="true">font-size: 20pt;</string>
-               </property>
-               <property name="frameShape">
-                <enum>QFrame::NoFrame</enum>
-               </property>
-               <property name="frameShadow">
-                <enum>QFrame::Plain</enum>
-               </property>
-               <property name="digitCount">
-                <number>11</number>
-               </property>
-               <property name="segmentStyle">
-                <enum>QLCDNumber::Flat</enum>
-               </property>
-              </widget>
-             </item>
-             <item row="1" column="0">
-              <widget class="QLabel" name="betLabel">
-               <property name="styleSheet">
-                <string notr="true">font-size: 20pt;</string>
-               </property>
+              <widget class="QLabel" name="winAmount">
                <property name="text">
-                <string>Bet</string>
+                <string>0</string>
                </property>
                <property name="alignment">
                 <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -198,28 +184,9 @@ color: rgb(255, 255, 255);</string>
               </widget>
              </item>
              <item row="1" column="1">
-              <widget class="QLCDNumber" name="betAmount">
-               <property name="frameShape">
-                <enum>QFrame::NoFrame</enum>
-               </property>
-               <property name="frameShadow">
-                <enum>QFrame::Plain</enum>
-               </property>
-               <property name="digitCount">
-                <number>11</number>
-               </property>
-               <property name="segmentStyle">
-                <enum>QLCDNumber::Flat</enum>
-               </property>
-              </widget>
-             </item>
-             <item row="2" column="0">
-              <widget class="QLabel" name="creditsLabel">
-               <property name="styleSheet">
-                <string notr="true">font-size: 20pt;</string>
-               </property>
+              <widget class="QLabel" name="betAmount">
                <property name="text">
-                <string>Credits</string>
+                <string>0</string>
                </property>
                <property name="alignment">
                 <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -227,18 +194,12 @@ color: rgb(255, 255, 255);</string>
               </widget>
              </item>
              <item row="2" column="1">
-              <widget class="QLCDNumber" name="creditsAmount">
-               <property name="frameShape">
-                <enum>QFrame::NoFrame</enum>
+              <widget class="QLabel" name="creditsAmount">
+               <property name="text">
+                <string>0</string>
                </property>
-               <property name="frameShadow">
-                <enum>QFrame::Plain</enum>
-               </property>
-               <property name="digitCount">
-                <number>11</number>
-               </property>
-               <property name="segmentStyle">
-                <enum>QLCDNumber::Flat</enum>
+               <property name="alignment">
+                <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
                </property>
               </widget>
              </item>
@@ -253,6 +214,9 @@ color: rgb(255, 255, 255);</string>
     </item>
     <item>
      <widget class="QFrame" name="softKeyArea">
+      <property name="cursor">
+       <cursorShape>ForbiddenCursor</cursorShape>
+      </property>
       <property name="styleSheet">
        <string notr="true">background-color: rgb(0, 0, 0);</string>
       </property>
@@ -272,7 +236,6 @@ color: rgb(255, 255, 255);</string>
     border-style: outset;
     border-width: 2px;
     border-color: gray;
-    font-size: 15pt;
 }
 QPushButton {
     color: black;
@@ -280,7 +243,6 @@ QPushButton {
     border-style: outset;
     border-width: 2px;
     border-color: gold;
-    font-size: 15pt;
 }
 QPushButton:pressed {
     color: yellow;
@@ -288,7 +250,6 @@ QPushButton:pressed {
     border-style: outset;
     border-width: 2px;
     border-color: yellow;
-    font-size: 15pt;
 }
 </string>
          </property>
@@ -309,7 +270,6 @@ QPushButton:pressed {
     border-style: outset;
     border-width: 2px;
     border-color: gray;
-    font-size: 15pt;
 }
 QPushButton {
     color: black;
@@ -317,7 +277,6 @@ QPushButton {
     border-style: outset;
     border-width: 2px;
     border-color: gold;
-    font-size: 15pt;
 }
 QPushButton:pressed {
     color: yellow;
@@ -325,7 +284,6 @@ QPushButton:pressed {
     border-style: outset;
     border-width: 2px;
     border-color: yellow;
-    font-size: 15pt;
 }
 </string>
          </property>
@@ -346,7 +304,6 @@ QPushButton:pressed {
     border-style: outset;
     border-width: 2px;
     border-color: gray;
-    font-size: 15pt;
 }
 QPushButton {
     color: black;
@@ -354,7 +311,6 @@ QPushButton {
     border-style: outset;
     border-width: 2px;
     border-color: gold;
-    font-size: 15pt;
 }
 QPushButton:pressed {
     color: yellow;
@@ -362,7 +318,6 @@ QPushButton:pressed {
     border-style: outset;
     border-width: 2px;
     border-color: yellow;
-    font-size: 15pt;
 }
 </string>
          </property>
@@ -383,7 +338,6 @@ QPushButton:pressed {
     border-style: outset;
     border-width: 2px;
     border-color: gray;
-    font-size: 15pt;
 }
 QPushButton {
     color: black;
@@ -391,7 +345,6 @@ QPushButton {
     border-style: outset;
     border-width: 2px;
     border-color: gold;
-    font-size: 15pt;
 }
 QPushButton:pressed {
     color: yellow;
@@ -399,7 +352,6 @@ QPushButton:pressed {
     border-style: outset;
     border-width: 2px;
     border-color: yellow;
-    font-size: 15pt;
 }
 </string>
          </property>
@@ -420,7 +372,6 @@ QPushButton:pressed {
     border-style: outset;
     border-width: 2px;
     border-color: gray;
-    font-size: 15pt;
 }
 QPushButton {
     color: black;
@@ -428,7 +379,6 @@ QPushButton {
     border-style: outset;
     border-width: 2px;
     border-color: gold;
-    font-size: 15pt;
 }
 QPushButton:pressed {
     color: yellow;
@@ -436,7 +386,6 @@ QPushButton:pressed {
     border-style: outset;
     border-width: 2px;
     border-color: yellow;
-    font-size: 15pt;
 }
 </string>
          </property>
