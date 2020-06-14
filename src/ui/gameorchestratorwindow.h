@@ -36,6 +36,19 @@ class HandWidget;
 /**
  * @brief The GameOrchestratorWindow provides a graphical interface to a generic PokerGame logic via an orchestrator
  *        which handles dealing, holding, drawing, betting, winning operations with an Account which tracks all funds.
+ *
+ * @note  Multiple-Hand Support
+ *        The orchestrator can play as many hands at a time as a player wishes to wager. The player interacts with a
+ *        primary hand which renders at deal time. Only this hannd can have card held, it will hold the same card on
+ *        all other hands too. Then at draw time, all the hands will be filled with their shuffled decks.
+ *        Constraints about realistic betting amounts and how many hands can fit on a screen mean an upper limit of
+ *        100 simultaneous hands. The way these "secondary hands" are drawn to the screen depends on how many are
+ *        played. The increment is not uniform either, but stepped: 1 -> 3 -> 5 -> 10 -> 25 ---> 100 (!)
+ *
+ *        Be advised that screen constraints get a little troublesome above 10 hands, especially on 1080p monitors.
+ *
+ *        In the constructor, the font and pixel sizes can be updated to work with your screen situation (since this
+ *        was originally designed for desktop monitors and then kludged into smaller screen resolutions).
  */
 class GameOrchestratorWindow : public QMainWindow
 {

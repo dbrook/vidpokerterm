@@ -83,7 +83,7 @@ GameOrchestratorWindow::GameOrchestratorWindow(Account   &playerAccount,
     /*
      * Primary hand setup: this hand will control the hold status of *all* additional hands for multi-hand games
      */
-    HandWidget *PrimaryHand = new HandWidget(false, this);
+    HandWidget *PrimaryHand = new HandWidget(false, QSize(125, 175), "32", "", this);
     ui->primaryHand->layout()->addWidget(PrimaryHand);
 
     // Connect [primary] hand widgets to the game orchestrator to show results, winnings
@@ -113,11 +113,80 @@ GameOrchestratorWindow::GameOrchestratorWindow(Account   &playerAccount,
      * Additional Hands (optional)
      * Using push_front so that when rendering the hands it will go from bottom to top
      */
+    ui->multipleHand->layout()->deleteLater();
+    QGridLayout *secondaryHandsLayout = new QGridLayout(this);
+    ui->multipleHand->setLayout(secondaryHandsLayout);
     _addedHands.reserve(_handsToPlay);
-    for (int extraHands = 1; extraHands < _handsToPlay; ++extraHands) {
-        HandWidget *ExtraHand = new HandWidget(true, this);
-        ui->multipleHand->layout()->addWidget(ExtraHand);
-        _addedHands.push_front(ExtraHand);
+
+    if (_handsToPlay == 3) {
+        for (int extraHands = 1; extraHands < _handsToPlay; ++extraHands) {
+            HandWidget *ExtraHand = new HandWidget(true, QSize(125, 175), "32", "", this);
+            secondaryHandsLayout->addWidget(ExtraHand, extraHands - 1, 0);
+            _addedHands.push_front(ExtraHand);
+        }
+    } else if (_handsToPlay == 5) {
+        int column = 1;
+        int row    = 0;
+        for (int extraHands = 1; extraHands < _handsToPlay; ++extraHands) {
+            HandWidget *ExtraHand = new HandWidget(true, QSize(80, 110), "24", "", this);
+            secondaryHandsLayout->addWidget(ExtraHand, row, column);
+            _addedHands.push_front(ExtraHand);
+
+            // Determine the row and column of the next hand to render
+            column = column - 1;
+            if (column == -1) {
+                ++row;
+                column = 1;
+            }
+        }
+    } else if (_handsToPlay == 10) {
+        int column = 2;
+        int row    = 0;
+        for (int extraHands = 1; extraHands < _handsToPlay; ++extraHands) {
+            HandWidget *ExtraHand = new HandWidget(true, QSize(60, 80), "18", "", this);
+            secondaryHandsLayout->addWidget(ExtraHand, row, column);
+            _addedHands.push_front(ExtraHand);
+
+            // Determine the row and column of the next hand to render
+            column = column - 1;
+            if (column == -1) {
+                ++row;
+                column = 2;
+            }
+        }
+    } else if (_handsToPlay == 25) {
+        int column = 4;
+        int row    = 0;
+        for (int extraHands = 1; extraHands < _handsToPlay; ++extraHands) {
+            // Need to shrink down the payout text when there are this many shown
+            HandWidget *ExtraHand = new HandWidget(true, QSize(25, 35), "9", "9", this);
+            secondaryHandsLayout->addWidget(ExtraHand, row, column);
+            _addedHands.push_front(ExtraHand);
+
+            // Determine the row and column of the next hand to render
+            column = column - 1;
+            if (column == -1) {
+                ++row;
+                column = 4;
+            }
+        }
+    } else if (_handsToPlay == 100) {
+        // Mostly a thought experiment ... this runs really poorly on the Pi Zero and the HandWidget probably needs
+        // some reengineering to support hands of this size on 1080p screens
+        int column = 9;
+        int row    = 0;
+        for (int extraHands = 1; extraHands < _handsToPlay; ++extraHands) {
+            HandWidget *ExtraHand = new HandWidget(true, QSize(35, 50), "9", "", this);
+            secondaryHandsLayout->addWidget(ExtraHand, row, column);
+            _addedHands.push_front(ExtraHand);
+
+            // Determine the row and column of the next hand to render
+            column = column - 1;
+            if (column == -1) {
+                ++row;
+                column = 9;
+            }
+        }
     }
 
     connect(_gameOrc, &GameOrchestrator::secondaryCardRevealed, this, &GameOrchestratorWindow::updateSecondaryHandCard);
@@ -222,6 +291,9 @@ void GameOrchestratorWindow::disableDealDraw(bool dealDrawDisabled)
 {
     // Do not let the deal/draw button get pressed again while the orchestrator is working
     ui->drawDealButton->setDisabled(dealDrawDisabled);
+
+    // Do not let the speed adjuster get pressed either
+    ui->speedButton->setDisabled(dealDrawDisabled);
 }
 
 void GameOrchestratorWindow::syncDealDraw()

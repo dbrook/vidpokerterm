@@ -51,7 +51,6 @@ color: rgb(255, 255, 255);</string>
             <property name="frameShadow">
              <enum>QFrame::Raised</enum>
             </property>
-            <layout class="QVBoxLayout" name="verticalLayout_3"/>
            </widget>
           </item>
           <item>
@@ -214,9 +213,6 @@ color: rgb(255, 255, 255);</string>
     </item>
     <item>
      <widget class="QFrame" name="softKeyArea">
-      <property name="cursor">
-       <cursorShape>ForbiddenCursor</cursorShape>
-      </property>
       <property name="styleSheet">
        <string notr="true">background-color: rgb(0, 0, 0);</string>
       </property>

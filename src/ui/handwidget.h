@@ -29,18 +29,21 @@ class HandWidget;
 class HandWidget : public QWidget
 {
     Q_OBJECT
-
-    const static QString cardBackStyle;
-    const static QString cardFrontStyle;
-
 public:
     /**
      * @brief HandWidget is a display/select module for a single hand of a poker game UI
      *
      * @param[in]  extraHand      true to indicate 'extra' hands (no hold controls), false for the primary hand
+     * @param[in]  cardSize       size of the cards to draw in the hand (a null QSize should be used for primary hand)
+     * @param[in]  cardFontSize   CSS-compatible font size in pt --> Example: fonstSize == "14" --> "font-size:14pt;"
+     * @param[in]  winFontSize    CSS-compatible font size in pt for the winning string (use "" if keeping same as app.)
      * @param[in]  parent         standard QObject hierarchy / memory management pointer
      */
-    explicit HandWidget(bool extraHand, QWidget *parent = nullptr);
+    explicit HandWidget(bool           extraHand,
+                        const QSize   &cardSize,
+                        const QString &cardFontSize,
+                        const QString &winFontSize,
+                        QWidget       *parent = nullptr);
 
     ~HandWidget();
 
@@ -68,7 +71,12 @@ signals:
     void card5Hold(bool cardIsHeld);
 
 private:
-    bool _displayCardsOnly;
+    bool    _displayCardsOnly;
+    QSize   _cardSize;
+    QString _fontSize;
+    QString _winFontSize;
+    QString _cardFrontStyleSheet;
+    QString _cardBackStyleSheet;
 
     // Actual Qt widgets
     Ui::HandWidget *ui;
