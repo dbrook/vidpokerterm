@@ -19,9 +19,11 @@
 #include "ui_handwidget.h"
 
 const QString HandWidget::cardBackStyle =
-        "background-color:rgb(0,66,188);border-radius:10px;color:rgb(227,227,227);";
+        "border-radius:10px;color:rgb(227,227,227);"
+        "background-color: qlineargradient(spread:repeat, x1:0, y1:0, x2:1, y2:1, stop:0 rgba(0, 0, 74, 255), stop:1 rgba(0, 0, 255, 255));";
 const QString HandWidget::cardFrontStyle =
-        "background-color:rgb(227,227,227);border-radius:10px;font-size:32pt;";
+        "border-radius:10px;font-size:32pt;"
+        "background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:1, stop:0 rgba(190, 190, 190, 255), stop:1 rgba(255, 255, 255, 255));";
 
 HandWidget::HandWidget(bool extraHand, QWidget *parent) :
     QWidget(parent),
@@ -176,23 +178,23 @@ void HandWidget::revealCard(int cardIdx, PlayingCard card)
 void HandWidget::showCardBacks(bool card1, bool card2, bool card3, bool card4, bool card5)
 {
     if (card1) {
-        ui->card1->setText("Chad's\nCasino");
+        ui->card1->setText("");
         ui->card1->setStyleSheet(cardBackStyle);
     }
     if (card2) {
-        ui->card2->setText("Chad's\nCasino");
+        ui->card2->setText("");
         ui->card2->setStyleSheet(cardBackStyle);
     }
     if (card3) {
-        ui->card3->setText("Chad's\nCasino");
+        ui->card3->setText("");
         ui->card3->setStyleSheet(cardBackStyle);
     }
     if (card4) {
-        ui->card4->setText("Chad's\nCasino");
+        ui->card4->setText("");
         ui->card4->setStyleSheet(cardBackStyle);
     }
     if (card5) {
-        ui->card5->setText("Chad's\nCasino");
+        ui->card5->setText("");
         ui->card5->setStyleSheet(cardBackStyle);
     }
 }
@@ -209,15 +211,15 @@ void HandWidget::resetAll()
     }
 
     // Flip cards back
-    ui->card1->setText("Chad's\nCasino");
+    ui->card1->setText("");
     ui->card1->setStyleSheet(cardBackStyle);
-    ui->card2->setText("Chad's\nCasino");
+    ui->card2->setText("");
     ui->card2->setStyleSheet(cardBackStyle);
-    ui->card3->setText("Chad's\nCasino");
+    ui->card3->setText("");
     ui->card3->setStyleSheet(cardBackStyle);
-    ui->card4->setText("Chad's\nCasino");
+    ui->card4->setText("");
     ui->card4->setStyleSheet(cardBackStyle);
-    ui->card5->setText("Chad's\nCasino");
+    ui->card5->setText("");
     ui->card5->setStyleSheet(cardBackStyle);
 
     // Hide any winning string
