@@ -14,9 +14,30 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-INCLUDEPATH += $$PWD
+# Here we are building the main GUI application by linking in (statically) the
+# core poker game logic handler object and building the UI wrappers around it.
 
-DEPENDPATH += $$PWD
+QT += core gui
+
+greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
+
+CONFIG += c++11
+
+# The following define makes your compiler emit warnings if you use
+# any Qt feature that has been marked deprecated (the exact warnings
+# depend on your compiler). Please consult the documentation of the
+# deprecated API in order to know how to port your code away from it.
+DEFINES += QT_DEPRECATED_WARNINGS
+
+TARGET = vidpokerterm
+TEMPLATE = app
+
+DESTDIR = $$OUT_PWD/../bin
+
+LIBS *= -L$$DESTDIR -lpokerbe
+
+INCLUDEPATH += $$PWD \
+    $$PWD/../poker
 
 SOURCES += \
     $$PWD/gameorchestratorwindow.cpp \
