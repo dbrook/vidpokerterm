@@ -14,9 +14,17 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-INCLUDEPATH += $$PWD
+# Here we are building a statically-linkable library to be used by the GUI and test framework
+# This fixes the problem we had with the code building once for the main program and then all
+# over again for the test suite (it was really noticeable in the Raspberry Pi builds!)
 
-DEPENDPATH += $$PWD
+TARGET    = pokerbe
+TEMPLATE  = lib
+CONFIG   += staticlib
+DESTDIR   = $$OUT_PWD/../bin
+
+INCLUDEPATH += $$PWD
+DEPENDPATH  += $$PWD
 
 HEADERS += \
     $$PWD/account.h \

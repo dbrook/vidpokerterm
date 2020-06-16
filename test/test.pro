@@ -14,10 +14,11 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-QT     += core testlib
+# Here we are relying on the already-build static library (libpokerbe.a) to
+# link into the unit test binary (therefore it doesn't require rebuilding).
 
+QT += core testlib
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
-
 CONFIG += c++11
 
 # The following define makes your compiler emit warnings if you use
@@ -26,7 +27,11 @@ CONFIG += c++11
 # deprecated API in order to know how to port your code away from it.
 DEFINES += QT_DEPRECATED_WARNINGS
 
-include("../src/poker/poker.pri")
+DESTDIR = $$OUT_PWD/../bin
+
+INCLUDEPATH += $$PWD/../poker
+
+LIBS *= -L$$DESTDIR -lpokerbe
 
 SOURCES += \
     jacksorbetter_orctest.cpp \
