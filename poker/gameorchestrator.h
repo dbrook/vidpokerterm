@@ -165,6 +165,11 @@ signals:
     void operating(bool handsDealing);
 
     /**
+     * @brief readyForHolds indicates that the orchestrator can accept hold operations
+     */
+    void readyForHolds(bool canAllowHolds);
+
+    /**
      * @brief primaryHandUpdated indicates the result of the hand analysis and any winnings associated with that hand
      */
     void primaryHandUpdated(const QString &handString, quint32 winning);

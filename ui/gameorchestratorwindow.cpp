@@ -94,7 +94,7 @@ GameOrchestratorWindow::GameOrchestratorWindow(Account   &playerAccount,
 
     // Card holding (for the primary hand) - set to disabled to start
     PrimaryHand->enableHolds(false);
-    connect(_gameOrc, &GameOrchestrator::gameInProgress, PrimaryHand, &HandWidget::enableHolds);
+    connect(_gameOrc, &GameOrchestrator::readyForHolds, PrimaryHand, &HandWidget::enableHolds);
 
     connect(PrimaryHand, &HandWidget::card1Hold, this, &GameOrchestratorWindow::holdCard1);
     connect(PrimaryHand, &HandWidget::card2Hold, this, &GameOrchestratorWindow::holdCard2);

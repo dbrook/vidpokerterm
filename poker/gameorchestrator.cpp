@@ -162,12 +162,16 @@ void GameOrchestrator::dealDraw()
             _gameAnalyzer->determineHandAndWin(_gameCards[0].second, _betsPerHand, handAnalyResult, handWinCredits);
             emit primaryHandUpdated(handAnalyResult, 0);
             emit operating(false);
+            emit readyForHolds(true);
         }
     } else {
         /*
          * Second stage of a game, hold cards selected, so draw only non-held-cards, then analyze the win
          */
-        // First, flip the cards back over
+        // Do not allow holds
+        emit readyForHolds(false);
+
+        // Flip the cards back over
         bool flipCard1 = false;
         bool flipCard2 = false;
         bool flipCard3 = false;
