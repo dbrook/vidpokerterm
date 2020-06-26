@@ -1,24 +1,18 @@
-# VidPokerTerm
-# Copyright (c) 2020 Daniel Brook (danb358 {at} gmail {dot} com)
+# This file is NOT technically part of VidPokerTerm. This is to orchestrate the
+# integration of u8g2 (an LCD Monochrome Graphics Library for writing to displays)
+# by way of building a linkable library to the rest of the lcdui binary.
 #
-# This program is free software: you can redistribute it and/or modify
-# it under the terms of the GNU General Public License as published by
-# the Free Software Foundation, either version 3 of the License, or
-# (at your option) any later version.
+# Copy and fill in SOURCES and HEADERS with the C sources/headers (.c and .h files)
+# retrievable from:
+#   https://github.com/olikraus/u8g2/tree/master/csrc
 #
-# This program is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-# GNU General Public License for more details.
+# Note that the SPI communications layer for u8g2 to function is not covered here
+# but instead comes from the code done by Rafael Ibasco (ribasco):
+#   https://github.com/ribasco/u8g2-rpi-demo
 #
-# You should have received a copy of the GNU General Public License
-# along with this program.  If not, see <http://www.gnu.org/licenses/>.
-
-# Here we are building the main GUI application by linking in (statically) the
-# core poker game logic handler object and building the UI wrappers around it.
+# The statically-linkable version of his files are under the lcdspi directory
 
 QT += core
-
 TEMPLATE  = lib
 CONFIG   += staticlib
 
@@ -29,7 +23,6 @@ CONFIG   += staticlib
 DEFINES += QT_DEPRECATED_WARNINGS
 
 TARGET = lcdu8g2
-TEMPLATE = lib
 
 DESTDIR = $$OUT_PWD/../bin
 

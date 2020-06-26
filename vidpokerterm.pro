@@ -23,4 +23,4 @@ TEMPLATE = subdirs
 #SUBDIRS  = poker test lcdinterface lcdui
 
 # Uncomment this line below to build everything
-SUBDIRS  = poker ui test lcdinterface lcdui
+SUBDIRS  = poker ui test lcdinterface lcdspi lcdui

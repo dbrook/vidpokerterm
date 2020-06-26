@@ -36,7 +36,8 @@ LIBS *= -L$$DESTDIR -lpokerbe
 
 INCLUDEPATH += $$PWD \
     $$PWD/../poker \
-    $$PWD/../lcdinterface
+    $$PWD/../lcdinterface \
+    $$PWD/../lcdspi
 
 SOURCES += \
     cfontz634.cpp \

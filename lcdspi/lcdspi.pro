@@ -21,6 +21,8 @@ TARGET = lcdspi
 
 DESTDIR = $$OUT_PWD/../bin
 
+INCLUDEPATH += $$PWD/../lcdinterface
+
 SOURCES += \
     spi.cpp \
     u8g2_hal_rpi.cpp
