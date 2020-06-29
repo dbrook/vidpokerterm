@@ -199,6 +199,11 @@ signals:
      */
     void renderSpeed(const QString &currentSpeed);
 
+    /**
+     * @brief insufficientFunds indicates the player does not have enough credits to play
+     */
+    void insufficientFunds();
+
 private:
     PokerGame                  *_gameAnalyzer;
     quint32                     _nbHandsToPlay;
