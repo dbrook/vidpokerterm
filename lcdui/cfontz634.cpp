@@ -86,8 +86,6 @@ CFontz634::CFontz634(const QString &device, QObject *parent)
 
 CFontz634::~CFontz634()
 {
-    this->clearDisplay();
-    this->showShutdownMessage();
     close(_deviceHandle);
     _deviceHandle = 0;
 }
@@ -174,26 +172,12 @@ void CFontz634::writeByteAtPos(int startRow, int startCol, const unsigned char l
     this->sendByte(lcdChar);
 }
 
-void CFontz634::fillSoftkeyText(int softkeyIdx, const QString &softkeyText)
+void CFontz634::fillSoftkeys(QVector <QString> softkeys)
 {
-    if (softkeyIdx < 0 || softkeyIdx > 4) {
-        throw std::runtime_error("Display softkey out of range");
-    }
-
-    switch (softkeyIdx) {
-    case 0:
-        this->writeTextAtPos(3,  0, softkeyText.leftJustified(4, ' '));
-        break;
-    case 1:
-        this->writeTextAtPos(3,  5, softkeyText.leftJustified(4, ' '));
-        break;
-    case 2:
-        this->writeTextAtPos(3, 10, softkeyText.leftJustified(4, ' '));
-        break;
-    case 3:
-        this->writeTextAtPos(3, 15, softkeyText.leftJustified(5, ' '));
-        break;
-    }
+    this->writeTextAtPos(3,  0, softkeys[0].leftJustified(4, ' '));
+    this->writeTextAtPos(3,  5, softkeys[1].leftJustified(4, ' '));
+    this->writeTextAtPos(3, 10, softkeys[2].leftJustified(4, ' '));
+    this->writeTextAtPos(3, 15, softkeys[3].leftJustified(5, ' '));
 }
 
 void CFontz634::setupWelcomeDisplay()
@@ -231,8 +215,9 @@ void CFontz634::showShutdownMessage()
         throw std::runtime_error("Display not ready / opened");
     }
 
-    this->sendByte(12);
+    this->clearDisplay();
     this->writeTextAtPos(3, 0, "Shutting down...");
+    emit shutdownDisplayed();
 }
 
 void CFontz634::fatalShutdownMessage()
@@ -444,6 +429,40 @@ void CFontz634::showHoldIndicator(int cardIdx, bool isHeld)
     default:
         ;
     }
+}
+
+void CFontz634::showCardFrames(bool card1, bool card2, bool card3, bool card4, bool card5)
+{
+    ; // Do nothing ... the CFA634 does not really have good enough graphic abilities to render blank cards
+}
+
+void CFontz634::displayNoFundsWarning()
+{
+    this->writeTextAtPos(2, 0, "Insufficient Funds!");
+}
+
+void CFontz634::clearAllHolds()
+{
+    cursorToTextPosition(0, 1);
+    this->sendByte(32);
+    cursorToTextPosition(1, 1);
+    this->sendByte(32);
+    cursorToTextPosition(0, 3);
+    this->sendByte(32);
+    cursorToTextPosition(1, 3);
+    this->sendByte(32);
+    cursorToTextPosition(0, 5);
+    this->sendByte(32);
+    cursorToTextPosition(1, 5);
+    this->sendByte(32);
+    cursorToTextPosition(0, 7);
+    this->sendByte(32);
+    cursorToTextPosition(1, 7);
+    this->sendByte(32);
+    cursorToTextPosition(0, 9);
+    this->sendByte(32);
+    cursorToTextPosition(1, 9);
+    this->sendByte(32);
 }
 
 void CFontz634::sendByte(unsigned char byte)

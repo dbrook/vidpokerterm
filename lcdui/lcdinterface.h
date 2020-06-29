@@ -29,6 +29,12 @@ class LCDInterface : public QObject
 {
     Q_OBJECT
 public:
+    /**
+     * @brief LCDInterface
+     *
+     * @param[in]  nbSoftkeys     Number of softkeys to render on the display (not including the "more" button)
+     * @param[in]  parent         parent widget pointer
+     */
     explicit LCDInterface(int nbSoftkeys, QObject *parent = nullptr);
 
     virtual ~LCDInterface();
@@ -48,7 +54,7 @@ public slots:
      * @brief softkeys emits all the softkeys that can fit on the current page. If there are multiple pages, then the
      *        last key will always be a "next" button
      */
-    void softkeys();
+    void softkeyPage();
 
     /**
      * @brief nextSoftkeyPage gets the next page of softkeys (if available)
@@ -61,14 +67,14 @@ public slots:
     void noopSoftkeyItem();
 
     /**
-     * @brief triggerSoftkey calls the function pointed to by the softkey
+     * @brief softkeysForPage calls the function pointed to by the softkey
      *
      * @param displayedKeyIdx     Index of the displayed screen softkey (not the overall QVector's index)
      */
     void triggerSoftkey(int displayedKeyIdx);
 
 signals:
-    void softkeyAtPosition(int keyPosition, const QString &label);
+    void softkeysForPage(QVector<QString> keyNames);
 
 protected:
     QVector<QPair<QString, void (LCDInterface::*)()>> _softkeys;

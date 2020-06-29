@@ -42,29 +42,31 @@ GameOrchestratorInterface::GameOrchestratorInterface(int                  nbSoft
 
     // Connect all the events up
     connect(_creds, &Account::balanceChanged, _lcd, &GenericLCD::showCreditsInGame);
-    connect(this, &GameOrchestratorInterface::softkeyAtPosition, _lcd, &GenericLCD::fillSoftkeyText);
+    connect(this, &GameOrchestratorInterface::softkeysForPage, _lcd, &GenericLCD::fillSoftkeys);
     connect(_input, &GenericInputHandler::softkeyPressed, this, &GameOrchestratorInterface::triggerSoftkey);
     connect(_synchroOrc, &GameOrchestrator::betUpdated, this, &GameOrchestratorInterface::showBetAmount);
     connect(this, &GameOrchestratorInterface::betAmountUpdated, _lcd, &GenericLCD::showBetAmount);
     connect(_input, &GenericInputHandler::triggerPressed, _synchroOrc, &GameOrchestrator::dealDraw);
     connect(_synchroOrc, &GameOrchestrator::primaryCardRevealed, _lcd, &GenericLCD::showCardValue);
     connect(this, &GameOrchestratorInterface::cardHeld, _lcd, &GenericLCD::showHoldIndicator);
-    connect(_synchroOrc, &GameOrchestrator::gameInProgress, this, &GameOrchestratorInterface::allowHolds);
+    connect(this, &GameOrchestratorInterface::holdsReset, _lcd, &GenericLCD::clearAllHolds);
+    connect(_synchroOrc, &GameOrchestrator::readyForHolds, this, &GameOrchestratorInterface::allowHolds);
+    connect(_synchroOrc, &GameOrchestrator::cardsToRedraw, _lcd, &GenericLCD::showCardFrames);
     connect(_synchroOrc, &GameOrchestrator::primaryHandUpdated, _lcd, &GenericLCD::showWinnings);
+    connect(_synchroOrc, &GameOrchestrator::insufficientFunds, _lcd, &GenericLCD::displayNoFundsWarning);
 
     // Setup the softkey functions and broadcast them to the display
-    this->addSoftkeyFunction("BACK", static_cast<void (LCDInterface::*)()>(&GameOrchestratorInterface::closeGame));
-    this->addSoftkeyFunction("BET+", static_cast<void (LCDInterface::*)()>(&GameOrchestratorInterface::betPlus));
-    this->addSoftkeyFunction("BETM", static_cast<void (LCDInterface::*)()>(&GameOrchestratorInterface::betMax));
+    this->addSoftkeyFunction("Return", static_cast<void (LCDInterface::*)()>(&GameOrchestratorInterface::closeGame));
+    this->addSoftkeyFunction("Bet +1", static_cast<void (LCDInterface::*)()>(&GameOrchestratorInterface::betPlus));
+    this->addSoftkeyFunction("BetMax", static_cast<void (LCDInterface::*)()>(&GameOrchestratorInterface::betMax));
     this->finishSoftkeys();
-    this->softkeys();
+    this->softkeyPage();
 
     // Trigger the display of the balance by changing it to itself
     _creds->setBalance(_creds->balance());
 
     // Trigger the display of the bet to the display
     _synchroOrc->setCreditsToBet(1);
-
 }
 
 GameOrchestratorInterface::~GameOrchestratorInterface()
@@ -101,11 +103,7 @@ void GameOrchestratorInterface::resetHolds()
     _holdCard3 = false;
     _holdCard4 = false;
     _holdCard5 = false;
-    emit cardHeld(0, _holdCard1);
-    emit cardHeld(1, _holdCard2);
-    emit cardHeld(2, _holdCard3);
-    emit cardHeld(3, _holdCard4);
-    emit cardHeld(4, _holdCard5);
+    emit holdsReset();
 }
 
 void GameOrchestratorInterface::toggleHold(int handCardIdx)
@@ -138,12 +136,18 @@ void GameOrchestratorInterface::toggleHold(int handCardIdx)
 
 void GameOrchestratorInterface::allowHolds(bool allowed)
 {
-    // Disable the softkeys
+    // Swap the softkey buffer the softkeys
     QVector<QPair<QString, void (LCDInterface::*)()>> swap = _hiddenKeys;
-    _hiddenKeys = _softkeys;
-    _softkeys = swap;
-    this->finishSoftkeys();
-    this->softkeys();
+    _hiddenKeys  = _softkeys;
+    _softkeys    = swap;
+    _softkeyPage = 0;
+
+    // The first time the keys are disabled, the "empty" ones need to be finalized to render properly
+    if (_softkeys.empty()) {
+        this->finishSoftkeys();
+    }
+
+    this->softkeyPage();
 
     if (allowed) {
         connect(_input, &GenericInputHandler::holdPressed, this, &GameOrchestratorInterface::toggleHold);

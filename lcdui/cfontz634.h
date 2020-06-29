@@ -36,14 +36,50 @@ public:
     /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
      * Standard LCD features                                                                                         *
      * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+    /**
+     * @brief setupCharacters centralized location to fill the up-to-8 CGRAM custom characters
+     */
     void setupCharacters();
+
+    /**
+     * @brief clearDisplay clears all text/graphics on the display
+     */
     void clearDisplay();
+
+    /**
+     * @brief cursorToTextPosition moves the text writing cursor to the desired row and column. Probably should not be
+     *        used to position stuff on graphic LCDs?
+     *
+     * @param[in]  row            row to which the cursor should move
+     * @param[in]  col            column to which the cursor should move
+     */
     void cursorToTextPosition(int row, int col);
+
+    /**
+     * @brief writeTextAtPos writes a string buffer to the display, however it will not convert any special characters
+     *        to the bizarre character map of the Crystalfontz 634, so ... best to stick to alphanumerics
+     *
+     * @param[in]  startRow       Row (0-indexed) to place the text
+     * @param[in]  startCol       Column (0-indexed) to begin writing the text
+     * @param[in]  text           The text to be written
+     */
     void writeTextAtPos(int startRow, int startCol, const QString &text);
+
+    /**
+     * @brief writeByteAtPos write a single byte after initializing the display's cursor. Use this to send special
+     *        characters from the CGROM/CGRAM of the display (for instance, any custom chars you made)
+     *
+     * @param[in]  startRow
+     * @param[in]  startCol
+     * @param[in]  lcdChar
+     */
     void writeByteAtPos(int startRow, int startCol, const unsigned char lcdChar);
 
 public slots:
-    void fillSoftkeyText(int softkeyIdx, const QString &softkeyText);
+    /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+     * Standard softkey rendering function                                                                           *
+     * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+    void fillSoftkeys(QVector<QString> softkeys);
 
     /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
      * Primary Account and Game Selection Window Display Functions                                                   *
@@ -68,6 +104,9 @@ public slots:
     void showBetAmount(quint32 creditsBet);
     void showCardValue(int cardIdx, PlayingCard cardToShow);
     void showHoldIndicator(int cardIdx, bool isHeld);
+    void showCardFrames(bool card1, bool card2, bool card3, bool card4, bool card5);
+    void displayNoFundsWarning();
+    void clearAllHolds();
 
 private:
     /*****************************************************************************

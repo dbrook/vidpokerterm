@@ -115,15 +115,13 @@ void GameOrchestrator::dealDraw()
         // Must have enough credits to continue
         if (_playerAccount.balance() < _betsPerHand * _nbHandsToPlay) {
             qDebug() << "Insufficient funds to play a game";
-
-            /***********************************************************************************************************
-             * TODO: a signal to the game window should be added for this condition so a warning can show up
-             **********************************************************************************************************/
+            emit insufficientFunds();
             return;
         }
 
         // Set the in progress state right away so the UI will be updated before dealing out cards
         _handInProg = true;
+        emit cardsToRedraw(true, true, true, true, true);
         emit gameInProgress(_handInProg);
         emit operating(true);
 

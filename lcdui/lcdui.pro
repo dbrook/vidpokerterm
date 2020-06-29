@@ -32,7 +32,7 @@ TEMPLATE = app
 
 DESTDIR = $$OUT_PWD/../bin
 
-LIBS *= -L$$DESTDIR -lpokerbe
+LIBS *= -L$$DESTDIR -lpokerbe -llcdu8g2 -llcdspi -lwiringPi
 
 INCLUDEPATH += $$PWD \
     $$PWD/../poker \
@@ -40,6 +40,7 @@ INCLUDEPATH += $$PWD \
     $$PWD/../lcdspi
 
 SOURCES += \
+    cfontz12864.cpp \
     cfontz634.cpp \
     consolekeyboardinput.cpp \
     gameaccountinterface.cpp \
@@ -47,13 +48,16 @@ SOURCES += \
     genericinputhandler.cpp \
     genericlcd.cpp \
     lcd_main.cpp \
-    lcdinterface.cpp
+    lcdinterface.cpp \
+    raspigpioinput.cpp
 
 HEADERS += \
+    cfontz12864.h \
     cfontz634.h \
     consolekeyboardinput.h \
     gameaccountinterface.h \
     gameorchestratorinterface.h \
     genericinputhandler.h \
     genericlcd.h \
-    lcdinterface.h
+    lcdinterface.h \
+    raspigpioinput.h

@@ -89,6 +89,8 @@ signals:
 
     void cardHoldIndic(int cardIdx);
 
+    void holdsReset();
+
 private:
     GenericLCD          *_lcd;
     GenericInputHandler *_input;

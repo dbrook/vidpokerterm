@@ -21,6 +21,7 @@
 #include "playingcard.h"
 
 #include <QObject>
+#include <QVector>
 
 /**
  * @brief The GenericLCD class allows for a standardized interface for a Poker Game Orchestrator, Pay Table, and Game
@@ -30,7 +31,7 @@
  *        |                   | ---+
  *        |                   |    +-- program area
  *        |                   | ---+
- *        |   |   |   |   |   | <----- softkey area (4 features can be displayed like in the desktop interface)
+ *        |     |     |     |>| <----- softkey area (3 features can be displayed + a "next page" button)
  *        +-------------------+
  */
 class GenericLCD : public QObject
@@ -41,41 +42,14 @@ public:
 
     virtual ~GenericLCD();
 
-    /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
-     * Standard LCD features                                                                                         *
-     * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
-    /**
-     * @brief clearDisplay clears all text/graphics on the display
-     */
-    virtual void clearDisplay() = 0;
-
-    /**
-     * @brief cursorToTextPosition moves the text writing cursor to the desired row and column. Probably should not be
-     *        used to position stuff on graphic LCDs?
-     *
-     * @param[in]  row            row to which the cursor should move
-     * @param[in]  col            column to which the cursor should move
-     */
-    virtual void cursorToTextPosition(int row, int col) = 0;
-
-    /**
-     * @brief      writeTextAtPos will display a string on the LCD starting at startRow, startCol
-     *
-     * @param[in]  startRow       Row at which to start writing
-     * @param[in]  startCol       Column at which to start writing
-     * @param[in]  text           The text to be written
-     */
-    virtual void writeTextAtPos(int startRow, int startCol, const QString &text) = 0;
-
-    /**
-     * @brief fillSoftkeyText renders the text of the specified softkey to the softkey region
-     *
-     * @param[in]  softkeyIdx     0, 1, 2, 3 for the softkey position
-     * @param[in]  softkeyText    the text to display -- should be truncated if too long for the text region!
-     */
-    virtual void fillSoftkeyText(int softkeyIdx, const QString &softkeyText) = 0;
-
 public slots:
+    /**
+     * @brief fillSoftkeys renders the text of the specified softkey to the softkey region
+     *
+     * @param[in]  softkeys       array of softkeys to show on the screen
+     */
+    virtual void fillSoftkeys(QVector <QString> softkeys) = 0;
+
     /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
      * Primary Account and Game Selection Window Display Functions                                                   *
      * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
@@ -149,6 +123,24 @@ public slots:
      * @param[in]  cardIdx        position of the card in the hand to mark as held
      */
     virtual void showHoldIndicator(int cardIdx, bool isHeld) = 0;
+
+    /**
+     * @brief showCardFrames shows the "backs" of requested cards
+     */
+    virtual void showCardFrames(bool card1, bool card2, bool card3, bool card4, bool card5) = 0;
+
+    /**
+     * @brief displayNoFundsWarning will overlay a warning there are insufficient funds to play
+     */
+    virtual void displayNoFundsWarning() = 0;
+
+    /**
+     * @brief clearAllHolds erases all the hold indicators in one write
+     */
+    virtual void clearAllHolds() = 0;
+
+signals:
+    void shutdownDisplayed();
 };
 
 #endif // GENERICLCD_H

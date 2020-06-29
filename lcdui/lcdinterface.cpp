@@ -24,7 +24,7 @@ LCDInterface::LCDInterface(int nbSoftkeys, QObject *parent)
       _nbSoftkeys  (nbSoftkeys),
       _softkeyPage (0)
 {
-
+    qRegisterMetaType<QVector<QString>>("QVector<QString>");
 }
 
 LCDInterface::~LCDInterface() {}
@@ -39,12 +39,12 @@ void LCDInterface::addSoftkeyFunction(const QString &functionName, void (LCDInte
 void LCDInterface::finishSoftkeys()
 {
     // Put in "next" buttons in case of overflow
-    QPair<QString, void (LCDInterface::*)()>          nextButton("   ->", &LCDInterface::nextSoftkeyPage);
+    QPair<QString, void (LCDInterface::*)()>          nextButton(">", &LCDInterface::nextSoftkeyPage);
     QPair<QString, void (LCDInterface::*)()>          noopButton("", &LCDInterface::noopSoftkeyItem);
     QVector<QPair<QString, void (LCDInterface::*)()>> paddedSoftkeys;
 
     if (_softkeys.size() > _nbSoftkeys) {
-        int nextBtnOffset = _nbSoftkeys;
+        int nextBtnOffset = _nbSoftkeys + 1;
         int revisedButtonPosition = 1;
 
         for (QPair<QString, void (LCDInterface::*)()> softkeyItem : _softkeys) {
@@ -57,8 +57,8 @@ void LCDInterface::finishSoftkeys()
         };
 
         // Put a final button (to be able to go back to the beginning) after putting any padding
-        if (revisedButtonPosition % _nbSoftkeys != 1) {
-            while (revisedButtonPosition % _nbSoftkeys != 0) {
+        if (revisedButtonPosition % nextBtnOffset != 1) {
+            while (revisedButtonPosition % nextBtnOffset != 0) {
                 paddedSoftkeys.push_back(noopButton);
                 ++revisedButtonPosition;
             };
@@ -68,30 +68,27 @@ void LCDInterface::finishSoftkeys()
         // Overwrite the old key vector with the 'padded' one
         _softkeys = paddedSoftkeys;
     } else {
-        // Put no-op buttons to fill the rest of the key position (so as not to get a seg fault)
-        for (int emptyKeyIdx = _softkeys.size(); emptyKeyIdx < _nbSoftkeys; ++emptyKeyIdx) {
+        // Put no-op buttons to fill the rest of the key position (so as not to get a seg fault when pressed)
+        for (int emptyKeyIdx = _softkeys.size(); emptyKeyIdx < _nbSoftkeys + 1; ++emptyKeyIdx) {
             _softkeys.push_back(noopButton);
         }
     }
 
-//    for (QPair<QString, void (LCDInterface::*)()> button : _softkeys) {
-//        qDebug() << "Button: " << button.first;
-//    }
+    for (QPair<QString, void (LCDInterface::*)()> button : _softkeys) {
+        qDebug() << "Button: " << button.first;
+    }
 }
 
-void LCDInterface::softkeys()
+void LCDInterface::softkeyPage()
 {
     int keysDrawn = 0;
-    for (int startKey = _softkeyPage * _nbSoftkeys;
-         startKey < _softkeys.size() && keysDrawn < _nbSoftkeys;
+    QVector<QString> keyNamesForPage;
+    for (int startKey = _softkeyPage * (_nbSoftkeys + 1);
+         startKey < _softkeys.size() && keysDrawn < _nbSoftkeys + 1;
          ++startKey, ++keysDrawn) {
-        emit softkeyAtPosition(keysDrawn, _softkeys[startKey].first);
+        keyNamesForPage.push_back(_softkeys[startKey].first);
     }
-
-    // If we didn't use up all the positions, make sure to zero out the other keys with a bunch of spaces
-    for (; keysDrawn < _nbSoftkeys; ++keysDrawn) {
-        emit softkeyAtPosition(keysDrawn, "              ");
-    }
+    emit softkeysForPage(keyNamesForPage);
 }
 
 void LCDInterface::nextSoftkeyPage()
@@ -103,12 +100,12 @@ void LCDInterface::nextSoftkeyPage()
 //             << "_softkeys.size()" << _softkeys.size();
 
     // Did we run out of keys? Reset to the first page
-    if (_softkeyPage * _nbSoftkeys >= _softkeys.size()) {
+    if (_softkeyPage * (_nbSoftkeys + 1) >= _softkeys.size()) {
         _softkeyPage = 0;
     }
 
     // Then re-emit the keys
-    this->softkeys();
+    this->softkeyPage();
 }
 
 void LCDInterface::noopSoftkeyItem()
@@ -119,5 +116,5 @@ void LCDInterface::noopSoftkeyItem()
 void LCDInterface::triggerSoftkey(int displayedKeyIdx)
 {
 //    qDebug() << "Trying to activate key: " << _softkeyPage * _nbSoftkeys + displayedKeyIdx;
-    (this->*_softkeys[_softkeyPage * _nbSoftkeys + displayedKeyIdx].second)();
+    (this->*_softkeys[_softkeyPage * (_nbSoftkeys + 1) + displayedKeyIdx].second)();
 }

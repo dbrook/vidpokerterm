@@ -20,7 +20,7 @@ TEMPLATE = subdirs
 #SUBDIRS  = poker ui test
 
 # Uncomment this line below to build the Graphic/Text Mode LCD interface
-#SUBDIRS  = poker test lcdinterface lcdui
+#SUBDIRS  = poker test lcdinterface lcdspi lcdui
 
 # Uncomment this line below to build everything
 SUBDIRS  = poker ui test lcdinterface lcdspi lcdui
