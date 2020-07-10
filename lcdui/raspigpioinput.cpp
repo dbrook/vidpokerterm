@@ -19,6 +19,7 @@
 
 #include <wiringPi.h>
 
+#include <QDebug>
 #include <QDateTime>
 
 RasPiGPIOInput* RasPiGPIOInput::s_inst = nullptr;
