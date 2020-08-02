@@ -139,6 +139,19 @@ public slots:
      */
     virtual void clearAllHolds() = 0;
 
+    /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+     * Generic Pay Table Interaction Screen                                                                          *
+     * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+    /**
+     * @brief setupPayTableDisplay clears the screen and sets the title bar to the game name
+     */
+    virtual void setupPayTableDisplay(const QString &gameName) = 0;
+
+    /**
+     * @brief displayTablePage renders [part of] the paytable passed in 'table'
+     */
+    virtual void displayTablePage(QVector<QPair<const QString, int>> table, int startIdx, int nbItems) = 0;
+
 signals:
     void shutdownDisplayed();
 };

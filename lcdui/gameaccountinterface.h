@@ -78,6 +78,11 @@ signals:
     void haltRequested();
 
     /**
+     * @brief resetDisplay is emitted when the display should be fully reconditioned
+     */
+    void resetDisplay();
+
+    /**
      * @brief selectedGame is emitted when a game selection change is made
      *
      * @param nameOfGame          The name of the game currently selected for opening

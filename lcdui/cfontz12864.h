@@ -73,6 +73,12 @@ public slots:
     void displayNoFundsWarning();
     void clearAllHolds();
 
+    /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+     * Generic Pay Table Interaction Screen                                                                          *
+     * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+    void setupPayTableDisplay(const QString &gameName);
+    void displayTablePage(QVector<QPair<const QString, int>> table, int startIdx, int nbItems);
+
 private:
     u8g2_t _disp;
 

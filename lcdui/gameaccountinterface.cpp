@@ -42,14 +42,6 @@ GameAccountInterface::GameAccountInterface(int                  nbSoftkeys,
     this->addSoftkeyFunction("Cred 0", static_cast<void (LCDInterface::*)()>(&GameAccountInterface::zeroCredits));
     this->addSoftkeyFunction("Game", static_cast<void (LCDInterface::*)()>(&GameAccountInterface::cycleGame));
     this->addSoftkeyFunction("Exit", static_cast<void (LCDInterface::*)()>(&GameAccountInterface::exitApplication));
-//    this->addSoftkeyFunction("Func 0", static_cast<void (LCDInterface::*)()>(&GameAccountInterface::noopSoftkeyItem));
-//    this->addSoftkeyFunction("Func 1", static_cast<void (LCDInterface::*)()>(&GameAccountInterface::noopSoftkeyItem));
-//    this->addSoftkeyFunction("Func 2", static_cast<void (LCDInterface::*)()>(&GameAccountInterface::noopSoftkeyItem));
-//    this->addSoftkeyFunction("Func 3", static_cast<void (LCDInterface::*)()>(&GameAccountInterface::noopSoftkeyItem));
-//    this->addSoftkeyFunction("Func 4", static_cast<void (LCDInterface::*)()>(&GameAccountInterface::noopSoftkeyItem));
-//    this->addSoftkeyFunction("Func 5", static_cast<void (LCDInterface::*)()>(&GameAccountInterface::noopSoftkeyItem));
-//    this->addSoftkeyFunction("Func 6", static_cast<void (LCDInterface::*)()>(&GameAccountInterface::noopSoftkeyItem));
-//    this->addSoftkeyFunction("Func 7", static_cast<void (LCDInterface::*)()>(&GameAccountInterface::noopSoftkeyItem));
     this->finishSoftkeys();
 
     // A player needs to have funds with which to gamble
@@ -106,6 +98,7 @@ void GameAccountInterface::playSelectedGame()
     // Suspend the connections from the interface to this screen
     disconnect(this, &GameAccountInterface::softkeysForPage, _lcd, &GenericLCD::fillSoftkeys);
     disconnect(_input, &GenericInputHandler::softkeyPressed, this, &GameAccountInterface::triggerSoftkey);
+    disconnect(this, &GameAccountInterface::resetDisplay, _lcd, &GenericLCD::setupWelcomeDisplay);
     disconnect(_playerCreds, &Account::balanceChanged, _lcd, &GenericLCD::showCreditsInMainWin);
     disconnect(this, &GameAccountInterface::selectedGame, _lcd, &GenericLCD::showGameName);
     disconnect(_input, &GenericInputHandler::triggerPressed, this, &GameAccountInterface::playSelectedGame);
@@ -130,12 +123,13 @@ void GameAccountInterface::restoreConnections()
 {
     connect(this, &GameAccountInterface::softkeysForPage, _lcd, &GenericLCD::fillSoftkeys);
     connect(_input, &GenericInputHandler::softkeyPressed, this, &GameAccountInterface::triggerSoftkey);
+    connect(this, &GameAccountInterface::resetDisplay, _lcd, &GenericLCD::setupWelcomeDisplay);
     connect(_playerCreds, &Account::balanceChanged, _lcd, &GenericLCD::showCreditsInMainWin);
     connect(this, &GameAccountInterface::selectedGame, _lcd, &GenericLCD::showGameName);
     connect(_input, &GenericInputHandler::triggerPressed, this, &GameAccountInterface::playSelectedGame);
 
     // Reprint everything?
-    _lcd->setupWelcomeDisplay();   // TODO: might need to make this thread safe?
+    emit resetDisplay();
     this->softkeyPage();
     emit selectedGame(_supportedGames[_selectedGameIdx]->gameName());
     _playerCreds->setBalance(_playerCreds->balance());
