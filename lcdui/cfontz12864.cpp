@@ -81,7 +81,7 @@ void CFontz12864::fillSoftkeys(QVector<QString> softkeys)
         u8g2_DrawStr(&_disp,    80, 62, softkeys[2].toUtf8());
     }
     if (!softkeys[3].isEmpty()) {
-        u8g2_DrawHLine(&_disp, 117, 52, 10);
+        u8g2_DrawHLine(&_disp, 117, 52, 11);
         u8g2_DrawVLine(&_disp, 117, 52, 12);
         u8g2_DrawStr(&_disp,   120, 62, softkeys[3].toUtf8());
     }
@@ -104,7 +104,6 @@ void CFontz12864::setupWelcomeDisplay()
 
     // Draw frames for credits and game selection
     u8g2_DrawFrame(&_disp, 2, 11, 124, 14);
-    u8g2_DrawFrame(&_disp, 2, 26, 124, 25);
     u8g2_DrawStr(&_disp, 4, 21, "Credits: ");
     u8g2_DrawStr(&_disp, 4, 36, "Game Selection: ");
 
@@ -211,10 +210,10 @@ void CFontz12864::showWinnings(const QString &winString, quint32 winCredits)
 
     // Winning amount
     if (winCredits != 0) {
-        u8g2_DrawStr(&_disp, 1, 38,
+        u8g2_DrawStr(&_disp, 0, 38,
                      (winString + " +" + QString::number(winCredits).leftJustified(21, ' ')).toUtf8());
     } else {
-        u8g2_DrawStr(&_disp, 1, 38, winString.leftJustified(21, ' ').toUtf8());
+        u8g2_DrawStr(&_disp, 0, 38, winString.leftJustified(21, ' ').toUtf8());
     }
 
     u8g2_SendBuffer(&_disp);
