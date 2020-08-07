@@ -81,7 +81,7 @@ void CFontz12864::fillSoftkeys(QVector<QString> softkeys)
         u8g2_DrawStr(&_disp,    80, 62, softkeys[2].toUtf8());
     }
     if (!softkeys[3].isEmpty()) {
-        u8g2_DrawHLine(&_disp, 117, 52, 10);
+        u8g2_DrawHLine(&_disp, 117, 52, 11);
         u8g2_DrawVLine(&_disp, 117, 52, 12);
         u8g2_DrawStr(&_disp,   120, 62, softkeys[3].toUtf8());
     }
@@ -104,7 +104,6 @@ void CFontz12864::setupWelcomeDisplay()
 
     // Draw frames for credits and game selection
     u8g2_DrawFrame(&_disp, 2, 11, 124, 14);
-    u8g2_DrawFrame(&_disp, 2, 26, 124, 25);
     u8g2_DrawStr(&_disp, 4, 21, "Credits: ");
     u8g2_DrawStr(&_disp, 4, 36, "Game Selection: ");
 
@@ -211,10 +210,10 @@ void CFontz12864::showWinnings(const QString &winString, quint32 winCredits)
 
     // Winning amount
     if (winCredits != 0) {
-        u8g2_DrawStr(&_disp, 1, 38,
+        u8g2_DrawStr(&_disp, 0, 38,
                      (winString + " +" + QString::number(winCredits).leftJustified(21, ' ')).toUtf8());
     } else {
-        u8g2_DrawStr(&_disp, 1, 38, winString.leftJustified(21, ' ').toUtf8());
+        u8g2_DrawStr(&_disp, 0, 38, winString.leftJustified(21, ' ').toUtf8());
     }
 
     u8g2_SendBuffer(&_disp);
@@ -439,5 +438,41 @@ void CFontz12864::clearAllHolds()
     // Overwrites all the hold indicators in a single push since SPI is sloooooooowwwwwwwwwwwwwww ;-)
     u8g2_SetDrawColor(&_disp, 0);
     u8g2_DrawBox(&_disp, 6, 26, 115, 2);
+    u8g2_SendBuffer(&_disp);
+}
+
+void CFontz12864::setupPayTableDisplay(const QString &gameName)
+{
+    u8g2_ClearBuffer(&_disp);
+    u8g2_SetFontMode(&_disp, 0);
+    u8g2_SetFontDirection(&_disp, 0);
+    u8g2_SetDrawColor(&_disp, 1);
+    u8g2_SetFont(&_disp, u8g2_font_6x10_mf);
+
+    // Title Bar Text and Line
+    u8g2_DrawStr(&_disp, 0, 8, gameName.toUtf8());
+    u8g2_DrawHLine(&_disp,  0, 11, 128);
+
+    u8g2_SendBuffer(&_disp);
+}
+
+void CFontz12864::displayTablePage(QVector<QPair<const QString, int> > table, int startIdx, int nbItems)
+{
+    // Clear the display table area
+    u8g2_SetDrawColor(&_disp, 0);
+    u8g2_DrawBox(&_disp, 0, 12, 128, 40);
+
+    u8g2_SetFontMode(&_disp, 0);
+    u8g2_SetFontDirection(&_disp, 0);
+    u8g2_SetDrawColor(&_disp, 1);
+    u8g2_SetFont(&_disp, u8g2_font_5x8_mf);
+
+    // Item Loop
+    int vertPixel = 21;
+    for (int tblIdx = startIdx; tblIdx < table.size() && tblIdx < nbItems; ++tblIdx, vertPixel += 9) {
+        u8g2_DrawStr(&_disp, 0, vertPixel, table[tblIdx].first.toUtf8());
+        u8g2_DrawStr(&_disp, 109, vertPixel, QString::number(table[tblIdx].second).rightJustified(4, ' ').toUtf8());
+    }
+
     u8g2_SendBuffer(&_disp);
 }

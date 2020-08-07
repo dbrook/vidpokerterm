@@ -80,8 +80,20 @@ public slots:
      */
     void allowHolds(bool allowed);
 
+    /**
+     * @brief opens a table display for the current game logic and bet amount so a player can see the payouts
+     */
+    void displayPayTableForBet();
+
+    /**
+     * @brief restoreConnections sets all the input events to the appropriate targets
+     */
+    void restoreConnections();
+
 signals:
     void gameCompleted();
+
+    void displayReset();
 
     void betAmountUpdated(quint32 totalBetAmount);
 

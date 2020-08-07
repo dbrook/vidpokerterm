@@ -17,7 +17,10 @@
 
 #include "gameorchestratorinterface.h"
 
+#include "paytableinterface.h"
+
 #include <QDebug>
+#include <QThread>
 
 GameOrchestratorInterface::GameOrchestratorInterface(int                  nbSoftkeys,
                                                      GenericLCD          *lcdScreen,
@@ -34,36 +37,19 @@ GameOrchestratorInterface::GameOrchestratorInterface(int                  nbSoft
     qRegisterMetaType<PlayingCard>("PlayingCard");
     _synchroOrc = new GameOrchestrator(_game, 1, *_creds, 0);
 
-    // Initialize the game display
-    _lcd->setupGameDisplay();
-
     // Reset / initialize the holds
     this->resetHolds();
 
-    // Connect all the events up
-    connect(_creds, &Account::balanceChanged, _lcd, &GenericLCD::showCreditsInGame);
-    connect(this, &GameOrchestratorInterface::softkeysForPage, _lcd, &GenericLCD::fillSoftkeys);
-    connect(_input, &GenericInputHandler::softkeyPressed, this, &GameOrchestratorInterface::triggerSoftkey);
-    connect(_synchroOrc, &GameOrchestrator::betUpdated, this, &GameOrchestratorInterface::showBetAmount);
-    connect(this, &GameOrchestratorInterface::betAmountUpdated, _lcd, &GenericLCD::showBetAmount);
-    connect(_input, &GenericInputHandler::triggerPressed, _synchroOrc, &GameOrchestrator::dealDraw);
-    connect(_synchroOrc, &GameOrchestrator::primaryCardRevealed, _lcd, &GenericLCD::showCardValue);
-    connect(this, &GameOrchestratorInterface::cardHeld, _lcd, &GenericLCD::showHoldIndicator);
-    connect(this, &GameOrchestratorInterface::holdsReset, _lcd, &GenericLCD::clearAllHolds);
-    connect(_synchroOrc, &GameOrchestrator::readyForHolds, this, &GameOrchestratorInterface::allowHolds);
-    connect(_synchroOrc, &GameOrchestrator::cardsToRedraw, _lcd, &GenericLCD::showCardFrames);
-    connect(_synchroOrc, &GameOrchestrator::primaryHandUpdated, _lcd, &GenericLCD::showWinnings);
-    connect(_synchroOrc, &GameOrchestrator::insufficientFunds, _lcd, &GenericLCD::displayNoFundsWarning);
-
     // Setup the softkey functions and broadcast them to the display
-    this->addSoftkeyFunction("Return", static_cast<void (LCDInterface::*)()>(&GameOrchestratorInterface::closeGame));
+    this->addSoftkeyFunction("PayTbl",
+                             static_cast<void (LCDInterface::*)()>(&GameOrchestratorInterface::displayPayTableForBet));
     this->addSoftkeyFunction("Bet +1", static_cast<void (LCDInterface::*)()>(&GameOrchestratorInterface::betPlus));
     this->addSoftkeyFunction("BetMax", static_cast<void (LCDInterface::*)()>(&GameOrchestratorInterface::betMax));
+    this->addSoftkeyFunction("Return", static_cast<void (LCDInterface::*)()>(&GameOrchestratorInterface::closeGame));
     this->finishSoftkeys();
-    this->softkeyPage();
 
-    // Trigger the display of the balance by changing it to itself
-    _creds->setBalance(_creds->balance());
+    // Finish initialization
+    this->restoreConnections();
 
     // Trigger the display of the bet to the display
     _synchroOrc->setCreditsToBet(1);
@@ -157,4 +143,62 @@ void GameOrchestratorInterface::allowHolds(bool allowed)
         disconnect(this, &GameOrchestratorInterface::cardHeld, _synchroOrc, &GameOrchestrator::hold);
         this->resetHolds();
     }
+}
+
+void GameOrchestratorInterface::displayPayTableForBet()
+{
+    // Detach all connections from this interface to prepare for opening new panel
+    disconnect(_creds, &Account::balanceChanged, _lcd, &GenericLCD::showCreditsInGame);
+    disconnect(this, &GameOrchestratorInterface::softkeysForPage, _lcd, &GenericLCD::fillSoftkeys);
+    disconnect(_input, &GenericInputHandler::softkeyPressed, this, &GameOrchestratorInterface::triggerSoftkey);
+    disconnect(this, &GameOrchestratorInterface::displayReset, _lcd, &GenericLCD::setupGameDisplay);
+    disconnect(_synchroOrc, &GameOrchestrator::betUpdated, this, &GameOrchestratorInterface::showBetAmount);
+    disconnect(this, &GameOrchestratorInterface::betAmountUpdated, _lcd, &GenericLCD::showBetAmount);
+    disconnect(_input, &GenericInputHandler::triggerPressed, _synchroOrc, &GameOrchestrator::dealDraw);
+    disconnect(_synchroOrc, &GameOrchestrator::primaryCardRevealed, _lcd, &GenericLCD::showCardValue);
+    disconnect(this, &GameOrchestratorInterface::cardHeld, _lcd, &GenericLCD::showHoldIndicator);
+    disconnect(this, &GameOrchestratorInterface::holdsReset, _lcd, &GenericLCD::clearAllHolds);
+    disconnect(_synchroOrc, &GameOrchestrator::readyForHolds, this, &GameOrchestratorInterface::allowHolds);
+    disconnect(_synchroOrc, &GameOrchestrator::cardsToRedraw, _lcd, &GenericLCD::showCardFrames);
+    disconnect(_synchroOrc, &GameOrchestrator::primaryHandUpdated, _lcd, &GenericLCD::showWinnings);
+    disconnect(_synchroOrc, &GameOrchestrator::insufficientFunds, _lcd, &GenericLCD::displayNoFundsWarning);
+
+    // Call the paytable display
+    PayTableInterface *payTableDisplay = new PayTableInterface(_nbSoftkeys,
+                                                               _lcd,
+                                                               _input,
+                                                               _synchroOrc,
+                                                               _game->gameName());
+    QThread *payTblThread = new QThread();
+    payTableDisplay->moveToThread(payTblThread);
+    payTblThread->start();
+
+    // When control returns, retore the input processor
+    connect(payTableDisplay, &PayTableInterface::tableCompleted, payTableDisplay, &PayTableInterface::deleteLater);
+    connect(payTableDisplay, &PayTableInterface::destroyed, this, &GameOrchestratorInterface::restoreConnections);
+    connect(payTableDisplay, &PayTableInterface::destroyed, payTblThread, &QThread::quit);
+}
+
+void GameOrchestratorInterface::restoreConnections()
+{
+    connect(_creds, &Account::balanceChanged, _lcd, &GenericLCD::showCreditsInGame);
+    connect(this, &GameOrchestratorInterface::softkeysForPage, _lcd, &GenericLCD::fillSoftkeys);
+    connect(_input, &GenericInputHandler::softkeyPressed, this, &GameOrchestratorInterface::triggerSoftkey);
+    connect(this, &GameOrchestratorInterface::displayReset, _lcd, &GenericLCD::setupGameDisplay);
+    connect(_synchroOrc, &GameOrchestrator::betUpdated, this, &GameOrchestratorInterface::showBetAmount);
+    connect(this, &GameOrchestratorInterface::betAmountUpdated, _lcd, &GenericLCD::showBetAmount);
+    connect(_input, &GenericInputHandler::triggerPressed, _synchroOrc, &GameOrchestrator::dealDraw);
+    connect(_synchroOrc, &GameOrchestrator::primaryCardRevealed, _lcd, &GenericLCD::showCardValue);
+    connect(this, &GameOrchestratorInterface::cardHeld, _lcd, &GenericLCD::showHoldIndicator);
+    connect(this, &GameOrchestratorInterface::holdsReset, _lcd, &GenericLCD::clearAllHolds);
+    connect(_synchroOrc, &GameOrchestrator::readyForHolds, this, &GameOrchestratorInterface::allowHolds);
+    connect(_synchroOrc, &GameOrchestrator::cardsToRedraw, _lcd, &GenericLCD::showCardFrames);
+    connect(_synchroOrc, &GameOrchestrator::primaryHandUpdated, _lcd, &GenericLCD::showWinnings);
+    connect(_synchroOrc, &GameOrchestrator::insufficientFunds, _lcd, &GenericLCD::displayNoFundsWarning);
+
+    // Setup and redisplay all items on the interface
+    emit displayReset();
+    this->softkeyPage();
+    this->showBetAmount();
+    _creds->setBalance(_creds->balance());
 }

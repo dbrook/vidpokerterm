@@ -49,6 +49,7 @@ SOURCES += \
     genericlcd.cpp \
     lcd_main.cpp \
     lcdinterface.cpp \
+    paytableinterface.cpp \
     raspigpioinput.cpp
 
 HEADERS += \
@@ -60,4 +61,5 @@ HEADERS += \
     genericinputhandler.h \
     genericlcd.h \
     lcdinterface.h \
+    paytableinterface.h \
     raspigpioinput.h

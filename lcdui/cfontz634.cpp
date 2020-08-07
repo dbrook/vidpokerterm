@@ -465,6 +465,18 @@ void CFontz634::clearAllHolds()
     this->sendByte(32);
 }
 
+void CFontz634::setupPayTableDisplay(const QString &gameName)
+{
+    // TODO: implement later
+    ;
+}
+
+void CFontz634::displayTablePage(QVector<QPair<const QString, int> > table, int startIdx, int nbItems)
+{
+    // TODO: implement later
+    ;
+}
+
 void CFontz634::sendByte(unsigned char byte)
 {
     write(_deviceHandle, &byte, 1);
