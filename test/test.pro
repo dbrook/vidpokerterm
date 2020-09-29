@@ -33,6 +33,8 @@ INCLUDEPATH += $$PWD/../poker
 
 LIBS *= -L$$DESTDIR -lpokerbe
 
+PRE_TARGETDEPS += $$OUT_PWD/../bin/libpokerbe.a
+
 SOURCES += \
     jacksorbetter_orctest.cpp \
     pokerhand_test.cpp \

@@ -16,11 +16,15 @@
 
 TEMPLATE = subdirs
 
-# Uncomment this line below to build the proper GUI interface
+# Uncomment the lines below to build the proper GUI interface
 #SUBDIRS  = poker ui test
+#ui.depends = poker
 
-# Uncomment this line below to build the Graphic/Text Mode LCD interface
+# Uncomment the lines below to build the Graphic/Text Mode LCD interface
 #SUBDIRS  = poker test lcdinterface lcdspi lcdui
+#lcdui.depends = poker lcdui lcdinterface
 
-# Uncomment this line below to build everything
+# Uncomment the lines below to build everything
 SUBDIRS  = poker ui test lcdinterface lcdspi lcdui
+lcdui.depends = poker lcdui lcdinterface
+ui.depends = poker
