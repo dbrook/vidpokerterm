@@ -39,6 +39,8 @@ LIBS *= -L$$DESTDIR -lpokerbe
 INCLUDEPATH += $$PWD \
     $$PWD/../poker
 
+PRE_TARGETDEPS += $$OUT_PWD/../bin/libpokerbe.a
+
 SOURCES += \
     $$PWD/gameorchestratorwindow.cpp \
     $$PWD/handwidget.cpp \

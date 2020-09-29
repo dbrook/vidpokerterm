@@ -34,6 +34,8 @@ DESTDIR = $$OUT_PWD/../bin
 
 LIBS *= -L$$DESTDIR -lpokerbe -llcdu8g2 -llcdspi -lwiringPi
 
+PRE_TARGETDEPS += $$OUT_PWD/../bin/libpokerbe.a $$OUT_PWD/../bin/liblcdu8g2.a $$OUT_PWD/../bin/liblcdspi.a
+
 INCLUDEPATH += $$PWD \
     $$PWD/../poker \
     $$PWD/../lcdinterface \

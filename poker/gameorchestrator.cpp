@@ -34,7 +34,7 @@ GameOrchestrator::GameOrchestrator(PokerGame *gameAnalyzer,
       _fakeGame     (false),
       _handInProg   (false)
 {
-    // TODO: How many hand should we max out at? This is a fun thought experiment ... probably depends on screen reso.?
+    // TODO: How many hand should we max out at ---> this is a UI-based problem, the orchestrator should not care
     _gameCards.reserve(nbHandsToPlay);
     for (quint32 handCount = 0; handCount < nbHandsToPlay; ++handCount) {
         Hand pokerHand;

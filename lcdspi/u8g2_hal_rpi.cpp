@@ -7,7 +7,7 @@
 #include "spi.h"
 #include "u8g2_hal_rpi.h"
 
-#define U8G2_HAL_SPI_SPEED 500000
+#define U8G2_HAL_SPI_SPEED 900000
 #define U8G2_HAL_SPI_MODE SPI_DEV_MODE_0
 #define U8G2_HAL_SPI_CHANNEL 0
 
