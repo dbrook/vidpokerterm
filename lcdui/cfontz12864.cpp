@@ -66,24 +66,24 @@ void CFontz12864::fillSoftkeys(QVector<QString> softkeys)
     u8g2_SetDrawColor(&_disp, 1);
 
     if (!softkeys[0].isEmpty()) {
-        u8g2_DrawHLine(&_disp,   0, 52, 37);
-        u8g2_DrawVLine(&_disp,  37, 52, 12);
-        u8g2_DrawStr(&_disp,     0, 62, softkeys[0].toUtf8());
+        u8g2_DrawHLine(&_disp,   0, 52, 39);
+        u8g2_DrawVLine(&_disp,  39, 52, 12);
+        u8g2_DrawStr(&_disp,     2, 62, softkeys[0].toUtf8());
     }
     if (!softkeys[1].isEmpty()) {
-        u8g2_DrawHLine(&_disp,  38, 52, 39);
-        u8g2_DrawVLine(&_disp,  77, 52, 12);
-        u8g2_DrawStr(&_disp,    40, 62, softkeys[1].toUtf8());
+        u8g2_DrawHLine(&_disp,  40, 52, 39);
+        u8g2_DrawVLine(&_disp,  79, 52, 12);
+        u8g2_DrawStr(&_disp,    42, 62, softkeys[1].toUtf8());
     }
     if (!softkeys[2].isEmpty()) {
-        u8g2_DrawHLine(&_disp,  78, 52, 39);
-        u8g2_DrawVLine(&_disp, 117, 52, 12);
-        u8g2_DrawStr(&_disp,    80, 62, softkeys[2].toUtf8());
+        u8g2_DrawHLine(&_disp,  80, 52, 39);
+        u8g2_DrawVLine(&_disp, 119, 52, 12);
+        u8g2_DrawStr(&_disp,    82, 62, softkeys[2].toUtf8());
     }
     if (!softkeys[3].isEmpty()) {
-        u8g2_DrawHLine(&_disp, 117, 52, 11);
-        u8g2_DrawVLine(&_disp, 117, 52, 12);
-        u8g2_DrawStr(&_disp,   120, 62, softkeys[3].toUtf8());
+        u8g2_DrawHLine(&_disp, 119, 52,  9);
+        u8g2_DrawVLine(&_disp, 119, 52, 12);
+        u8g2_DrawStr(&_disp,   121, 62, softkeys[3].toUtf8());
     }
 
     u8g2_SendBuffer(&_disp);
@@ -107,7 +107,6 @@ void CFontz12864::setupWelcomeDisplay()
     u8g2_DrawStr(&_disp, 4, 21, "Credits: ");
     u8g2_DrawStr(&_disp, 4, 36, "Game Selection: ");
 
-    // Be done with it ... let's just see if this works, mmmkay?
     u8g2_SendBuffer(&_disp);
 }
 
