@@ -47,19 +47,29 @@ RasPiGPIOInput::RasPiGPIOInput(bool *haltAtNextPress, QObject *parent)
     // Mark all the keypress pins as input pins
     // Hold Keys
     pinMode(25, INPUT);
+    pullUpDnControl(25, PUD_DOWN);
     pinMode(27, INPUT);
+    pullUpDnControl(27, PUD_DOWN);
     pinMode(23, INPUT);
+    pullUpDnControl(23, PUD_DOWN);
     pinMode(26, INPUT);
+    pullUpDnControl(26, PUD_DOWN);
     pinMode( 6, INPUT);
+    pullUpDnControl(6, PUD_DOWN);
 
     // Soft Keys
     pinMode( 4, INPUT);
+    pullUpDnControl(4, PUD_DOWN);
     pinMode( 3, INPUT);
+    pullUpDnControl(3, PUD_DOWN);
     pinMode( 2, INPUT);
+    pullUpDnControl(2, PUD_DOWN);
     pinMode( 1, INPUT);
+    pullUpDnControl(1, PUD_DOWN);
 
     // Select/Trigger/Deal/Draw Key
     pinMode( 0, INPUT);
+    pullUpDnControl(0, PUD_DOWN);
 
     // Track button push event times in milliseconds-since-epoch to debounce
     qint64 current = QDateTime::currentMSecsSinceEpoch();
